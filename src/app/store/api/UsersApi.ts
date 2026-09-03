@@ -5,7 +5,7 @@ import type { User } from '../slices/authSlice';
 export const UsersApi = createApi({
   reducerPath: 'userApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: `${import.meta.env.VITE_BASE_API_URL}/user`,
+    baseUrl: `${import.meta.env.VITE_BASE_API_URL || '/api/v1'}/user`,
     prepareHeaders: (headers, { getState }) => {
       const state = getState() as RootState;
       const token = state.auth.token;
