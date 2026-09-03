@@ -1,15 +1,29 @@
 import { useNavigate } from 'react-router';
+import clsx from 'clsx';
 import type { OfferWithBook } from '@/types/entities/OfferWithBook';
 import noImages from '@/assest/images/noImage.jpg';
+import { AddToFavoritesSvg } from '@/shared/ui/icons/AddToFavoritesSvg';
+import { useIsOfferOwner } from '@/shared/hooks/useIsOfferOwner';
+
+const IMAGE_HOST = import.meta.env.VITE_IMAGE_HOST || '';
+
 type BookCardProps = {
   offer: OfferWithBook;
   onContact: () => void;
   onFavorite: () => void;
+  isOwner?: boolean;
 };
 
-export function BookCard({ offer, onContact, onFavorite }: BookCardProps) {
+export function BookCard({
+  offer,
+  onContact,
+  onFavorite,
+  isOwner: isOwnerProp,
+}: BookCardProps) {
   const { book, price, type } = offer;
   const navigate = useNavigate();
+  const isOwnerCalculated = useIsOfferOwner(offer);
+  const isOwner = isOwnerProp ?? isOwnerCalculated;
 
   const handleCardClick = () => {
     navigate(`/offers/${offer.id}`);
@@ -19,6 +33,12 @@ export function BookCard({ offer, onContact, onFavorite }: BookCardProps) {
     e.stopPropagation(); // Prevent card click when clicking buttons
     callback();
   };
+
+  const imageSrc = book.images?.[0]?.path
+    ? book.images[0].path.startsWith('http')
+      ? book.images[0].path
+      : `${IMAGE_HOST}${book.images[0].path}`
+    : noImages;
 
   return (
     <div
@@ -33,19 +53,11 @@ export function BookCard({ offer, onContact, onFavorite }: BookCardProps) {
         className="flex justify-center w-16 sm:w-20 h-20 sm:h-28 rounded flex-shrink-0
                       lg:w-full lg:h-48 xl:h-56 lg:rounded-t-lg lg:rounded-b-none"
       >
-        {book.images?.[0]?.path ? (
-          <img
-            src={book.images[0].path}
-            alt={book.title}
-            className="w-full h-full object-cover rounded lg:rounded-t-lg lg:rounded-b-none"
-          />
-        ) : (
-          <img
-            src={noImages}
-            alt="no Image"
-            className="  h-full object-cover rounded lg:rounded-t-lg lg:rounded-b-none"
-          />
-        )}
+        <img
+          src={imageSrc}
+          alt={book.title}
+          className="w-full h-full object-cover rounded lg:rounded-t-lg lg:rounded-b-none"
+        />
       </div>
 
       {/* Book information and actions */}
@@ -96,28 +108,51 @@ export function BookCard({ offer, onContact, onFavorite }: BookCardProps) {
         {/* Action buttons */}
         <div className="flex items-center gap-2 mt-auto lg:gap-3">
           <button
-            onClick={(e) => handleButtonClick(e, onContact)}
-            className="flex-1 bg-gray-800 text-white py-2 sm:py-2.5 lg:py-3 px-3 sm:px-4 rounded-lg font-medium text-xs sm:text-sm lg:text-base hover:bg-gray-700 transition-colors"
+            type="button"
+            disabled={isOwner}
+            onClick={(e) => {
+              if (isOwner) return;
+              handleButtonClick(e, onContact);
+            }}
+            className={clsx(
+              'flex-1 bg-gray-800 text-white py-2 sm:py-2.5 lg:py-3 px-3 sm:px-4 rounded-lg font-medium text-xs sm:text-sm lg:text-base transition-colors',
+              isOwner
+                ? 'opacity-50 cursor-not-allowed'
+                : 'hover:bg-gray-700 cursor-pointer'
+            )}
           >
             Contact
           </button>
           <button
-            onClick={(e) => handleButtonClick(e, onFavorite)}
-            className="p-2 sm:p-2.5 lg:p-3 border border-gray-300 rounded-lg hover:bg-gray-50 flex-shrink-0 transition-colors"
+            type="button"
+            disabled={isOwner}
+            onClick={(e) => {
+              if (isOwner) return;
+              handleButtonClick(e, onFavorite);
+            }}
+            className={clsx(
+              'p-2 sm:p-2.5 lg:p-3 border rounded-lg flex-shrink-0 transition-colors',
+              isOwner
+                ? 'opacity-50 cursor-not-allowed border-gray-200'
+                : 'hover:bg-gray-50 cursor-pointer',
+              offer.isFavorite
+                ? 'border-powder-600 bg-powder-50'
+                : 'border-gray-300'
+            )}
+            aria-label={
+              offer.isFavorite ? 'Remove from favorites' : 'Add to favorites'
+            }
           >
-            <svg
-              className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-              />
-            </svg>
+            <AddToFavoritesSvg
+              className={clsx(
+                'w-4 h-4 sm:w-5 sm:h-5 transition-colors',
+                isOwner ? 'cursor-not-allowed' : 'cursor-pointer',
+                {
+                  'text-powder-600': offer.isFavorite,
+                  'text-transparent': !offer.isFavorite,
+                }
+              )}
+            />
           </button>
         </div>
       </div>

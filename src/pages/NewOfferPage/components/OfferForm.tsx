@@ -124,11 +124,13 @@ export const OfferForm: React.FC<OfferFormProps> = ({
       </div>
 
       {/* Submit Button */}
-      <Button type="submit" isLoading={isSubmitting} className="mb-[40px]">
-        {isSubmitting
-          ? t(`sellBook.${mode}.loading`)
-          : t(`sellBook.${mode}.submit`)}
-      </Button>
+      <div className="flex justify-center">
+        <Button type="submit" isLoading={isSubmitting} className="mb-[40px]">
+          {isSubmitting
+            ? t(`sellBook.${mode}.loading`)
+            : t(`sellBook.${mode}.submit`)}
+        </Button>
+      </div>
     </form>
   );
 };

@@ -33,7 +33,7 @@ export const NotFoundPage: React.FC = () => {
           <p className="text-h6m sm:text-[16px]">{t('notFound.description')}</p>
         </div>
 
-        <Link to="/" className="w-[343px] block mx-auto">
+        <Link to="/" className="w-full max-w-[343px] block mx-auto">
           <Button variant="primary">{t('notFound.backToHome')}</Button>
         </Link>
       </main>

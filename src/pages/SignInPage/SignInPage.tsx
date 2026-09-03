@@ -191,9 +191,11 @@ const SignInPage: React.FC = () => {
           </div>
 
           {/* SUBMIT */}
-          <Button type="submit" isLoading={isLoading}>
-            {isLoading ? t('auth.signingIn') : t('auth.signIn')}
-          </Button>
+          <div className="w-full text-center">
+            <Button type="submit" isLoading={isLoading}>
+              {isLoading ? t('auth.signingIn') : t('auth.signIn')}
+            </Button>
+          </div>
 
           {/* DIVIDER */}
           <div className="flex items-center gap-3 mt-6 mb-3">

@@ -151,7 +151,10 @@
   "favorites": {
     "title": "My Favorites",
     "itemsNumber": "{count, plural, one {# item in your list} other {# items in your list}}",
-    "total": "Your Total: {total} UAH"
+    "total": "Your Total:",
+    "emptyTitle": "No favorites yet",
+    "emptySubtitle": "Start browsing and add books to your favorites list",
+    "browseBooks": "Browse Books"
   },
 
   "bookDetails": {

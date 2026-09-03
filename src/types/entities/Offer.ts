@@ -4,9 +4,16 @@ export type Offer = {
   status: OfferStatus;
   description: string;
   price: number;
-  previewImage: string;
+  previewImage?: string;
   bookId: string;
-  sellerId: string;
+  sellerId?: string;
+  seller?: {
+    id: string | number;
+    name: string;
+    avatar?: string;
+  };
+  isFavorite?: boolean;
+  favoritesCount?: number;
 };
 
 export type OfferRequest = Omit<Offer, 'id' | 'previewImage'> & {

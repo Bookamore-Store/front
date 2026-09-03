@@ -197,9 +197,11 @@ const SignUpPage: React.FC = () => {
           )}
 
           {/* SUBMIT */}
-          <Button type="submit" isLoading={isLoading}>
-            {isLoading ? t('auth.signingUp') : t('auth.signUp')}
-          </Button>
+          <div className="w-full text-center">
+            <Button type="submit" isLoading={isLoading}>
+              {isLoading ? t('auth.signingUp') : t('auth.signUp')}
+            </Button>
+          </div>
 
           {/* DIVIDER */}
           <div className="flex items-center gap-3 mt-6 mb-3">
