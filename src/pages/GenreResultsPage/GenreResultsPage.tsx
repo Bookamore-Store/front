@@ -11,6 +11,7 @@ import {
 import type { OfferWithBook } from '@/types/entities/OfferWithBook';
 import BackButton from '@/shared/ui/BackButton';
 import type { Category } from '@/shared/constants/categories';
+import { useFavoriteToggle } from '@/shared/hooks/useFavoriteToggle';
 
 // Mock mode flag - set to true to use mocks instead of API
 const USE_MOCKS = true;
@@ -51,6 +52,7 @@ const GenreResultsPage: React.FC = () => {
   const { genre } = useParams<{ genre: Category }>();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const { toggleFavorite } = useFavoriteToggle();
 
   // Get filter parameters from URL
   const filters = {
@@ -112,8 +114,7 @@ const GenreResultsPage: React.FC = () => {
   };
 
   const handleFavorite = (offer: OfferWithBook) => {
-    // TODO: Implement favorite logic
-    console.log('Add to favorites:', offer.id);
+    toggleFavorite(offer.id, Boolean(offer.isFavorite));
   };
 
   // Loading state

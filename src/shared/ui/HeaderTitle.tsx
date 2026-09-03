@@ -23,7 +23,7 @@ const HeaderTitle = ({ title, icon, className }: HeaderProps) => {
         `}
     >
       <BackButton />
-      <h1 className="absolute top-1/2 -translate-y-1/2 right-1/2 translate-x-1/2 text-h2m lg:text-[22px] text-text-black">
+      <h1 className="absolute top-1/2 -translate-y-1/2 right-1/2 translate-x-1/2 text-h2m lg:text-[22px] text-text-black whitespace-nowrap">
         {title}
       </h1>
       {icon && <>{icon}</>}

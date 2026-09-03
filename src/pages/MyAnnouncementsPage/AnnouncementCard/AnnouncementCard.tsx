@@ -112,17 +112,19 @@ export const AnnouncementCard = ({
         className={`flex gap-4 p-4 border-2 ${cardColor} rounded-r-2xl rounded-bl-2xl shadow-sm`}
       >
         {/* Обкладинка */}
-        <div className="w-28 h-43 shrink-0 shadow-md overflow-hidden rounded-md border border-gray-200">
-          <img
-            src={
-              offer.book.images?.[0]?.path
-                ? `${IMAGE_HOST}${offer.book.images?.[0]?.path}`
-                : noImages
-            }
-            alt={offer.book.title}
-            className="w-full h-full object-cover"
-          />
-        </div>
+        <a href={`/offers/${offer.id}`}>
+          <div className="w-28 h-43 shrink-0 shadow-md overflow-hidden rounded-md border border-gray-200">
+            <img
+              src={
+                offer.book.images?.[0]?.path
+                  ? `${IMAGE_HOST}${offer.book.images?.[0]?.path}`
+                  : noImages
+              }
+              alt={offer.book.title}
+              className="w-full h-full object-cover"
+            />
+          </div>
+        </a>
 
         {/* Інформація */}
         <div className="flex flex-col flex-1 py-1">

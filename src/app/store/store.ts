@@ -3,8 +3,10 @@ import { OffersApi } from '@app/store/api/OffersApi.ts';
 import { BooksApi } from '@app/store/api/BooksApi.ts';
 import { AuthApi } from '@app/store/api/AuthApi.ts';
 import { ImagesApi } from '@app/store/api/ImagesApi.ts';
+import { FavoritesApi } from '@app/store/api/FavoritesApi.ts';
 import authReducer from '@app/store/slices/authSlice.ts';
 import { authErrorMiddleware } from './middleware/authErrorMiddleware.ts';
+import { authResetMiddleware } from './middleware/authResetMiddleware.ts';
 import { UsersApi } from './api/UsersApi.ts';
 
 export const store = configureStore({
@@ -15,6 +17,7 @@ export const store = configureStore({
     [AuthApi.reducerPath]: AuthApi.reducer,
     [ImagesApi.reducerPath]: ImagesApi.reducer,
     [UsersApi.reducerPath]: UsersApi.reducer,
+    [FavoritesApi.reducerPath]: FavoritesApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(
@@ -23,7 +26,9 @@ export const store = configureStore({
       AuthApi.middleware,
       ImagesApi.middleware,
       UsersApi.middleware,
-      authErrorMiddleware // Додаємо наш middleware
+      FavoritesApi.middleware,
+      authErrorMiddleware,
+      authResetMiddleware
     ),
 });
 

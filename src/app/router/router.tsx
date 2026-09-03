@@ -47,7 +47,11 @@ export const router = createBrowserRouter([
   },
   {
     path: '/favorites',
-    element: <FavoritesPage />,
+    element: (
+      <ProtectedRoute>
+        <FavoritesPage />
+      </ProtectedRoute>
+    ),
   },
   {
     path: '/genres/:genre',

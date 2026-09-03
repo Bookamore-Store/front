@@ -1,14 +1,15 @@
+import type { ButtonHTMLAttributes, ReactNode } from 'react';
 import clsx from 'clsx';
 
 type ButtonProps = {
-  children: React.ReactNode;
-  type?: 'button' | 'submit' | 'reset';
+  children: ReactNode;
   variant?: 'primary' | 'secondary';
   isLoading?: boolean;
-  disabled?: boolean;
-  onClick?: () => void;
   className?: string;
-};
+} & Pick<
+  ButtonHTMLAttributes<HTMLButtonElement>,
+  'type' | 'disabled' | 'onClick'
+>;
 
 export const Button = ({
   children,
@@ -27,17 +28,20 @@ export const Button = ({
       onClick={onClick}
       disabled={isDisabled}
       className={clsx(
-        'w-full px-4 py-2.5 rounded-lg text-base font-medium transition-colors cursor-pointer',
+        'w-full max-w-[342px] px-4 py-2.5 rounded-lg text-base font-medium transition-colors',
         {
-          // primary
-          'bg-deep-blue text-white hover:bg-deep-blue-950 active:bg-deep-blue-950':
-            variant === 'primary',
+          'bg-deep-blue text-white': variant === 'primary',
+          'hover:bg-deep-blue-950 active:bg-deep-blue-950':
+            variant === 'primary' && !isDisabled,
 
-          // secondary
-          'border border-deep-blue text-text-black bg-white hover:bg-[#DDF3FF] active:bg-[#DDF3FF] hover:text-deep-blue':
+          'border border-deep-blue text-text-black bg-white':
             variant === 'secondary',
+          'hover:bg-[#DDF3FF] active:bg-[#DDF3FF] hover:text-deep-blue':
+            variant === 'secondary' && !isDisabled,
+
+          'cursor-pointer': !isDisabled,
+          'opacity-50 cursor-default': isDisabled,
         },
-        isDisabled && 'opacity-50 cursor-not-allowed',
         className
       )}
     >
