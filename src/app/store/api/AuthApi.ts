@@ -27,7 +27,7 @@ interface SignUpResponse {
 export const AuthApi = createApi({
   reducerPath: 'authApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: `${import.meta.env.VITE_BASE_API_URL}/auth`,
+    baseUrl: `${import.meta.env.VITE_BASE_API_URL || '/api/v1'}/auth`,
   }),
   endpoints: (builder) => ({
     login: builder.mutation<AuthResponse, LoginRequest>({

@@ -5,7 +5,7 @@ import type { RootState } from '../store';
 export const BooksApi = createApi({
   reducerPath: 'booksApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: `${import.meta.env.VITE_BASE_API_URL}/books`,
+    baseUrl: `${import.meta.env.VITE_BASE_API_URL || '/api/v1'}/books`,
     prepareHeaders: (headers, { getState }) => {
       const state = getState() as RootState;
       const token = state.auth.token;

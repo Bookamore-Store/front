@@ -18,7 +18,7 @@ export const OffersApi = createApi({
   reducerPath: 'offerApi',
   tagTypes: ['Offer'],
   baseQuery: fetchBaseQuery({
-    baseUrl: `${import.meta.env.VITE_BASE_API_URL}/offers`,
+    baseUrl: `${import.meta.env.VITE_BASE_API_URL || '/api/v1'}/offers`,
     prepareHeaders: (headers, { getState }) => {
       const state = getState() as RootState;
       const token = state.auth.token;

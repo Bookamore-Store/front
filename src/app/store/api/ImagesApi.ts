@@ -17,7 +17,7 @@ export interface ImageResponse {
 export const ImagesApi = createApi({
   reducerPath: 'imagesApi',
   baseQuery: fetchBaseQuery({
-    baseUrl: `${import.meta.env.VITE_BASE_API_URL}/images`,
+    baseUrl: `${import.meta.env.VITE_BASE_API_URL || '/api/v1'}/images`,
     prepareHeaders: (headers, { getState }) => {
       const state = getState() as RootState;
       const token = state.auth.token;
