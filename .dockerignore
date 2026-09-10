@@ -1,0 +1,17 @@
+# Dockerfile робить `COPY . .`, а Vite підхоплює .env автоматично на `npm run build`.
+# Без цього файлу локальний .env розробника вшивається в образ разом з адресами
+# його середовища — і їде в GHCR, звідки його тягнуть і DEV, і PROD.
+.env
+.env.*
+!.env.example
+
+.git
+.github
+node_modules
+dist
+dist-ssr
+
+*.log
+.vscode
+.idea
+.DS_Store

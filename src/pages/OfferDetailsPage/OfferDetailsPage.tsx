@@ -18,6 +18,8 @@ import { NotFoundPage } from '@/pages/NotFoundPage/NotFoundPage';
 import { BottomNav } from '@/shared/ui/BottomNav';
 import { BookSection } from '@/shared/ui/BookSection';
 import HeaderTitle from '@/shared/ui/HeaderTitle';
+import { useFavoriteToggle } from '@/shared/hooks/useFavoriteToggle';
+import { useIsOfferOwner } from '@/shared/hooks/useIsOfferOwner';
 
 import type { Category } from '@/shared/constants/categories';
 import type { OfferWithBook } from '@/types/entities/OfferWithBook';
@@ -28,7 +30,7 @@ const OfferDetailsPage: React.FC = () => {
 
   const [imgIndex, setImgIndex] = useState(0);
   const [isAboutOpen, setIsAboutOpen] = useState(true);
-  const [isFavorite, setIsFavorite] = useState(false);
+  const { toggleFavorite, isLoading: isTogglingFavorite } = useFavoriteToggle();
 
   useEffect(() => {
     setImgIndex(0);
@@ -39,6 +41,8 @@ const OfferDetailsPage: React.FC = () => {
     isLoading,
     error,
   } = useGetOfferWithBookByIdQuery(offerId || '', { skip: !offerId });
+
+  const isOwner = useIsOfferOwner(offer);
 
   const similarBooksQuery = useGetAllOffersWithBooksQuery(
     offer?.book?.genres?.length
@@ -71,8 +75,13 @@ const OfferDetailsPage: React.FC = () => {
         title={t('bookDetails.title')}
         icon={
           <FavoriteButton
-            isFavorite={isFavorite}
-            onToggle={() => setIsFavorite((v) => !v)}
+            isFavorite={Boolean(offer.isFavorite)}
+            favoritesCount={offer.favoritesCount}
+            disabled={isTogglingFavorite || isOwner}
+            onToggle={() => {
+              if (isOwner) return;
+              toggleFavorite(offer.id, Boolean(offer.isFavorite), isOwner);
+            }}
           />
         }
       />
@@ -84,6 +93,7 @@ const OfferDetailsPage: React.FC = () => {
           images={images}
           imgIndex={imgIndex}
           setImgIndex={setImgIndex}
+          isOwner={isOwner}
         />
 
         <ConditionBlock condition={offer.book.condition} />

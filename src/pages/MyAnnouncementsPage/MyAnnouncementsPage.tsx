@@ -173,7 +173,7 @@ const MyAnnouncementsPage = () => {
       <HeaderTitle title={t('myAnnouncements.title')} className="mb-4" />
 
       <main className="mx-auto mb-[80px] w-full space-y-5 lg:max-w-6xl xl:max-w-7xl">
-        <section className="px-4 sm:px-6 lg:px-8 xl:px-12">
+        <section className="px-4 sm:px-6 lg:px-8 xl:px-12 text-center">
           <Button onClick={() => navigate('/offers/new')}>
             {t('myAnnouncements.add')}
           </Button>

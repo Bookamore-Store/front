@@ -10,6 +10,8 @@ type Seller = {
 export type OfferWithBook = Omit<Offer, 'bookId'> & {
   book: Book;
   seller: Seller;
+  isFavorite?: boolean;
+  favoritesCount?: number;
 };
 
 export type OfferWithBookRequest = Omit<OfferRequest, 'bookId'> & {

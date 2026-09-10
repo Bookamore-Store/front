@@ -4,6 +4,8 @@ import { BookImageGallery } from './parts/BookImageGallery';
 import { BookTitle } from './parts/BookTitle';
 import { PriceBlock } from './parts/PriceBlock';
 
+import { useIsOfferOwner } from '@/shared/hooks/useIsOfferOwner';
+
 import type { OfferWithBook } from '@/types/entities/OfferWithBook';
 import type { Book, image } from '@/types/entities/Book';
 
@@ -13,14 +15,18 @@ export const BookDetailsCard = ({
   images,
   imgIndex,
   setImgIndex,
+  isOwner: isOwnerProp,
 }: {
   offer: OfferWithBook;
   book: Book;
   images: image[];
   imgIndex: number;
   setImgIndex: React.Dispatch<React.SetStateAction<number>>;
+  isOwner?: boolean;
 }) => {
   const { t } = useTranslation();
+  const isOwnerCalculated = useIsOfferOwner(offer);
+  const isOwner = isOwnerProp ?? isOwnerCalculated;
 
   return (
     <section className="px-4 sm:px-6 lg:px-8 xl:px-12">
@@ -40,13 +46,14 @@ export const BookDetailsCard = ({
           showExchange={
             offer.type === 'SELL_EXCHANGE' || offer.type === 'EXCHANGE'
           }
-          t={t}
         />
 
         <Button
           onClick={() => {
+            if (isOwner) return;
             console.log('Contact');
           }}
+          disabled={isOwner}
           className="max-w-[364px]"
         >
           {t('common.contact')}

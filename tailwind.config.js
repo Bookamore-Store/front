@@ -51,6 +51,7 @@ export default {
       },
       colors: {
         error: '#E51C29',
+        delete: '#E51C29',
         iconsBlack: '#153037',
         textBlack: '#153037',
         deepBlue: {

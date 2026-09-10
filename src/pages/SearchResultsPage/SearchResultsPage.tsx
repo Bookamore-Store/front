@@ -10,6 +10,7 @@ import {
 } from '../../shared/mocks/mockData';
 import type { QueryParams } from '../../types/entities/QueryParams';
 import BackButton from '@/shared/ui/BackButton';
+import { useFavoriteToggle } from '@/shared/hooks/useFavoriteToggle';
 
 // Mock mode flag - set to true to use mocks instead of API
 const USE_MOCKS = true;
@@ -94,6 +95,7 @@ function FilterChip({ label, isActive = false, onClick }: FilterChipProps) {
 export function SearchResultsPage() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
+  const { toggleFavorite } = useFavoriteToggle();
 
   // Get all filter parameters from URL
   const searchQuery = searchParams.get('q') || '';
@@ -254,8 +256,7 @@ export function SearchResultsPage() {
                     // TODO: Implement contact functionality
                   }}
                   onFavorite={() => {
-                    console.log('Toggle favorite for offer:', offer.id);
-                    // TODO: Implement favorite functionality
+                    toggleFavorite(offer.id, Boolean(offer.isFavorite));
                   }}
                 />
               ))}
