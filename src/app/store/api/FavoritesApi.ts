@@ -11,7 +11,7 @@ export const FavoritesApi = createApi({
   tagTypes: ['Favorite'],
   refetchOnMountOrArgChange: true,
   baseQuery: fetchBaseQuery({
-    baseUrl: `${import.meta.env.VITE_BASE_API_URL}/favorites`,
+    baseUrl: `${import.meta.env.VITE_BASE_API_URL || '/api/v1'}/favorites`,
     prepareHeaders: (headers, { getState }) => {
       const state = getState() as RootState;
       const token = state.auth.token;
