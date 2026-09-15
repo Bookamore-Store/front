@@ -1,0 +1,38 @@
+name: PR checks
+
+# build.yml збирає образ уже після мержу, на push у main/dev — на самому PR
+# не запускається нічого. Без цього workflow у main немає жодного статусу,
+# який можна зробити обов'язковим у branch protection.
+on:
+  pull_request:
+    branches:
+      - main
+      - dev
+
+# Кожен новий пуш у гілку PR скасовує попередній прогін: перевіряти застарілий
+# коміт немає сенсу, а хвилини раннера спільні на всю організацію.
+concurrency:
+  group: pr-checks-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # node:20-alpine — та сама мажорна версія, що й у Dockerfile,
+      # інакше PR може позеленіти на версії, якою образ ніколи не збирається.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      # npm ci, а не npm install: ставимо рівно те, що в package-lock.json.
+      - run: npm ci
+
+      - run: npm run lint
+
+      # tsc -b && vite build — саме тут ловляться помилки типів,
+      # яких лінтер не бачить.
+      - run: npm run build
