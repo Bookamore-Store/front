@@ -85,6 +85,13 @@ VITE_BASE_API_URL=/api/v1
 `AnnouncementCard`, `UploadPhoto`, `BookSection`) підставляє `''`, і шлях `/img/book/…`
 з бази йде на той самий origin, де його вже чекає nginx.
 
+Google login uses the backend's Spring Security OAuth2 flow. The frontend does not
+use the Google JavaScript SDK, so it must not contain `VITE_GOOGLE_CLIENT_ID` or a
+Google client secret. The sign-in link goes to the same-origin
+`/oauth2/authorization/google` endpoint; Nginx forwards that path to the backend.
+The backend receives `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` from its runtime
+environment, and `CLIENT_URL` must be the public origin for that environment.
+
 > `frontend/.env.production` (він у git) містить те саме значення, але Vite у режимі
 > `dev` його **не читає** — потрібен саме `.env`.
 
