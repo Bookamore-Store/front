@@ -1,121 +1,143 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import BackButton from '@/shared/ui/BackButton';
+import { Button } from '@/shared/ui/Button/Button';
+import { AuthHeader } from '@/shared/ui/AuthHeader';
+import { BottomNav } from '@/shared/ui/BottomNav';
+import { FormField } from '@/shared/ui/FormField';
+import { AlertSvg } from '@/shared/ui/icons/AlertSvg';
+import { validators } from '@/shared/helpers/validators';
+import { useTranslation } from 'react-i18next';
+import { PasswordValidator } from '@/modules/auth/ui/PasswordValidator';
+
+interface ValidationError {
+  password?: string;
+  confirmPassword?: string;
+  form?: string;
+}
+
+interface UpdatePasswordFormData {
+  password: string;
+  confirmPassword: string;
+}
 
 const UpdatePasswordPage: React.FC = () => {
-  const [passwordVisible, setPasswordVisible] = useState(false);
-  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const togglePasswordVisibility = () => {
-    setPasswordVisible(!passwordVisible);
+  const [formData, setFormData] = useState<UpdatePasswordFormData>({
+    password: '',
+    confirmPassword: '',
+  });
+
+  const [errors, setErrors] = useState<ValidationError>({});
+
+  const clearFieldError = (field: keyof UpdatePasswordFormData) => {
+    setErrors((prev) => ({
+      ...prev,
+      [field]: undefined,
+      form: undefined,
+    }));
   };
 
-  const toggleConfirmPasswordVisibility = () => {
-    setConfirmPasswordVisible(!confirmPasswordVisible);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const field = e.target.name as keyof UpdatePasswordFormData;
+    const { value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+
+    clearFieldError(field);
+  };
+
+  const validateForm = (): boolean => {
+    const newErrors: ValidationError = {};
+
+    if (!formData.password) {
+      newErrors.password = 'validation.passwordRequired';
+    } else if (!validators.password(formData.password)) {
+      newErrors.password = 'validation.passwordMinLength';
+    }
+
+    if (!formData.confirmPassword) {
+      newErrors.confirmPassword = 'validation.confirmPassword';
+    } else if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = 'validation.passwordsDoNotMatch';
+    }
+
+    setErrors(newErrors);
+
+    return !Object.keys(newErrors).length;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!password || !confirmPassword) return;
 
-    if (password !== confirmPassword) {
-      alert('Passwords do not match');
-      return;
-    }
+    if (!validateForm()) return;
 
-    navigate('/');
+    navigate('/sign-in');
   };
 
   return (
     <div className="flex min-h-screen flex-col items-center bg-white">
-      <div className="w-full max-w-sm">
-        {/* <div className='w-full pt-4 pb-2 px-4'>
-                    <button onClick={handleBackClick} className='p-1 cursor-pointer'>
-                        <IoChevronBack className='text-2xl' />
-                    </button>
-                </div> */}
-        <BackButton />
+      <AuthHeader tittle={t('auth.updatePassword')} />
 
-        <div className="px-6">
-          <div className="flex flex-col items-center">
-            <div className="mb-6 h-40 w-40 rounded-full bg-gray-200"></div>
-            <h2 className="mb-2 text-3xl font-bold text-gray-800">
-              Update Password
-            </h2>
-            <p className="mb-10 text-center text-sm text-gray-500">
-              {/* eget Morbi lacus vel placerat fringilla varius quis risus enim */}
-            </p>
+      <div className="w-full max-w-sm px-6 space-y-9">
+        <p className="text-center text-paragraphm text-text-black">
+          {t('auth.updatePasswordDescription')}
+        </p>
+
+        <form className="w-full" onSubmit={handleSubmit} noValidate>
+          <FormField
+            id="password"
+            label={t('auth.newPassword')}
+            type="password"
+            name="password"
+            placeholder={t('auth.newPassword')}
+            value={formData.password}
+            onChange={handleChange}
+            error={errors.password ? t(errors.password) : undefined}
+            autoComplete="new-password"
+            required
+          />
+
+          {formData.password && !errors.password && (
+            <div className="-mt-2 mb-4">
+              <PasswordValidator password={formData.password} />
+            </div>
+          )}
+
+          <FormField
+            id="confirmPassword"
+            label={t('auth.confirmPassword')}
+            type="password"
+            name="confirmPassword"
+            placeholder={t('auth.confirmPassword')}
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            error={
+              errors.confirmPassword ? t(errors.confirmPassword) : undefined
+            }
+            autoComplete="new-password"
+            required
+          />
+
+          {/* FORM ERROR */}
+          {errors.form && (
+            <div className="flex items-center justify-between mb-4 rounded-xl border border-error bg-red-50 p-3 text-sm text-error">
+              {t(errors.form)}
+              <AlertSvg />
+            </div>
+          )}
+
+          <div className="w-full text-center">
+            <Button type="submit">{t('auth.update')}</Button>
           </div>
-
-          <form onSubmit={handleSubmit}>
-            <div className="mb-4">
-              <label className="mb-2 block text-sm font-medium text-gray-700">
-                New Password
-              </label>
-              <div className="relative">
-                <input
-                  type={passwordVisible ? 'text' : 'password'}
-                  placeholder="New Password"
-                  value={password}
-                  onChange={({ target }) => setPassword(target.value)}
-                  className="w-full rounded-lg border-2 border-transparent bg-gray-100 p-3 pr-10 focus:border-blue-500 focus:outline-none"
-                  required
-                  minLength={6}
-                />
-                <button
-                  type="button"
-                  onClick={togglePasswordVisibility}
-                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500"
-                >
-                  {passwordVisible ? <FaEyeSlash /> : <FaEye />}
-                </button>
-              </div>
-            </div>
-
-            <div className="mb-6">
-              <label className="mb-2 block text-sm font-medium text-gray-700">
-                Confirm password
-              </label>
-              <div className="relative">
-                <input
-                  type={confirmPasswordVisible ? 'text' : 'password'}
-                  placeholder="Confirm password"
-                  value={confirmPassword}
-                  onChange={({ target }) => setConfirmPassword(target.value)}
-                  className="w-full rounded-lg border-2 border-transparent bg-gray-100 p-3 pr-10 focus:border-blue-500 focus:outline-none"
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={toggleConfirmPasswordVisibility}
-                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500"
-                >
-                  {confirmPasswordVisible ? <FaEyeSlash /> : <FaEye />}
-                </button>
-              </div>
-            </div>
-
-            {/* {error && (
-							<div className='mb-4 text-red-500 text-sm'>
-								Passwords do not match.
-							</div>
-						)} */}
-
-            <button
-              type="submit"
-              // disabled={isLoading}
-              className="w-full rounded-lg bg-gray-800 p-3 font-medium text-white transition-colors hover:bg-gray-900 disabled:opacity-50 cursor-pointer"
-            >
-              {/* {isLoading ? 'Loading...' : 'Update'} */}
-              Update
-            </button>
-          </form>
-        </div>
+        </form>
       </div>
+
+      <BottomNav />
     </div>
   );
 };
