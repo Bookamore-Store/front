@@ -28,7 +28,7 @@ export const Button = ({
       onClick={onClick}
       disabled={isDisabled}
       className={clsx(
-        'w-full max-w-[342px] px-4 py-2.5 rounded-lg text-base font-medium transition-colors',
+        'w-full max-w-[416px] px-4 py-2.5 rounded-lg text-base font-medium transition-colors',
         {
           'bg-deep-blue text-white': variant === 'primary',
           'hover:bg-deep-blue-950 active:bg-deep-blue-950':

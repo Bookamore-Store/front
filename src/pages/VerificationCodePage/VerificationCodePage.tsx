@@ -1,70 +1,137 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router';
+import React, { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router';
+import { Button } from '@/shared/ui/Button/Button';
+import { AuthHeader } from '@/shared/ui/AuthHeader';
+import { BottomNav } from '@/shared/ui/BottomNav';
+import { AlertSvg } from '@/shared/ui/icons/AlertSvg';
 import { PinInput } from '@/shared/ui/PinInput';
-import BackButton from '@/shared/ui/BackButton';
+import { useTranslation } from 'react-i18next';
+
+interface ValidationError {
+  code?: string;
+  form?: string;
+}
+
+interface VerificationCodeFormData {
+  code: string;
+}
+
+interface VerificationCodeLocationState {
+  email?: string;
+}
 
 const VerificationCodePage: React.FC = () => {
-  const [currentPin, setCurrentPin] = useState('');
+  const { t } = useTranslation();
+  const location = useLocation();
   const navigate = useNavigate();
+  const email =
+    (location.state as VerificationCodeLocationState | null)?.email ?? '';
 
-  const handlePinComplete = (pin: string) => setCurrentPin(pin);
+  const [formData, setFormData] = useState<VerificationCodeFormData>({
+    code: '',
+  });
+
+  const [errors, setErrors] = useState<ValidationError>({});
+  const [resendSuccess, setResendSuccess] = useState(false);
+
+  const clearFieldError = (field: keyof VerificationCodeFormData) => {
+    setErrors((prev) => ({
+      ...prev,
+      [field]: undefined,
+      form: undefined,
+    }));
+  };
+
+  const handlePinChange = (pin: string) => {
+    setFormData({ code: pin });
+    clearFieldError('code');
+  };
+
+  const handlePinComplete = (pin: string) => {
+    setFormData({ code: pin });
+    clearFieldError('code');
+  };
+
+  const validateForm = (): boolean => {
+    const newErrors: ValidationError = {};
+
+    if (!formData.code.trim()) {
+      newErrors.code = 'validation.codeRequired';
+    } else if (formData.code.trim().length < 4) {
+      newErrors.code = 'validation.codeIncomplete';
+    }
+
+    setErrors(newErrors);
+
+    return !Object.keys(newErrors).length;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!currentPin) return;
 
-    console.log(currentPin);
+    if (!validateForm()) return;
+
     navigate('/update-password');
+  };
+
+  const handleResendCode = () => {
+    setResendSuccess(true);
+    setTimeout(() => setResendSuccess(false), 4000);
   };
 
   return (
     <div className="flex min-h-screen flex-col items-center bg-white">
-      <div className="w-full max-w-sm">
-        {/* <div className='w-full pt-4 pb-2 px-4'>
-                    <button onClick={handleBackClick} className='p-1 cursor-pointer'>
-                        <IoChevronBack className='text-2xl' />
-                    </button>
-                </div> */}
-        <BackButton />
+      <AuthHeader tittle={t('auth.verificationCode')} />
 
-        <div className="px-6">
-          <div className="flex flex-col items-center">
-            <div className="mb-6 h-40 w-40 rounded-full bg-gray-200"></div>
-            <h2 className="mb-2 text-3xl font-bold text-gray-800">
-              Verification Code
-            </h2>
-            <p className="mb-10 text-center text-sm text-gray-500">
-              {/* eget Morbi lacus vel placerat fringilla varius quis risus enim */}
-            </p>
+      <div className="w-full max-w-sm px-6 space-y-9">
+        <p className="text-center text-paragraphm text-text-black">
+          {t('auth.verificationCodeDescription', { email })}
+        </p>
+
+        <form className="w-full" onSubmit={handleSubmit} noValidate>
+          <div className="mb-6">
+            <PinInput
+              onComplete={handlePinComplete}
+              onChange={handlePinChange}
+              error={!!errors.code}
+            />
+            {errors.code && (
+              <p className="mt-2 ml-1 text-sm text-error">{t(errors.code)}</p>
+            )}
           </div>
 
-          <form onSubmit={handleSubmit}>
-            <PinInput onComplete={handlePinComplete} className="mb-4" />
+          {/* FORM ERROR */}
+          {errors.form && (
+            <div className="flex items-center justify-between mb-4 rounded-xl border border-error bg-red-50 p-3 text-sm text-error">
+              {t(errors.form)}
+              <AlertSvg />
+            </div>
+          )}
 
-            {/* {error && (
-							<div className='mb-4 text-red-500 text-sm'>
-								Pin failed.
-							</div>
-						)} */}
+          {resendSuccess && (
+            <div className="flex items-center justify-center mb-4 rounded-xl border border-green-500 bg-green-50 p-3 text-sm text-green-700">
+              {t('auth.codeSent')}
+            </div>
+          )}
 
-            <button
-              type="submit"
-              // disabled={isLoading}
-              className="w-full rounded-lg bg-gray-800 p-3 font-medium text-white transition-colors hover:bg-gray-900 disabled:opacity-50 cursor-pointer"
-            >
-              {/* {isLoading ? 'Loading...' : 'Confirm'} */}
-              Confirm
-            </button>
-          </form>
+          <div className="w-full text-center">
+            <Button type="submit">{t('auth.confirm')}</Button>
+          </div>
+        </form>
 
-          <p className="mt-8 text-center text-xs text-gray-500">
-            Did not receive the code?{' '}
-            <a href="#" className="font-semibold text-gray-800 underline">
-              Send again
-            </a>
-          </p>
-        </div>
+        <p className="text-center text-xs text-gray-500">
+          {t('auth.didNotReceiveCode')}{' '}
+          <button
+            type="button"
+            onClick={handleResendCode}
+            className="font-semibold text-deep-blue underline hover:text-deep-blue-950 cursor-pointer"
+          >
+            {t('auth.resendCode')}
+          </button>
+        </p>
       </div>
+
+      <BottomNav />
     </div>
   );
 };

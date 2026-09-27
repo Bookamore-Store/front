@@ -24,7 +24,7 @@ const FormField: React.FC<FormFieldProps> = ({
   value,
   error,
   onChange,
-  autoComplete,
+  autoComplete = 'off',
   required = false,
 }) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
