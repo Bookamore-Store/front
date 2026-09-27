@@ -140,11 +140,9 @@ const SignInPage: React.FC = () => {
 
   return (
     <div className="flex flex-col max-h-fit pb-[75px] overflow-x-auto scrollbar-custom">
-      <AuthHeader />
+      <AuthHeader tittle={t('auth.logIn')} />
 
       <main className="flex flex-col items-center w-full max-w-md mx-auto px-4">
-        <h2 className="mb-5 text-h2m text-text-black">{t('auth.logIn')}</h2>
-
         <form className="w-full" onSubmit={handleSubmit} noValidate>
           <FormField
             id="email"
@@ -186,7 +184,7 @@ const SignInPage: React.FC = () => {
               to="/forgot-password"
               className="text-sm text-blue-500 hover:text-blue-600"
             >
-              {t('auth.forgotPassword')}
+              {t('auth.forgotPassword')}?
             </Link>
           </div>
 
