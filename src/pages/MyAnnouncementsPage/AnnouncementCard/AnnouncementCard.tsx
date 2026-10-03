@@ -7,8 +7,7 @@ import { DeleteOfferButton } from '@/pages/MyAnnouncementsPage/AnnouncementCard/
 import noImages from '@/assest/images/noImage.jpg';
 import { SynchronizeArrows } from '@/shared/ui/icons/Arrows';
 import { useTranslation } from 'react-i18next';
-
-const IMAGE_HOST = import.meta.env.VITE_IMAGE_HOST || '';
+import { getImageUrl } from '@/shared/lib/imageUrl';
 
 export interface Announcement {
   id: string;
@@ -115,11 +114,7 @@ export const AnnouncementCard = ({
         <a href={`/offers/${offer.id}`}>
           <div className="w-28 h-43 shrink-0 shadow-md overflow-hidden rounded-md border border-gray-200">
             <img
-              src={
-                offer.book.images?.[0]?.path
-                  ? `${IMAGE_HOST}${offer.book.images?.[0]?.path}`
-                  : noImages
-              }
+              src={getImageUrl(offer.book.images?.[0]?.path) || noImages}
               alt={offer.book.title}
               className="w-full h-full object-cover"
             />

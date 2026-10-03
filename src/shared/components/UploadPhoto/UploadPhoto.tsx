@@ -3,25 +3,12 @@ import { NoImgAddPhoto } from '@/shared/ui/icons/NoImgAddSvg';
 import { useState, type ChangeEvent, useEffect } from 'react';
 import { DeletePhotoSvg } from '@/shared/ui/icons/DeletePhotoSvg';
 import { useTranslation } from 'react-i18next';
+import { getImageUrl } from '@/shared/lib/imageUrl';
 
 interface ExistingImage {
   id: string;
   path: string;
 }
-
-const IMAGE_HOST = import.meta.env.VITE_IMAGE_HOST || '';
-
-const getImagePreviewUrl = (path?: string) => {
-  if (!path) return '';
-
-  if (/^https?:\/\//i.test(path)) {
-    return path;
-  }
-
-  const normalizedPath = path.startsWith('/') ? path : `/${path}`;
-
-  return `${IMAGE_HOST}${normalizedPath}`;
-};
 
 interface UploadPhotoProps {
   onPhotosChange?: (photos: File[]) => void;
@@ -79,7 +66,7 @@ const UploadPhoto: React.FC<UploadPhotoProps> = ({
   const displayItems = [
     ...existingImages.map((image) => ({
       type: 'existing' as const,
-      previewUrl: getImagePreviewUrl(image.path),
+      previewUrl: getImageUrl(image.path),
       id: image.id,
     })),
     ...newPhotos.map((photo, index) => ({
