@@ -2,10 +2,9 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import type { OfferWithBook } from '@/types/entities/OfferWithBook';
 import noImages from '@/assest/images/noImage.jpg';
+import { getImageUrl } from '@/shared/lib/imageUrl';
 import { Badge } from './icons/Badge';
 import { Spinner } from './Spinner';
-
-const IMAGE_HOST = import.meta.env.VITE_IMAGE_HOST || '';
 
 interface BookCardProps {
   condition?: 'new' | 'used';
@@ -41,7 +40,7 @@ function BookCard({ condition, offer }: BookCardProps) {
     >
       <div className="relative aspect-[3/5] overflow-hidden rounded-lg">
         <img
-          src={bookImage ? `${IMAGE_HOST}${bookImage}` : noImages}
+          src={bookImage ? getImageUrl(bookImage) : noImages}
           alt={bookTitle}
           className="w-full h-full object-cover"
         />
