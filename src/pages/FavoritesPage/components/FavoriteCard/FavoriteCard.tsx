@@ -9,8 +9,7 @@ import { Button } from '@/shared/ui/Button/Button';
 import { DeleteSvg } from '@/shared/ui/icons/DeleteSvg';
 import { SynchronizeArrows } from '@/shared/ui/icons/Arrows';
 import { useIsOfferOwner } from '@/shared/hooks/useIsOfferOwner';
-
-const IMAGE_HOST = import.meta.env.VITE_IMAGE_HOST || '';
+import { getImageUrl } from '@/shared/lib/imageUrl';
 
 interface FavoriteCardProps {
   offer: Offer;
@@ -35,11 +34,7 @@ export const FavoriteCard: React.FC<FavoriteCardProps> = ({
   const authors = book?.authors?.length ? book.authors.join(', ') : 'Unknown';
   const condition = book?.condition;
   const imagePath = book?.images?.[0]?.path;
-  const imageSrc = imagePath
-    ? imagePath.startsWith('http')
-      ? imagePath
-      : `${IMAGE_HOST}${imagePath}`
-    : noImages;
+  const imageSrc = imagePath ? getImageUrl(imagePath) : noImages;
 
   const handleImageCardClick = () => {
     navigate(`/offers/${offer.id}`);
