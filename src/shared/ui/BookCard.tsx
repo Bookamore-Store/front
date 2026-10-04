@@ -4,7 +4,8 @@ import type { OfferWithBook } from '@/types/entities/OfferWithBook';
 import noImages from '@/assest/images/noImage.jpg';
 import { AddToFavoritesSvg } from '@/shared/ui/icons/AddToFavoritesSvg';
 import { useIsOfferOwner } from '@/shared/hooks/useIsOfferOwner';
-import { getImageUrl } from '@/shared/lib/imageUrl';
+
+const IMAGE_HOST = import.meta.env.VITE_IMAGE_HOST || '';
 
 type BookCardProps = {
   offer: OfferWithBook;
@@ -34,7 +35,9 @@ export function BookCard({
   };
 
   const imageSrc = book.images?.[0]?.path
-    ? getImageUrl(book.images[0].path)
+    ? book.images[0].path.startsWith('http')
+      ? book.images[0].path
+      : `${IMAGE_HOST}${book.images[0].path}`
     : noImages;
 
   return (
