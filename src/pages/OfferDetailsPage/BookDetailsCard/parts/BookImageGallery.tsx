@@ -4,7 +4,8 @@ import { useCallback } from 'react';
 import type { image } from '@/types/entities/Book';
 
 import noImages from '@/assest/images/noImage.jpg';
-import { getImageUrl } from '@/shared/lib/imageUrl';
+
+const IMAGE_HOST = import.meta.env.VITE_IMAGE_HOST || '';
 
 export const BookImageGallery = ({
   images,
@@ -40,7 +41,7 @@ export const BookImageGallery = ({
       <div className="relative w-[164px] h-[264px] md:w-[214px] md:h-[345px] lg:w-[264px] lg:h-[404px] xl:w-[314px] xl:h-[484px] rounded-xl overflow-hidden">
         {images[index] ? (
           <img
-            src={getImageUrl(images[index].path)}
+            src={`${IMAGE_HOST}${images[index].path}`}
             alt={title}
             className="w-full h-full object-cover"
           />
