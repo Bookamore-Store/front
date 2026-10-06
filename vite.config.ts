@@ -16,14 +16,11 @@ export default defineConfig({
     },
     proxy: {
       '/api/v1': {
-        target: 'https://bookamore-dev.alt-web.biz.ua',
+        target: 'https://www.dev.bookamore.store',
         changeOrigin: true,
         configure: (proxy) => {
           proxy.on('proxyReq', (proxyReq) => {
-            proxyReq.setHeader(
-              'Origin',
-              'https://bookamore-dev.alt-web.biz.ua'
-            );
+            proxyReq.setHeader('Origin', 'https://www.dev.bookamore.store');
           });
         },
       },

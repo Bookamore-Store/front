@@ -104,7 +104,7 @@
     "confirmPassword": "Please confirm your password",
     "passwordsDoNotMatch": "Passwords do not match",
     "codeRequired": "Verification code is required",
-    "codeIncomplete": "Please enter all 4 digits of the code",
+    "codeIncomplete": "Please enter all 6 digits of the code",
     "authError": "Invalid email or password",
     "emailInUse": "Email is already in use",
     "RegisterError": "Registration failed. Please try again"
