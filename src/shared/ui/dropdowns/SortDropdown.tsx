@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { RadioBtn } from '@/shared/components/RadioBtn';
 import { CrossSvg } from '../icons/CrossSvg';
 
-export type SortOption = 'relevance' | 'lowest-price' | 'highest-price';
+export type SortOption = 'lowest-price' | 'highest-price' | undefined;
 
 interface SortDropdownProps {
   isOpen: boolean;
@@ -23,7 +23,6 @@ export function SortDropdown({
   const { t } = useTranslation();
 
   const sortOptions = [
-    { value: 'relevance' as const, label: t('sortOptions.relevance') },
     { value: 'lowest-price' as const, label: t('sortOptions.lowestPrice') },
     { value: 'highest-price' as const, label: t('sortOptions.highestPrice') },
   ];
