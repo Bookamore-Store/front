@@ -19,7 +19,7 @@ export function Header() {
   const location = useLocation();
   const [searchQuery, setSearchQuery] = useState('');
   const [isSortModalOpen, setIsSortModalOpen] = useState(false);
-  const [selectedSort, setSelectedSort] = useState<SortOption>('relevance');
+  const [selectedSort, setSelectedSort] = useState<SortOption>();
   const [isFilterDropdownOpen, setIsFilterDropdownOpen] = useState(false);
   const [filters, setFilters] = useState<FilterState>({
     condition: 'any',
@@ -31,7 +31,7 @@ export function Header() {
   // Initialize state from URL params
   useEffect(() => {
     const query = searchParams.get('q') || '';
-    const sort = (searchParams.get('sort') as SortOption) || 'relevance';
+    const sort = (searchParams.get('sort') as SortOption) || undefined;
     const condition =
       (searchParams.get('condition') as FilterState['condition']) || 'any';
     const categories =
@@ -132,8 +132,6 @@ export function Header() {
 
   const getSortLabel = (sort: SortOption) => {
     switch (sort) {
-      case 'relevance':
-        return t('titles.sort');
       case 'lowest-price':
         return `${t('titles.price')} ↑`;
       case 'highest-price':
