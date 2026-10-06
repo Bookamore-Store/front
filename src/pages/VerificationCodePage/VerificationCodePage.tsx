@@ -57,7 +57,7 @@ const VerificationCodePage: React.FC = () => {
 
     if (!formData.code.trim()) {
       newErrors.code = 'validation.codeRequired';
-    } else if (formData.code.trim().length < 4) {
+    } else if (formData.code.trim().length < 6) {
       newErrors.code = 'validation.codeIncomplete';
     }
 

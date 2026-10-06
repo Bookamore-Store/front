@@ -13,7 +13,7 @@ export const PinInput: FC<Props> = ({
   className = '',
   error = false,
 }) => {
-  const [values, setValues] = useState<string[]>(Array(4).fill(''));
+  const [values, setValues] = useState<string[]>(Array(6).fill(''));
   const inputsRef = useRef<HTMLInputElement[]>([]);
 
   const setInputRef = useCallback(
@@ -34,7 +34,7 @@ export const PinInput: FC<Props> = ({
       const combined = newValues.join('');
       onChange?.(combined);
 
-      if (value && index < 3) {
+      if (value && index < 5) {
         inputsRef.current[index + 1]?.focus();
       }
 
@@ -67,7 +67,7 @@ export const PinInput: FC<Props> = ({
       const combined = newValues.join('');
       onChange?.(combined);
 
-      const nextFocus = Math.min(digits.length, 3);
+      const nextFocus = Math.min(digits.length, 5);
       inputsRef.current[nextFocus]?.focus();
 
       if (newValues.every((v) => v !== '')) {
@@ -89,7 +89,7 @@ export const PinInput: FC<Props> = ({
           onChange={({ target }) => handleChange(target.value, i)}
           onKeyDown={(e) => handleKeyDown(e, i)}
           onPaste={handlePaste}
-          className={`w-18 h-9 text-center text-xl rounded-xl border transition-colors focus:outline-none ${
+          className={`w-12 h-9 text-center text-xl rounded-xl border transition-colors focus:outline-none ${
             error
               ? 'border-error bg-red-50 text-error focus:border-error'
               : 'border-gray-300 bg-gray-100 focus:border-blue-500 focus:bg-white text-text-black'
