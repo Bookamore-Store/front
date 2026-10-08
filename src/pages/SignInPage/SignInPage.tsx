@@ -29,16 +29,18 @@ interface SignInFormData {
 
 const SignInPage: React.FC = () => {
   const { t } = useTranslation();
+  const location = useLocation();
+
+  const successMessage = location.state?.successMessage as string | undefined;
 
   const [formData, setFormData] = useState<SignInFormData>({
-    email: '',
+    email: (location.state?.email as string) || '',
     password: '',
   });
 
   const [errors, setErrors] = useState<ValidationError>({});
 
   const navigate = useNavigate();
-  const location = useLocation();
   const dispatch = useDispatch();
 
   const [login, { isLoading }] = useLoginMutation();
@@ -169,6 +171,13 @@ const SignInPage: React.FC = () => {
             autoComplete="current-password"
             required
           />
+
+          {/* SUCCESS MESSAGE */}
+          {successMessage && !errors.form && (
+            <div className="flex items-center justify-center mb-4 rounded-xl border border-green-500 bg-green-50 p-3 text-sm text-green-700">
+              {t(successMessage)}
+            </div>
+          )}
 
           {/* FORM ERROR */}
           {errors.form && (

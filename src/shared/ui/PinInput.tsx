@@ -5,6 +5,7 @@ type Props = {
   onChange?: (pin: string) => void;
   className?: string;
   error?: boolean;
+  disabled?: boolean;
 };
 
 export const PinInput: FC<Props> = ({
@@ -12,6 +13,7 @@ export const PinInput: FC<Props> = ({
   onChange,
   className = '',
   error = false,
+  disabled = false,
 }) => {
   const [values, setValues] = useState<string[]>(Array(6).fill(''));
   const inputsRef = useRef<HTMLInputElement[]>([]);
@@ -57,7 +59,7 @@ export const PinInput: FC<Props> = ({
     e.preventDefault();
     const pastedData = e.clipboardData.getData('text').trim();
     if (/^\d+$/.test(pastedData)) {
-      const digits = pastedData.slice(0, 4).split('');
+      const digits = pastedData.slice(0, 6).split('');
       const newValues = [...values];
       digits.forEach((digit, idx) => {
         newValues[idx] = digit;
@@ -86,6 +88,7 @@ export const PinInput: FC<Props> = ({
           inputMode="numeric"
           maxLength={1}
           value={value}
+          disabled={disabled}
           onChange={({ target }) => handleChange(target.value, i)}
           onKeyDown={(e) => handleKeyDown(e, i)}
           onPaste={handlePaste}
@@ -93,7 +96,7 @@ export const PinInput: FC<Props> = ({
             error
               ? 'border-error bg-red-50 text-error focus:border-error'
               : 'border-gray-300 bg-gray-100 focus:border-blue-500 focus:bg-white text-text-black'
-          }`}
+          } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
           aria-invalid={error}
         />
       ))}
