@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router';
+import { useNavigate, Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
+import { useForgotPasswordMutation } from '@/app/store/api/AuthApi';
 
 import { Button } from '@/shared/ui/Button/Button';
 import { AuthHeader } from '@/shared/ui/AuthHeader';
@@ -30,6 +31,7 @@ const RestorePasswordPage: React.FC = () => {
     useState<RestorePasswordFormData>(INITIAL_FORM_DATA);
 
   const [errors, setErrors] = useState<FormErrors>({});
+  const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -64,14 +66,38 @@ const RestorePasswordPage: React.FC = () => {
     return !emailError;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!validateForm()) return;
+    if (!validateForm() || isLoading) return;
 
-    navigate('/verification-code', {
-      state: { email: formData.email.trim() },
-    });
+    const email = formData.email.trim();
+
+    try {
+      await forgotPassword({ email }).unwrap();
+
+      navigate('/verification-code', {
+        state: { email },
+      });
+    } catch (err: unknown) {
+      const apiErr = err as {
+        status?: number | string;
+        data?: { message?: string };
+      };
+      if (apiErr?.status === 503) {
+        setErrors((prev) => ({ ...prev, form: 'validation.smtpError' }));
+      } else if (apiErr?.status === 400) {
+        setErrors((prev) => ({
+          ...prev,
+          form: apiErr.data?.message || 'validation.emailInvalid',
+        }));
+      } else {
+        setErrors((prev) => ({
+          ...prev,
+          form: apiErr?.data?.message || 'validation.sendCodeError',
+        }));
+      }
+    }
   };
 
   return (
@@ -95,6 +121,7 @@ const RestorePasswordPage: React.FC = () => {
             error={errors.email ? t(errors.email) : undefined}
             autoComplete="email"
             required
+            disabled={isLoading}
           />
 
           {errors.form && (
@@ -105,7 +132,18 @@ const RestorePasswordPage: React.FC = () => {
           )}
 
           <div className="w-full text-center">
-            <Button type="submit">{t('auth.sendCode')}</Button>
+            <Button type="submit" isLoading={isLoading}>
+              {t('auth.sendCode')}
+            </Button>
+          </div>
+
+          <div className="mt-6 mb-6 text-center text-sm">
+            <Link
+              to="/sign-in"
+              className="font-bold text-deep-blue hover:text-deep-blue-950"
+            >
+              {t('auth.backToSignIn')}
+            </Link>
           </div>
         </form>
       </div>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { Button } from '@/shared/ui/Button/Button';
 import { AuthHeader } from '@/shared/ui/AuthHeader';
@@ -6,6 +6,7 @@ import { BottomNav } from '@/shared/ui/BottomNav';
 import { AlertSvg } from '@/shared/ui/icons/AlertSvg';
 import { PinInput } from '@/shared/ui/PinInput';
 import { useTranslation } from 'react-i18next';
+import { useForgotPasswordMutation } from '@/app/store/api/AuthApi';
 
 interface ValidationError {
   code?: string;
@@ -33,6 +34,24 @@ const VerificationCodePage: React.FC = () => {
 
   const [errors, setErrors] = useState<ValidationError>({});
   const [resendSuccess, setResendSuccess] = useState(false);
+  const [resendCountdown, setResendCountdown] = useState(0);
+
+  const [forgotPassword, { isLoading: isResending }] =
+    useForgotPasswordMutation();
+
+  useEffect(() => {
+    if (!email) {
+      navigate('/forgot-password', { replace: true });
+    }
+  }, [email, navigate]);
+
+  useEffect(() => {
+    if (resendCountdown <= 0) return;
+    const timer = setInterval(() => {
+      setResendCountdown((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [resendCountdown]);
 
   const clearFieldError = (field: keyof VerificationCodeFormData) => {
     setErrors((prev) => ({
@@ -71,12 +90,34 @@ const VerificationCodePage: React.FC = () => {
 
     if (!validateForm()) return;
 
-    navigate('/update-password');
+    navigate('/update-password', {
+      state: { email, code: formData.code.trim() },
+    });
   };
 
-  const handleResendCode = () => {
-    setResendSuccess(true);
-    setTimeout(() => setResendSuccess(false), 4000);
+  const handleResendCode = async () => {
+    if (!email || resendCountdown > 0 || isResending) return;
+
+    try {
+      await forgotPassword({ email }).unwrap();
+      setResendSuccess(true);
+      setResendCountdown(60);
+      setErrors((prev) => ({ ...prev, form: undefined }));
+      setTimeout(() => setResendSuccess(false), 5000);
+    } catch (err: unknown) {
+      const apiErr = err as {
+        status?: number | string;
+        data?: { message?: string };
+      };
+      if (apiErr?.status === 503) {
+        setErrors((prev) => ({ ...prev, form: 'validation.smtpError' }));
+      } else {
+        setErrors((prev) => ({
+          ...prev,
+          form: apiErr?.data?.message || 'validation.sendCodeError',
+        }));
+      }
+    }
   };
 
   return (
@@ -94,6 +135,7 @@ const VerificationCodePage: React.FC = () => {
               onComplete={handlePinComplete}
               onChange={handlePinChange}
               error={!!errors.code}
+              disabled={isResending}
             />
             {errors.code && (
               <p className="mt-2 ml-1 text-sm text-error">{t(errors.code)}</p>
@@ -121,13 +163,20 @@ const VerificationCodePage: React.FC = () => {
 
         <p className="text-center text-xs text-gray-500">
           {t('auth.didNotReceiveCode')}{' '}
-          <button
-            type="button"
-            onClick={handleResendCode}
-            className="font-semibold text-deep-blue underline hover:text-deep-blue-950 cursor-pointer"
-          >
-            {t('auth.resendCode')}
-          </button>
+          {resendCountdown > 0 ? (
+            <span className="font-semibold text-gray-400">
+              {t('auth.resendIn', { seconds: resendCountdown })}
+            </span>
+          ) : (
+            <button
+              type="button"
+              onClick={handleResendCode}
+              disabled={isResending}
+              className="font-semibold text-deep-blue underline hover:text-deep-blue-950 cursor-pointer disabled:opacity-50"
+            >
+              {isResending ? '...' : t('auth.resendCode')}
+            </button>
+          )}
         </p>
       </div>
 

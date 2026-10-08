@@ -9,6 +9,10 @@ export const validators = {
     return password.length >= 6;
   },
 
+  passwordPattern: (password: string): boolean => {
+    return password.length >= 6 && /[A-Z]/.test(password) && /[a-z]/.test(password);
+  },
+
   name: (name: string): boolean => {
     const trimmedName = name.trim();
     return trimmedName.length >= 2;
