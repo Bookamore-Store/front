@@ -1,121 +1,235 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import BackButton from '@/shared/ui/BackButton';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate, Link } from 'react-router';
+import { Button } from '@/shared/ui/Button/Button';
+import { AuthHeader } from '@/shared/ui/AuthHeader';
+import { BottomNav } from '@/shared/ui/BottomNav';
+import { FormField } from '@/shared/ui/FormField';
+import { AlertSvg } from '@/shared/ui/icons/AlertSvg';
+import { validators } from '@/shared/helpers/validators';
+import { useTranslation } from 'react-i18next';
+import { PasswordValidator } from '@/modules/auth/ui/PasswordValidator';
+import { useResetPasswordMutation } from '@/app/store/api/AuthApi';
+
+interface ValidationError {
+  password?: string;
+  confirmPassword?: string;
+  form?: string;
+}
+
+interface UpdatePasswordFormData {
+  password: string;
+  confirmPassword: string;
+}
+
+interface UpdatePasswordLocationState {
+  email?: string;
+  code?: string;
+}
 
 const UpdatePasswordPage: React.FC = () => {
-  const [passwordVisible, setPasswordVisible] = useState(false);
-  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const { t } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const togglePasswordVisibility = () => {
-    setPasswordVisible(!passwordVisible);
+  const { email, code } =
+    (location.state as UpdatePasswordLocationState | null) || {};
+
+  const [formData, setFormData] = useState<UpdatePasswordFormData>({
+    password: '',
+    confirmPassword: '',
+  });
+
+  const [errors, setErrors] = useState<ValidationError>({});
+  const [resetPassword, { isLoading }] = useResetPasswordMutation();
+
+  useEffect(() => {
+    if (!email || !code) {
+      navigate('/forgot-password', { replace: true });
+    }
+  }, [email, code, navigate]);
+
+  const clearFieldError = (field: keyof UpdatePasswordFormData) => {
+    setErrors((prev) => ({
+      ...prev,
+      [field]: undefined,
+      form: undefined,
+    }));
   };
 
-  const toggleConfirmPasswordVisibility = () => {
-    setConfirmPasswordVisible(!confirmPasswordVisible);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const field = e.target.name as keyof UpdatePasswordFormData;
+    const { value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+
+    clearFieldError(field);
+  };
+
+  const validateForm = (): boolean => {
+    const newErrors: ValidationError = {};
+
+    if (!formData.password) {
+      newErrors.password = 'validation.passwordRequired';
+    } else if (!validators.password(formData.password)) {
+      newErrors.password = 'validation.passwordMinLength';
+    } else if (!validators.passwordPattern(formData.password)) {
+      newErrors.password = 'validation.passwordRequirements';
+    }
+
+    if (!formData.confirmPassword) {
+      newErrors.confirmPassword = 'validation.confirmPassword';
+    } else if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = 'validation.passwordsDoNotMatch';
+    }
+
+    setErrors(newErrors);
+
+    return !Object.keys(newErrors).length;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!password || !confirmPassword) return;
 
-    if (password !== confirmPassword) {
-      alert('Passwords do not match');
+    if (!validateForm() || isLoading) return;
+    if (!email || !code) {
+      navigate('/forgot-password', { replace: true });
       return;
     }
 
-    navigate('/');
+    try {
+      await resetPassword({
+        email,
+        code,
+        password: formData.password,
+      }).unwrap();
+
+      navigate('/sign-in', {
+        state: {
+          email,
+          successMessage: 'auth.passwordResetSuccess',
+        },
+        replace: true,
+      });
+    } catch (err: unknown) {
+      const apiErr = err as {
+        status?: number | string;
+        data?: { message?: string };
+      };
+
+      if (apiErr?.status === 400) {
+        const msg = apiErr.data?.message || '';
+        if (/invalid or expired/i.test(msg)) {
+          setErrors((prev) => ({
+            ...prev,
+            form: 'validation.invalidResetCode',
+          }));
+        } else if (/password/i.test(msg)) {
+          setErrors((prev) => ({
+            ...prev,
+            password: 'validation.passwordRequirements',
+          }));
+        } else {
+          setErrors((prev) => ({
+            ...prev,
+            form: msg || 'validation.resetPasswordError',
+          }));
+        }
+      } else {
+        setErrors((prev) => ({
+          ...prev,
+          form: apiErr?.data?.message || 'validation.resetPasswordError',
+        }));
+      }
+    }
   };
 
   return (
     <div className="flex min-h-screen flex-col items-center bg-white">
-      <div className="w-full max-w-sm">
-        {/* <div className='w-full pt-4 pb-2 px-4'>
-                    <button onClick={handleBackClick} className='p-1 cursor-pointer'>
-                        <IoChevronBack className='text-2xl' />
-                    </button>
-                </div> */}
-        <BackButton />
+      <AuthHeader tittle={t('auth.updatePassword')} />
 
-        <div className="px-6">
-          <div className="flex flex-col items-center">
-            <div className="mb-6 h-40 w-40 rounded-full bg-gray-200"></div>
-            <h2 className="mb-2 text-3xl font-bold text-gray-800">
-              Update Password
-            </h2>
-            <p className="mb-10 text-center text-sm text-gray-500">
-              {/* eget Morbi lacus vel placerat fringilla varius quis risus enim */}
-            </p>
+      <div className="w-full max-w-sm px-6 space-y-9">
+        <p className="text-center text-paragraphm text-text-black">
+          {t('auth.updatePasswordDescription')}
+        </p>
+
+        <form className="w-full" onSubmit={handleSubmit} noValidate>
+          <FormField
+            id="password"
+            label={t('auth.newPassword')}
+            type="password"
+            name="password"
+            placeholder={t('auth.newPassword')}
+            value={formData.password}
+            onChange={handleChange}
+            error={errors.password ? t(errors.password) : undefined}
+            autoComplete="new-password"
+            required
+            disabled={isLoading}
+          />
+
+          {formData.password && !errors.password && (
+            <div className="-mt-2 mb-4">
+              <PasswordValidator password={formData.password} />
+            </div>
+          )}
+
+          <FormField
+            id="confirmPassword"
+            label={t('auth.confirmPassword')}
+            type="password"
+            name="confirmPassword"
+            placeholder={t('auth.confirmPassword')}
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            error={
+              errors.confirmPassword ? t(errors.confirmPassword) : undefined
+            }
+            autoComplete="new-password"
+            required
+            disabled={isLoading}
+          />
+
+          {/* FORM ERROR */}
+          {errors.form && (
+            <div className="mb-4">
+              <div className="flex items-center justify-between rounded-xl border border-error bg-red-50 p-3 text-sm text-error">
+                <span>{t(errors.form)}</span>
+                <AlertSvg />
+              </div>
+              {errors.form === 'validation.invalidResetCode' && (
+                <div className="mt-2 text-center text-xs">
+                  <Link
+                    to="/forgot-password"
+                    className="font-semibold text-deep-blue underline hover:text-deep-blue-950"
+                  >
+                    {t('auth.sendCode')}
+                  </Link>
+                </div>
+              )}
+            </div>
+          )}
+
+          <div className="w-full text-center">
+            <Button type="submit" isLoading={isLoading}>
+              {t('auth.update')}
+            </Button>
           </div>
 
-          <form onSubmit={handleSubmit}>
-            <div className="mb-4">
-              <label className="mb-2 block text-sm font-medium text-gray-700">
-                New Password
-              </label>
-              <div className="relative">
-                <input
-                  type={passwordVisible ? 'text' : 'password'}
-                  placeholder="New Password"
-                  value={password}
-                  onChange={({ target }) => setPassword(target.value)}
-                  className="w-full rounded-lg border-2 border-transparent bg-gray-100 p-3 pr-10 focus:border-blue-500 focus:outline-none"
-                  required
-                  minLength={6}
-                />
-                <button
-                  type="button"
-                  onClick={togglePasswordVisibility}
-                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500"
-                >
-                  {passwordVisible ? <FaEyeSlash /> : <FaEye />}
-                </button>
-              </div>
-            </div>
-
-            <div className="mb-6">
-              <label className="mb-2 block text-sm font-medium text-gray-700">
-                Confirm password
-              </label>
-              <div className="relative">
-                <input
-                  type={confirmPasswordVisible ? 'text' : 'password'}
-                  placeholder="Confirm password"
-                  value={confirmPassword}
-                  onChange={({ target }) => setConfirmPassword(target.value)}
-                  className="w-full rounded-lg border-2 border-transparent bg-gray-100 p-3 pr-10 focus:border-blue-500 focus:outline-none"
-                  required
-                />
-                <button
-                  type="button"
-                  onClick={toggleConfirmPasswordVisibility}
-                  className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500"
-                >
-                  {confirmPasswordVisible ? <FaEyeSlash /> : <FaEye />}
-                </button>
-              </div>
-            </div>
-
-            {/* {error && (
-							<div className='mb-4 text-red-500 text-sm'>
-								Passwords do not match.
-							</div>
-						)} */}
-
-            <button
-              type="submit"
-              // disabled={isLoading}
-              className="w-full rounded-lg bg-gray-800 p-3 font-medium text-white transition-colors hover:bg-gray-900 disabled:opacity-50 cursor-pointer"
+          <div className="mt-6 mb-6 text-center text-sm">
+            <Link
+              to="/sign-in"
+              className="font-bold text-deep-blue hover:text-deep-blue-950"
             >
-              {/* {isLoading ? 'Loading...' : 'Update'} */}
-              Update
-            </button>
-          </form>
-        </div>
+              {t('auth.backToSignIn')}
+            </Link>
+          </div>
+        </form>
       </div>
+
+      <BottomNav />
     </div>
   );
 };

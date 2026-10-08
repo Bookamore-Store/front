@@ -66,7 +66,7 @@ export const ConditionPriceFields: React.FC<ConditionPriceFieldsProps> = ({
           focus:outline-none focus:ring-0"
           required
           min="0"
-          step="0.01"
+          step="1"
         />
       </div>
     </div>

@@ -2,14 +2,20 @@ import { useCallback, useRef, useState, type FC } from 'react';
 
 type Props = {
   onComplete?: (pin: string) => void;
+  onChange?: (pin: string) => void;
   className?: string;
+  error?: boolean;
+  disabled?: boolean;
 };
 
 export const PinInput: FC<Props> = ({
   onComplete = () => {},
+  onChange,
   className = '',
+  error = false,
+  disabled = false,
 }) => {
-  const [values, setValues] = useState<string[]>(Array(4).fill(''));
+  const [values, setValues] = useState<string[]>(Array(6).fill(''));
   const inputsRef = useRef<HTMLInputElement[]>([]);
 
   const setInputRef = useCallback(
@@ -27,12 +33,15 @@ export const PinInput: FC<Props> = ({
       newValues[index] = value;
       setValues(newValues);
 
-      if (value && index < 3) {
+      const combined = newValues.join('');
+      onChange?.(combined);
+
+      if (value && index < 5) {
         inputsRef.current[index + 1]?.focus();
       }
 
       if (newValues.every((v) => v !== '')) {
-        onComplete(newValues.join(''));
+        onComplete(combined);
       }
     }
   };
@@ -46,6 +55,29 @@ export const PinInput: FC<Props> = ({
     }
   };
 
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    e.preventDefault();
+    const pastedData = e.clipboardData.getData('text').trim();
+    if (/^\d+$/.test(pastedData)) {
+      const digits = pastedData.slice(0, 6).split('');
+      const newValues = [...values];
+      digits.forEach((digit, idx) => {
+        newValues[idx] = digit;
+      });
+      setValues(newValues);
+
+      const combined = newValues.join('');
+      onChange?.(combined);
+
+      const nextFocus = Math.min(digits.length, 5);
+      inputsRef.current[nextFocus]?.focus();
+
+      if (newValues.every((v) => v !== '')) {
+        onComplete(combined);
+      }
+    }
+  };
+
   return (
     <div className={`relative flex justify-between w-full ${className}`}>
       {values.map((value, i) => (
@@ -56,10 +88,16 @@ export const PinInput: FC<Props> = ({
           inputMode="numeric"
           maxLength={1}
           value={value}
+          disabled={disabled}
           onChange={({ target }) => handleChange(target.value, i)}
           onKeyDown={(e) => handleKeyDown(e, i)}
-          className="size-12 text-center text-xl rounded-xl bg-gray-100 focus:border-blue-500 focus:outline-none"
-          required
+          onPaste={handlePaste}
+          className={`w-12 h-9 text-center text-xl rounded-xl border transition-colors focus:outline-none ${
+            error
+              ? 'border-error bg-red-50 text-error focus:border-error'
+              : 'border-gray-300 bg-gray-100 focus:border-blue-500 focus:bg-white text-text-black'
+          } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+          aria-invalid={error}
         />
       ))}
     </div>

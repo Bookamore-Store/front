@@ -29,16 +29,18 @@ interface SignInFormData {
 
 const SignInPage: React.FC = () => {
   const { t } = useTranslation();
+  const location = useLocation();
+
+  const successMessage = location.state?.successMessage as string | undefined;
 
   const [formData, setFormData] = useState<SignInFormData>({
-    email: '',
+    email: (location.state?.email as string) || '',
     password: '',
   });
 
   const [errors, setErrors] = useState<ValidationError>({});
 
   const navigate = useNavigate();
-  const location = useLocation();
   const dispatch = useDispatch();
 
   const [login, { isLoading }] = useLoginMutation();
@@ -140,11 +142,9 @@ const SignInPage: React.FC = () => {
 
   return (
     <div className="flex flex-col max-h-fit pb-[75px] overflow-x-auto scrollbar-custom">
-      <AuthHeader />
+      <AuthHeader tittle={t('auth.logIn')} />
 
       <main className="flex flex-col items-center w-full max-w-md mx-auto px-4">
-        <h2 className="mb-5 text-h2m text-text-black">{t('auth.logIn')}</h2>
-
         <form className="w-full" onSubmit={handleSubmit} noValidate>
           <FormField
             id="email"
@@ -172,6 +172,13 @@ const SignInPage: React.FC = () => {
             required
           />
 
+          {/* SUCCESS MESSAGE */}
+          {successMessage && !errors.form && (
+            <div className="flex items-center justify-center mb-4 rounded-xl border border-green-500 bg-green-50 p-3 text-sm text-green-700">
+              {t(successMessage)}
+            </div>
+          )}
+
           {/* FORM ERROR */}
           {errors.form && (
             <div className="flex items-center justify-between mb-4 rounded-xl border border-error bg-red-50 p-3 text-sm text-error">
@@ -186,7 +193,7 @@ const SignInPage: React.FC = () => {
               to="/forgot-password"
               className="text-sm text-blue-500 hover:text-blue-600"
             >
-              {t('auth.forgotPassword')}
+              {t('auth.forgotPassword')}?
             </Link>
           </div>
 
