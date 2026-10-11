@@ -66,7 +66,7 @@ export const OfferForm: React.FC<OfferFormProps> = ({
           required
         />
         {errors.title && (
-          <p id="title-error" className="mt-0,5 text-sm text-red-600">
+          <p id="title-error" className="mt-0.5 text-sm text-red-600">
             {t(errors.title)}
           </p>
         )}
