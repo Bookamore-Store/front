@@ -2,7 +2,7 @@
   "common": {
     "exchange": "Exchange",
     "exchangeOnly": "Exchange only",
-    "searchBarPlaceholder": "Search: name, author, seller",
+    "searchBarPlaceholder": "Search: name, author",
     "apply": "Apply",
     "reset": "Reset",
     "by": "by",
@@ -139,7 +139,12 @@
     "genresPlaceholder": "Add genres",
     "uploadPhoto": "Upload photo",
     "description": "Add description",
-    "descriptionPlaceholder": "Used, in good condition."
+    "descriptionPlaceholder": "Used, in good condition.",
+    "validation": {
+      "titleLength": "Book title must be between 5 and 150 characters.",
+      "authorLength": "Author must be between 5 and 100 characters.",
+      "descriptionLength": "Description must be between 10 and 2000 characters."
+    }
   },
 
   "chats": {

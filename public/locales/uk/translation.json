@@ -2,7 +2,7 @@
   "common": {
     "exchange": "Обмін",
     "exchangeOnly": "Тільки обмін",
-    "searchBarPlaceholder": "Пошук: ім'я, автор, продавець",
+    "searchBarPlaceholder": "Пошук: ім'я, автор",
     "apply": "Застосувати",
     "reset": "Скинути",
     "by": "від",
@@ -138,7 +138,12 @@
     "genresPlaceholder": "Додати жанри",
     "uploadPhoto": "Завантажити фото",
     "description": "Додати опис",
-    "descriptionPlaceholder": "Вживаний, у хорошому стані."
+    "descriptionPlaceholder": "Вживаний, у хорошому стані.",
+    "validation": {
+      "titleLength": "Назва книги має містити від 5 до 150 символів.",
+      "authorLength": "Ім’я автора має містити від 5 до 100 символів.",
+      "descriptionLength": "Опис має містити від 10 до 2000 символів."
+    }
   },
 
   "chats": {

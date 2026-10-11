@@ -14,6 +14,8 @@ const NewOfferPage: React.FC = () => {
   const {
     mode,
     formData,
+    errors,
+    handleInputBlur,
     existingImages,
     isLoading,
     error,
@@ -37,6 +39,8 @@ const NewOfferPage: React.FC = () => {
       <main className="mx-auto mb-[65px] w-full space-y-5 lg:max-w-6xl xl:max-w-7xl">
         <OfferForm
           formData={formData}
+          errors={errors}
+          onBlur={handleInputBlur}
           onChange={handleInputChange}
           onSubmit={handleSubmit}
           existingImages={existingImages}

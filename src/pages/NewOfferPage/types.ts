@@ -17,3 +17,7 @@ export interface CategoryOption {
   value: Category;
   label: string;
 }
+
+export type OfferFormErrors = Partial<
+  Record<'title' | 'author' | 'description', string>
+>;
