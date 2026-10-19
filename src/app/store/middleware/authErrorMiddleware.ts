@@ -1,8 +1,10 @@
 import { isRejectedWithValue } from '@reduxjs/toolkit';
 import type { Middleware } from '@reduxjs/toolkit';
-import { clearAuth } from '../slices/authSlice';
 
-// Type guard для перевірки чи це API помилка з кодом статусу
+import type { RootState } from '../store';
+import { clearAuth } from '../slices/authSlice';
+import { AuthApi } from '../api/AuthApi';
+
 function isApiError(
   error: unknown
 ): error is { status: number; data?: unknown } {
@@ -10,26 +12,29 @@ function isApiError(
     typeof error === 'object' &&
     error !== null &&
     'status' in error &&
-    typeof (error as { status: unknown }).status === 'number'
+    typeof error.status === 'number'
   );
 }
 
-/**
- * Middleware для обробки 401 помилок та автоматичного логауту
- */
 export const authErrorMiddleware: Middleware =
   (store) => (next) => (action) => {
-    // Перевіряємо чи це rejected action з кодом 401
     if (isRejectedWithValue(action)) {
       const error = action.payload;
 
-      // Перевіряємо чи це API помилка з кодом 401
       if (isApiError(error) && error.status === 401) {
-        // Автоматично очищуємо авторизацію при 401 помилці
-        store.dispatch(clearAuth());
+        const state = store.getState() as RootState;
 
-        // Не робимо window.location.href тут, дозвіляємо компонентам обробляти помилку
-        // Якщо потрібен редирект, компонент зробить це через useNavigate
+        const hasToken = Boolean(state.auth.token);
+
+        const isPublicAuthRequest =
+          AuthApi.endpoints.login.matchRejected(action) ||
+          AuthApi.endpoints.register.matchRejected(action) ||
+          AuthApi.endpoints.forgotPassword.matchRejected(action) ||
+          AuthApi.endpoints.resetPassword.matchRejected(action);
+
+        if (hasToken && !isPublicAuthRequest) {
+          store.dispatch(clearAuth());
+        }
       }
     }
 

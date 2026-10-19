@@ -6,7 +6,7 @@ import { useGetAllOffersWithBooksQuery } from '@/app/store/api/OffersApi.ts';
 import { useTranslation } from 'react-i18next';
 
 // Size of items per section slider
-const SECTION_SIZE = 10;
+const SECTION_SIZE = 50;
 
 const HomePage: React.FC = () => {
   const { t } = useTranslation();

@@ -9,7 +9,6 @@
     "viewAll": "View all",
     "contact": "Contact"
   },
-
   "titles": {
     "filter": "Filter",
     "sort": "Sort",
@@ -21,26 +20,22 @@
     "typeOfDeal": "Type of deal",
     "profile": "Profile"
   },
-
   "typeOfDeal": {
     "purchaseOnly": "Purchase only",
     "exchangeOnly": "Exchange only",
     "both": "Both"
   },
-
   "condition": {
     "NEW": "New",
     "AS_NEW": "As new",
     "USED": "Used",
     "ANY": "Any"
   },
-
   "sortOptions": {
     "relevance": "Relevance",
     "lowestPrice": "Lowest Price",
     "highestPrice": "Highest Price"
   },
-
   "categories": {
     "all": "All",
     "new": "New Arrivals",
@@ -58,7 +53,6 @@
     "children": "Children",
     "psychology": "Psychology"
   },
-
   "auth": {
     "name": "Name",
     "logIn": "Log In",
@@ -96,7 +90,6 @@
     "and": "and",
     "privacy": "Privacy Policy"
   },
-
   "validation": {
     "nameRequired": "Name is required",
     "nameInvalid": "Name must be at least 2 characters",
@@ -117,7 +110,6 @@
     "emailInUse": "Email is already in use",
     "RegisterError": "Registration failed. Please try again"
   },
-
   "passwordValidator": {
     "requirements": "Security Requirements",
     "minLength": "At least 6 characters",
@@ -125,7 +117,6 @@
     "lowercase": "At least 1 lowercase letter (a-z)",
     "specialChar": "Supports special characters (!@#$%)"
   },
-
   "profileItems": {
     "announcements": "My Announcements",
     "orders": "My Orders",
@@ -133,7 +124,6 @@
     "chats": "My Chats",
     "settings": "Settings"
   },
-
   "bottomNav": {
     "home": "Home",
     "favorites": "Favorites",
@@ -141,20 +131,17 @@
     "chats": "Chats",
     "profile": "Profile"
   },
-
   "sellBook": {
     "create": {
       "title": "Sell book",
       "submit": "Publish",
       "loading": "Publishing..."
     },
-
     "edit": {
       "title": "Edit book",
       "submit": "Update",
       "loading": "Updating..."
     },
-
     "bookTitle": "Book title",
     "author": "Author",
     "genres": "Genres",
@@ -168,13 +155,39 @@
       "descriptionLength": "Description must be between 10 and 2000 characters."
     }
   },
-
   "chats": {
     "title": "Chats",
     "mySellings": "My sellings",
-    "myPurchases": "My purchases"
+    "myPurchases": "My purchases",
+    "noChats": "No chats yet",
+    "buyersContact": "When buyers contact you about your books, conversations will appear here.",
+    "youContact": "When you contact sellers about books, conversations will appear here.",
+    "failedToLoad": "Failed to load chats",
+    "tryAgain": "Try again",
+    "unknownAuthor": "Unknown author",
+    "unknownBook": "Unknown book",
+    "unknownUser": "User",
+    "book": "Book",
+    "openConversation": "Open conversation with {name}",
+    "unreadMessages": "{count, plural, one {# unread message} other {# unread messages}}",
+    "conversationCategory": "Conversation category",
+    "conversations": "Conversations",
+    "chatNotFound": "Chat not found",
+    "conversationUnavailable": "This conversation is unavailable.",
+    "goBackToChats": "Go back to chats",
+    "offlineTitle": "You are offline",
+    "checkConnection": "Check your internet connection.",
+    "unableToLoadMessages": "Unable to load messages",
+    "unableToLoadMessagesDescription": "Unable to load messages. Please try again.",
+    "chat": "Chat",
+    "offlineBanner": "You are offline. Messages will update when connection is restored.",
+    "updateMessagesError": "Unable to update messages. Please try again.",
+    "typeMessage": "Type a message...",
+    "message": "Message",
+    "sendMessage": "Send message",
+    "noMessages": "No messages yet. Send a message to start the conversation!",
+    "sendMessageError": "Failed to send message. Please try again."
   },
-
   "favorites": {
     "title": "My Favorites",
     "itemsNumber": "{count, plural, one {# item in your list} other {# items in your list}}",
@@ -183,7 +196,6 @@
     "emptySubtitle": "Start browsing and add books to your favorites list",
     "browseBooks": "Browse Books"
   },
-
   "bookDetails": {
     "title": "Book Details",
     "description": "About the book",
@@ -191,7 +203,6 @@
     "seller": "The Owner",
     "similarBooks": "Similar Books"
   },
-
   "settings": {
     "title": "Settings",
     "lng": "Language",
@@ -201,13 +212,11 @@
     "myProfile": "My Profile",
     "privacyPolicy": "Privacy & Policy"
   },
-
   "languageSwitcher": {
     "label": "Language switcher",
     "english": "Switch language to English",
     "ukrainian": "Switch language to Ukrainian"
   },
-
   "myAnnouncements": {
     "title": "My Announcements",
     "add": "Add a new book",
@@ -219,17 +228,30 @@
     "change": "Change Card",
     "noAnnouncements": "You don't have any announcements yet. Click the button above to add your first book."
   },
-
   "deleteModal": {
     "warning": "Warning!",
     "confirmation": "Are you sure you want to delete this announcement? This action cannot be undone.",
     "confirmButton": "Yes, delete",
     "cancelButton": "No, cancel"
   },
-
   "notFound": {
     "title": "This page got lost between chapters",
     "description": "The link may be out of date",
     "backToHome": "Back to home"
+  },
+  "contactSellerModal": {
+    "сontact": "Contact",
+    "messageLabel": "Your message",
+    "messageDefault": "Hi! Is this book still available?",
+    "messagePlaceholder": "Type your message to the seller...",
+    "sendMessage": "Send Message",
+    "sendingMessage": "Sending...",
+    "cancel": "Cancel",
+    "messageSent": "Message sent successfully!",
+    "errorSendingMessage": "Failed to send message. Please try again."
+  },
+  "errors": {
+    "noBooks": "No books available.",
+    "booksLoadFailed": "Books load failed."
   }
 }

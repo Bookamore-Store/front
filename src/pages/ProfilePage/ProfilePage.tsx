@@ -41,7 +41,7 @@ const ProfilePage = () => {
     },
     {
       title: t('profileItems.chats'),
-      path: '/chats/:chatId',
+      path: '/chats',
       icon: <FaRegComments className="w-5 h-5" />,
     },
     {

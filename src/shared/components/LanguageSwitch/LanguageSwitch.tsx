@@ -34,8 +34,8 @@ export const LanguageSwitch: React.FC<{ className?: string }> = ({
     clsx(
       'text-[14px] rounded-sm px-1 transition-colors outline-grass-500 focus-visible:outline-2 focus-visible:outline-offset-2',
       isActive
-        ? 'font-bold cursor-default text-text-black'
-        : 'font-medium cursor-pointer text-gray-500 hover:text-gray-800'
+        ? 'font-medium cursor-default text-gray-500'
+        : 'font-bold cursor-pointer text-text-black hover:underline hover:underline-offset-2'
     );
 
   return (

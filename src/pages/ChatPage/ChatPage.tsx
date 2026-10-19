@@ -1,435 +1,255 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router';
-import { IoSend, IoAttach } from 'react-icons/io5';
-import BackButton from '@/shared/ui/BackButton';
+import { useEffect, useRef, useState } from 'react';
+import type { ChangeEvent, KeyboardEvent } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { useNavigate, useParams } from 'react-router';
 
-// Mock data types
-interface Message {
-  id: string;
-  text: string;
-  timestamp: Date;
-  isFromMe: boolean;
-  status: 'sent' | 'delivered' | 'read';
-}
+import {
+  useGetConversationsQuery,
+  useGetConversationMessagesQuery,
+  useSendConversationMessageMutation,
+} from '@/app/store/api/ChatsApi';
+import { selectUser } from '@/app/store/slices/authSlice';
 
-interface ChatUser {
-  id: string;
-  name: string;
-  avatar?: string;
-  isOnline: boolean;
-}
+import { useOnlineStatus } from '@/shared/hooks/useOnlineStatus';
+import { Spinner } from '@/shared/ui/Spinner';
 
-interface ChatData {
-  id: string;
-  user: ChatUser;
-  messages: Message[];
-  bookTitle?: string;
-}
+import { ChatError } from './components/ChatError';
+import { ChatHeader } from './components/ChatHeader';
+import { ConnectionBanner } from './components/ConnectionBanner';
+import { MessageInput } from './components/MessageInput';
+import { MessageList } from './components/MessageList';
 
-// Mock users data
-const mockUsers: Record<string, ChatUser> = {
-  '1': {
-    id: '1',
-    name: 'Jane Walker',
-    isOnline: true,
-  },
-  '2': {
-    id: '2',
-    name: 'Jane Walker',
-    isOnline: true,
-  },
-  '3': {
-    id: '3',
-    name: 'John Smith',
-    isOnline: false,
-  },
-  '4': {
-    id: '4',
-    name: 'Sarah Johnson',
-    isOnline: true,
-  },
-};
+import {
+  CHAT_MESSAGES_PAGE_SIZE,
+  useChatHistory,
+} from './hooks/useChatHistory';
+import { useChatScroll } from './hooks/useChatScroll';
+import { useMarkMessagesRead } from './hooks/useMarkMessagesRead';
 
-// Mock chat data
-const mockChatData: Record<string, ChatData> = {
-  '1': {
-    id: '1',
-    user: mockUsers['1'],
-    bookTitle: 'Dune',
-    messages: [
-      {
-        id: 'msg1',
-        text: 'Hi',
-        timestamp: new Date('2025-03-13T10:30:00'),
-        isFromMe: false,
-        status: 'read',
-      },
-      {
-        id: 'msg2',
-        text: 'Hello!',
-        timestamp: new Date('2025-03-13T10:31:00'),
-        isFromMe: true,
-        status: 'read',
-      },
-      {
-        id: 'msg3',
-        text: "I'll buy it!!!",
-        timestamp: new Date('2025-03-13T10:32:00'),
-        isFromMe: true,
-        status: 'read',
-      },
-      {
-        id: 'msg4',
-        text: 'Deal then! Thanks!)',
-        timestamp: new Date('2025-03-21T21:34:00'),
-        isFromMe: false,
-        status: 'read',
-      },
-      {
-        id: 'msg5',
-        text: 'Got it',
-        timestamp: new Date('2025-03-21T21:35:00'),
-        isFromMe: true,
-        status: 'delivered',
-      },
-      {
-        id: 'msg6',
-        text: 'Thanks!)',
-        timestamp: new Date('2025-03-21T21:36:00'),
-        isFromMe: true,
-        status: 'sent',
-      },
-    ],
-  },
-  '2': {
-    id: '2',
-    user: mockUsers['2'],
-    bookTitle: 'Foundation',
-    messages: [
-      {
-        id: 'msg7',
-        text: 'Is this book still available?',
-        timestamp: new Date('2025-03-20T15:22:00'),
-        isFromMe: true,
-        status: 'read',
-      },
-      {
-        id: 'msg8',
-        text: 'Yes, it is! Are you interested?',
-        timestamp: new Date('2025-03-20T15:25:00'),
-        isFromMe: false,
-        status: 'read',
-      },
-    ],
-  },
-  '3': {
-    id: '3',
-    user: mockUsers['3'],
-    bookTitle: 'The Martian',
-    messages: [
-      {
-        id: 'msg9',
-        text: 'Is this book still available?',
-        timestamp: new Date('2025-03-20T15:22:00'),
-        isFromMe: false,
-        status: 'read',
-      },
-      {
-        id: 'msg10',
-        text: 'Yes! Would you like to buy it?',
-        timestamp: new Date('2025-03-20T15:25:00'),
-        isFromMe: true,
-        status: 'read',
-      },
-      {
-        id: 'msg11',
-        text: 'How much?',
-        timestamp: new Date('2025-03-20T15:30:00'),
-        isFromMe: false,
-        status: 'read',
-      },
-      {
-        id: 'msg12',
-        text: '250 UAH, good condition',
-        timestamp: new Date('2025-03-20T15:32:00'),
-        isFromMe: true,
-        status: 'delivered',
-      },
-    ],
-  },
-  '4': {
-    id: '4',
-    user: mockUsers['4'],
-    bookTitle: 'Babel',
-    messages: [
-      {
-        id: 'msg13',
-        text: "I'm interested in your book",
-        timestamp: new Date('2025-03-19T12:10:00'),
-        isFromMe: true,
-        status: 'read',
-      },
-      {
-        id: 'msg14',
-        text: 'Great! Which one?',
-        timestamp: new Date('2025-03-19T12:12:00'),
-        isFromMe: false,
-        status: 'read',
-      },
-      {
-        id: 'msg15',
-        text: 'Babel by Rebecca Kuang',
-        timestamp: new Date('2025-03-19T12:13:00'),
-        isFromMe: true,
-        status: 'read',
-      },
-      {
-        id: 'msg16',
-        text: "Perfect! I'll take it",
-        timestamp: new Date('2025-03-19T12:15:00'),
-        isFromMe: true,
-        status: 'sent',
-      },
-    ],
-  },
-};
+import type { Conversation } from '@/types/entities/Chat';
 
-// Message Bubble Component
-interface MessageBubbleProps {
-  message: Message;
-}
-
-function MessageBubble({ message }: MessageBubbleProps) {
-  const formatTime = (date: Date) => {
-    return date.toLocaleTimeString('en-US', {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false,
-    });
-  };
-
-  return (
-    <div
-      className={`flex mb-4 ${
-        message.isFromMe ? 'justify-end' : 'justify-start'
-      }`}
-    >
-      <div
-        className={`max-w-xs lg:max-w-md px-4 py-2 rounded-2xl ${
-          message.isFromMe
-            ? 'bg-blue-500 text-white rounded-br-md'
-            : 'bg-gray-200 text-gray-900 rounded-bl-md'
-        }`}
-      >
-        <p className="text-sm">{message.text}</p>
-        <div
-          className={`flex items-center justify-end mt-1 text-xs ${
-            message.isFromMe ? 'text-blue-100' : 'text-gray-500'
-          }`}
-        >
-          <span>{formatTime(message.timestamp)}</span>
-          {message.isFromMe && (
-            <span className="ml-1">
-              {message.status === 'sent' && '✓'}
-              {message.status === 'delivered' && '✓✓'}
-              {message.status === 'read' && '✓✓'}
-            </span>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// Date Separator Component
-interface DateSeparatorProps {
-  date: Date;
-}
-
-function DateSeparator({ date }: DateSeparatorProps) {
-  const formatDate = (date: Date) => {
-    return date.toLocaleDateString('en-US', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    });
-  };
-
-  return (
-    <div className="flex justify-center my-4">
-      <span className="bg-gray-100 text-gray-600 text-xs px-3 py-1 rounded-full">
-        {formatDate(date)}
-      </span>
-    </div>
-  );
-}
-
-// Group messages by date
-function groupMessagesByDate(messages: Message[]) {
-  const groups: { date: string; messages: Message[] }[] = [];
-
-  messages.forEach((message) => {
-    const dateStr = message.timestamp.toDateString();
-    const existingGroup = groups.find((group) => group.date === dateStr);
-
-    if (existingGroup) {
-      existingGroup.messages.push(message);
-    } else {
-      groups.push({ date: dateStr, messages: [message] });
-    }
-  });
-
-  return groups;
-}
-
-const ChatPage: React.FC = () => {
-  const { chatId } = useParams();
+const ChatPage = () => {
+  const { t } = useTranslation();
+  const { chatId } = useParams<{ chatId: string }>();
   const navigate = useNavigate();
-  const [newMessage, setNewMessage] = useState('');
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-  const [chatData, setChatData] = useState<ChatData | null>(null);
 
-  // Load chat data
+  const currentUser = useSelector(selectUser);
+  const isOnline = useOnlineStatus();
+
+  const [newMessage, setNewMessage] = useState('');
+  const [sendError, setSendError] = useState<string | null>(null);
+  const [hasRefreshError, setHasRefreshError] = useState(false);
+
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const draftRef = useRef(newMessage);
+  const draftVersionRef = useRef(0);
+  const chatIdRef = useRef(chatId);
+
+  chatIdRef.current = chatId;
+
   useEffect(() => {
-    if (chatId && mockChatData[chatId]) {
-      setChatData(mockChatData[chatId]);
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+
+    textarea.style.height = 'auto';
+    textarea.style.height = `${Math.min(textarea.scrollHeight, 120)}px`;
+  }, [newMessage]);
+
+  const {
+    currentData: messagesData,
+    isError: isMessagesError,
+    isFetching: isFetchingMessages,
+    isSuccess: isMessagesSuccess,
+    refetch: refetchMessages,
+  } = useGetConversationMessagesQuery(
+    {
+      conversationId: chatId ?? '',
+      limit: CHAT_MESSAGES_PAGE_SIZE,
+    },
+    {
+      skip: !chatId,
+      pollingInterval: isOnline ? 3000 : 0,
+      skipPollingIfUnfocused: true,
+      refetchOnReconnect: true,
     }
+  );
+
+  // Keep the warning visible while subsequent polling requests are pending.
+  // Clear it only after a completed successful refresh.
+  useEffect(() => {
+    if (isMessagesError) {
+      setHasRefreshError(true);
+    } else if (isMessagesSuccess && !isFetchingMessages) {
+      setHasRefreshError(false);
+    }
+  }, [isMessagesError, isMessagesSuccess, isFetchingMessages]);
+
+  useEffect(() => {
+    setHasRefreshError(false);
   }, [chatId]);
 
-  // Auto-scroll to bottom
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [chatData?.messages]);
+  const { data: conversationsData } = useGetConversationsQuery();
+  const [sendMessage, { isLoading: isSending }] =
+    useSendConversationMessageMutation();
+
+  const { messages, loadMore, hasMore } = useChatHistory({
+    chatId,
+    latestMessages: messagesData?.messages,
+    isOnline,
+  });
+
+  const conversationsList: Conversation[] = Array.isArray(conversationsData)
+    ? conversationsData
+    : (conversationsData?.content ?? []);
+  const conversation = conversationsList.find((item) => item.id === chatId);
+  const lastMessage = messages.at(-1);
+
+  const { messagesContainerRef, handleMessagesScroll, saveScrollPosition } =
+    useChatScroll({
+      chatId,
+      firstMessageId: messages[0]?.id,
+      lastMessageId: lastMessage?.id,
+      lastMessageSenderId: lastMessage?.senderId,
+      currentUserId: currentUser?.id,
+      hasMessagesData: Boolean(messagesData),
+    });
+
+  useMarkMessagesRead({
+    chatId,
+    currentUserId: currentUser?.id,
+    messages: messagesData?.messages,
+    isOnline,
+    isMessagesError,
+  });
+
+  const handleChatScroll = () => {
+    handleMessagesScroll();
+
+    const container = messagesContainerRef.current;
+
+    if (
+      !container ||
+      !hasMore ||
+      !isOnline ||
+      container.scrollTop > container.clientHeight
+    ) {
+      return;
+    }
+
+    void loadMore(saveScrollPosition);
+  };
 
   const handleBack = () => {
     navigate(-1);
   };
 
-  const handleSendMessage = () => {
-    if (!newMessage.trim() || !chatData) return;
+  const handleRetry = () => {
+    if (!chatId || !isOnline) return;
 
-    const message: Message = {
-      id: Date.now().toString(),
-      text: newMessage.trim(),
-      timestamp: new Date(),
-      isFromMe: true,
-      status: 'sent',
-    };
-
-    setChatData((prev) =>
-      prev
-        ? {
-            ...prev,
-            messages: [...prev.messages, message],
-          }
-        : null
-    );
-
-    setNewMessage('');
+    void refetchMessages();
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSendMessage();
+  const handleSendMessage = async (): Promise<void> => {
+    const content = draftRef.current.trim();
+
+    if (!content || !chatId || !isOnline || isSending) return;
+
+    const sendingChatId = chatId;
+    const sendingVersion = draftVersionRef.current;
+
+    setSendError(null);
+
+    try {
+      await sendMessage({
+        conversationId: sendingChatId,
+        content,
+      }).unwrap();
+
+      if (
+        chatIdRef.current === sendingChatId &&
+        draftVersionRef.current === sendingVersion
+      ) {
+        draftRef.current = '';
+        setNewMessage('');
+      }
+    } catch (error: unknown) {
+      console.error('Failed to send message:', error);
+
+      if (chatIdRef.current === sendingChatId) {
+        setSendError(t('chats.sendMessageError'));
+      }
     }
   };
 
-  if (!chatData) {
+  const handleKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (
+      event.key === 'Enter' &&
+      !event.shiftKey &&
+      !event.nativeEvent.isComposing
+    ) {
+      event.preventDefault();
+      void handleSendMessage();
+    }
+  };
+
+  const handleTextareaChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    const value = event.target.value;
+
+    draftVersionRef.current += 1;
+    draftRef.current = value;
+
+    setNewMessage(value);
+    setSendError(null);
+  };
+
+  if (chatId && isOnline && !messagesData && !isMessagesError) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
-        <div className="text-center">
-          <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mb-4 mx-auto">
-            <span className="text-2xl">💬</span>
-          </div>
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
-            Chat not found
-          </h3>
-          <button
-            onClick={handleBack}
-            className="text-blue-500 hover:text-blue-600"
-          >
-            Go back to chats
-          </button>
-        </div>
+      <div className="flex min-h-screen items-center justify-center bg-white">
+        <Spinner size="md" />
       </div>
     );
   }
 
-  const messageGroups = groupMessagesByDate(chatData.messages);
+  if (!chatId || (!messagesData && (isMessagesError || !isOnline))) {
+    const errorType = !chatId ? 'not-found' : !isOnline ? 'offline' : 'error';
+
+    return (
+      <ChatError type={errorType} onRetry={handleRetry} onBack={handleBack} />
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-white flex flex-col">
-      {/* Header */}
-      <div className="bg-white px-4 py-3 flex items-center border-b border-gray-200 flex-shrink-0">
-        <BackButton />
+    <div className="flex h-dvh flex-col overflow-hidden bg-white">
+      <ChatHeader conversation={conversation} />
 
-        {/* User info */}
-        <div className="flex items-center flex-1">
-          <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center mr-3">
-            <span className="text-gray-600 font-medium text-sm">
-              {chatData.user.name
-                .split(' ')
-                .map((n) => n[0])
-                .join('')}
-            </span>
-          </div>
-          <div>
-            <h1 className="text-base font-semibold text-gray-900">
-              {chatData.user.name}
-            </h1>
-            {chatData.user.isOnline && (
-              <p className="text-xs text-green-500">Online</p>
-            )}
-          </div>
+      <main className="relative mx-auto flex min-h-0 w-full flex-1 flex-col overflow-hidden">
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-20">
+          <ConnectionBanner
+            isOnline={isOnline}
+            isMessagesError={hasRefreshError || isMessagesError}
+            hasMessagesData={Boolean(messagesData)}
+          />
         </div>
-      </div>
 
-      {/* Messages */}
-      <div className="flex-1 overflow-y-auto px-4 py-4">
-        {messageGroups.map((group, groupIndex) => (
-          <div key={groupIndex}>
-            <DateSeparator date={new Date(group.date)} />
-            {group.messages.map((message) => (
-              <MessageBubble key={message.id} message={message} />
-            ))}
-          </div>
-        ))}
-        <div ref={messagesEndRef} />
-      </div>
+        <MessageList
+          messages={messages}
+          currentUserId={currentUser?.id}
+          containerRef={messagesContainerRef}
+          onScroll={handleChatScroll}
+        />
+      </main>
 
-      {/* Message Input */}
-      <div className="bg-white border-t border-gray-200 p-4 flex-shrink-0">
-        <div className="flex items-center space-x-3">
-          <button className="flex-shrink-0 w-10 h-10 flex items-center justify-center text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors">
-            <IoAttach className="w-5 h-5" />
-          </button>
-
-          <div className="flex-1 relative">
-            <textarea
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              onKeyPress={handleKeyPress}
-              placeholder="Type a message..."
-              className="w-full px-4 py-3 border border-gray-300 rounded-2xl resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-              rows={1}
-              style={{ minHeight: '44px', maxHeight: '120px' }}
-            />
-          </div>
-
-          <button
-            onClick={handleSendMessage}
-            disabled={!newMessage.trim()}
-            className={`flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-full transition-colors ${
-              newMessage.trim()
-                ? 'bg-blue-500 text-white hover:bg-blue-600'
-                : 'bg-gray-200 text-gray-400'
-            }`}
-          >
-            <IoSend className="w-5 h-5" />
-          </button>
-        </div>
-      </div>
+      <MessageInput
+        value={newMessage}
+        isSending={isSending}
+        isOnline={isOnline}
+        error={sendError}
+        textareaRef={textareaRef}
+        onChange={handleTextareaChange}
+        onKeyDown={handleKeyDown}
+        onSend={() => void handleSendMessage()}
+      />
     </div>
   );
 };

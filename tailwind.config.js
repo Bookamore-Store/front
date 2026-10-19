@@ -56,9 +56,12 @@ export default {
         textBlack: '#153037',
         deepBlue: {
           DEFAULT: '#033f63',
+          100: '#DDF3FF',
+          800: '#005B90',
           950: '#022f4f',
         },
         gray: {
+          200: '#DFDFDF',
           400: '#B6B6B6',
           500: '#999999',
           700: '#7B7B7B',
@@ -70,12 +73,14 @@ export default {
           500: '#577561',
         },
         sand: {
+          50: '#F7F8F2',
           100: '#E9EADB',
         },
         aquamarine: {
           50: '#F0FBFB',
           100: '#DDF3FF',
           200: '#B4E7FF',
+          300: '#87D8D9',
           500: '#33A2A7',
           700: '#28666E',
         },
