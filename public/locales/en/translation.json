@@ -186,7 +186,9 @@
     "message": "Message",
     "sendMessage": "Send message",
     "noMessages": "No messages yet. Send a message to start the conversation!",
-    "sendMessageError": "Failed to send message. Please try again."
+    "sendMessageError": "Failed to send message. Please try again.",
+    "dateToday": "Today",
+    "dateYesterday": "Yesterday"
   },
   "favorites": {
     "title": "My Favorites",

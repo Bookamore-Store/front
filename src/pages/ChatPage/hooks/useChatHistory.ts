@@ -1,5 +1,7 @@
 import { useCallback, useRef, useState } from 'react';
 
+import { parseServerDate } from '@/shared/helpers/parseServerDate';
+
 import { useLazyGetConversationMessagesQuery } from '@/app/store/api/ChatsApi';
 import type { ChatMessage } from '@/types/entities/Chat';
 
@@ -33,7 +35,8 @@ const mergeMessages = (
 
   return Array.from(messagesMap.values()).sort(
     (a, b) =>
-      new Date(a.createdDate).getTime() - new Date(b.createdDate).getTime()
+      parseServerDate(a.createdDate).getTime() -
+      parseServerDate(b.createdDate).getTime()
   );
 };
 
