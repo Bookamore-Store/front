@@ -40,18 +40,7 @@
     "all": "All",
     "new": "New Arrivals",
     "recommended": "Recommended",
-    "sci-fi": "Sci-fi",
-    "romantic": "Romantic",
-    "historical": "Historical",
-    "detective": "Detective",
-    "fantasy": "Fantasy",
-    "biography": "Biography",
-    "horror": "Horror",
-    "comedy": "Comedy",
-    "drama": "Drama",
-    "adventure": "Adventure",
-    "children": "Children",
-    "psychology": "Psychology"
+    "sci-fi": "Science Fiction"
   },
   "auth": {
     "name": "Name",
