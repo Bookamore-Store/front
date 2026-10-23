@@ -25,6 +25,7 @@ import {
   useChatHistory,
 } from './hooks/useChatHistory';
 import { useChatScroll } from './hooks/useChatScroll';
+import { useChatDraft } from './hooks/useChatDraft';
 import { useMarkMessagesRead } from './hooks/useMarkMessagesRead';
 
 import type { Conversation } from '@/types/entities/Chat';
@@ -37,16 +38,12 @@ const ChatPage = () => {
   const currentUser = useSelector(selectUser);
   const isOnline = useOnlineStatus();
 
-  const [newMessage, setNewMessage] = useState('');
+  const { value: newMessage, version: draftVersion, updateDraft, clearIfUnchanged } =
+    useChatDraft(currentUser?.id, chatId);
   const [sendError, setSendError] = useState<string | null>(null);
   const [hasRefreshError, setHasRefreshError] = useState(false);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const draftRef = useRef(newMessage);
-  const draftVersionRef = useRef(0);
-  const chatIdRef = useRef(chatId);
-
-  chatIdRef.current = chatId;
 
   useEffect(() => {
     const textarea = textareaRef.current;
@@ -151,12 +148,12 @@ const ChatPage = () => {
   };
 
   const handleSendMessage = async (): Promise<void> => {
-    const content = draftRef.current.trim();
+    const content = newMessage.trim();
 
     if (!content || !chatId || !isOnline || isSending) return;
 
     const sendingChatId = chatId;
-    const sendingVersion = draftVersionRef.current;
+    const sendingVersion = draftVersion;
 
     setSendError(null);
 
@@ -166,17 +163,11 @@ const ChatPage = () => {
         content,
       }).unwrap();
 
-      if (
-        chatIdRef.current === sendingChatId &&
-        draftVersionRef.current === sendingVersion
-      ) {
-        draftRef.current = '';
-        setNewMessage('');
-      }
+      clearIfUnchanged(sendingChatId, sendingVersion, content);
     } catch (error: unknown) {
       console.error('Failed to send message:', error);
 
-      if (chatIdRef.current === sendingChatId) {
+      if (chatId === sendingChatId) {
         setSendError(t('chats.sendMessageError'));
       }
     }
@@ -196,10 +187,7 @@ const ChatPage = () => {
   const handleTextareaChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     const value = event.target.value;
 
-    draftVersionRef.current += 1;
-    draftRef.current = value;
-
-    setNewMessage(value);
+    updateDraft(value);
     setSendError(null);
   };
 
