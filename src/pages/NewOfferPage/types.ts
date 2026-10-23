@@ -1,6 +1,5 @@
 import type { OfferType } from '@/types/entities/Offer.d.ts';
 import type { BookCondition } from '@/types/entities/Book.d.ts';
-import { type Category } from '@/shared/constants/categories.ts';
 
 export interface OfferFormData {
   title: string;
@@ -14,7 +13,7 @@ export interface OfferFormData {
 }
 
 export interface CategoryOption {
-  value: Category;
+  value: string;
   label: string;
 }
 

@@ -1,17 +1,3 @@
-import { useMemo } from 'react';
-import { useTranslation } from 'react-i18next';
-import { categories } from '@/shared/constants/categories.ts';
-import type { CategoryOption } from '../types';
+import { useGenres } from '@/shared/hooks/useGenres';
 
-export const useCategoryOptions = (): CategoryOption[] => {
-  const { t } = useTranslation();
-
-  return useMemo(
-    () =>
-      categories.map((category) => ({
-        value: category,
-        label: t(`categories.${category}`),
-      })),
-    [t]
-  );
-};
+export const useCategoryOptions = useGenres;

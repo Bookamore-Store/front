@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import { formStyle } from '@app/styles/form';
-import { useCategoryOptions } from '../hooks/useCategoryOptions';
+import { useGenres } from '@/shared/hooks/useGenres';
 import type { CategoryOption } from '../types';
 
 interface GenreSelectProps {
@@ -15,7 +15,7 @@ const animatedComponents = makeAnimated();
 
 export const GenreSelect: React.FC<GenreSelectProps> = ({ value, onChange }) => {
   const { t } = useTranslation();
-  const categoryOptions = useCategoryOptions();
+  const { options: categoryOptions, isLoading, isError } = useGenres();
 
   return (
     <div className={formStyle.container}>
@@ -30,6 +30,9 @@ export const GenreSelect: React.FC<GenreSelectProps> = ({ value, onChange }) => 
         "
         id="genres"
         options={categoryOptions}
+        isLoading={isLoading}
+        isDisabled={isLoading || isError}
+        noOptionsMessage={() => isError ? 'Unable to load genres' : 'No genres available'}
         closeMenuOnSelect={false}
         components={animatedComponents}
         isMulti

@@ -2,6 +2,7 @@ import { setupListeners } from '@reduxjs/toolkit/query';
 import { configureStore } from '@reduxjs/toolkit';
 import { OffersApi } from '@app/store/api/OffersApi.ts';
 import { BooksApi } from '@app/store/api/BooksApi.ts';
+import { GenresApi } from '@app/store/api/GenresApi.ts';
 import { AuthApi } from '@app/store/api/AuthApi.ts';
 import { ImagesApi } from '@app/store/api/ImagesApi.ts';
 import { FavoritesApi } from '@app/store/api/FavoritesApi.ts';
@@ -16,6 +17,7 @@ export const store = configureStore({
     auth: authReducer,
     [OffersApi.reducerPath]: OffersApi.reducer,
     [BooksApi.reducerPath]: BooksApi.reducer,
+    [GenresApi.reducerPath]: GenresApi.reducer,
     [AuthApi.reducerPath]: AuthApi.reducer,
     [ImagesApi.reducerPath]: ImagesApi.reducer,
     [UsersApi.reducerPath]: UsersApi.reducer,
@@ -26,6 +28,7 @@ export const store = configureStore({
     getDefaultMiddleware().concat(
       OffersApi.middleware,
       BooksApi.middleware,
+      GenresApi.middleware,
       AuthApi.middleware,
       ImagesApi.middleware,
       UsersApi.middleware,
