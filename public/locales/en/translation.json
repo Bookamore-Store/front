@@ -188,7 +188,8 @@
     "noMessages": "No messages yet. Send a message to start the conversation!",
     "sendMessageError": "Failed to send message. Please try again.",
     "dateToday": "Today",
-    "dateYesterday": "Yesterday"
+    "dateYesterday": "Yesterday",
+    "draft": "Draft"
   },
   "favorites": {
     "title": "My Favorites",

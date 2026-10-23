@@ -5,15 +5,17 @@ import { UserAvatar } from '@/shared/ui/UserAvatar/UserAvatar';
 import type { Conversation } from '@/types/entities/Chat';
 
 import { formatMessageTime } from '../helpers/formatMessageTime';
+import { getChatDraft } from '@/shared/helpers/chatDraftStorage';
 import noImages from '@/assest/images/noImage.jpg';
 
 const IMAGE_HOST = import.meta.env.VITE_IMAGE_HOST || '';
 
 interface ChatListItemProps {
   chat: Conversation;
+  userId?: string;
 }
 
-export const ChatListItem = ({ chat }: ChatListItemProps) => {
+export const ChatListItem = ({ chat, userId }: ChatListItemProps) => {
   const { t } = useTranslation();
   const counterpartName = chat.counterpart?.name || t('chats.unknownUser');
   const book = chat.offer?.book;
@@ -22,6 +24,7 @@ export const ChatListItem = ({ chat }: ChatListItemProps) => {
   const imageSrc = imagePath ? `${IMAGE_HOST}${imagePath}` : null;
 
   const formattedTime = formatMessageTime(chat.lastMessageAt);
+  const hasDraft = Boolean(getChatDraft(userId, chat.id).trim());
 
   return (
     <Link
@@ -35,15 +38,20 @@ export const ChatListItem = ({ chat }: ChatListItemProps) => {
         className="mr-3 h-16 w-11 shrink-0 object-cover rounded-[4px]"
       />
 
-      <div className="min-w-0 flex-1">
+      <div className="relative min-w-0 flex-1">
         <div className="mb-2 flex items-start justify-between">
           <div className="min-w-0 flex-1 border-b border-gray-200">
             <h3 className="mb-1 truncate text-h3m font-semibold text-text-black">
               {book?.title || t('chats.unknownBook')}
             </h3>
 
-            <p className="pb-2 truncate text-h6m font-medium text-text-black">
+            <p className="flex justify-between pb-2 truncate text-h6m font-medium text-text-black">
               {book?.author || t('chats.unknownAuthor')}
+              {hasDraft && (
+                <span className="absolute right-0 shrink-0 text-xs font-medium text-amber-700">
+                  {t('chats.draft')}
+                </span>
+              )}
             </p>
           </div>
 
@@ -70,6 +78,11 @@ export const ChatListItem = ({ chat }: ChatListItemProps) => {
             </p>
           </div>
 
+          {/* {hasDraft && (
+            <span className="shrink-0 text-xs font-medium text-amber-700">
+              {t('chats.draft')}
+            </span>
+          )} */}
           {chat.unreadCount > 0 && (
             <span
               aria-label={t('chats.unreadMessages', {

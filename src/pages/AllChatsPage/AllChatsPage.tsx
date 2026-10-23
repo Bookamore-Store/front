@@ -1,5 +1,7 @@
 import { useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { selectUser } from '@/app/store/slices/authSlice';
 
 import { BottomNav } from '@/shared/ui/BottomNav';
 import HeaderTitle from '@/shared/ui/HeaderTitle';
@@ -14,6 +16,7 @@ import type { ChatTab } from './types';
 
 const AllChatsPage = () => {
   const { t } = useTranslation();
+  const currentUser = useSelector(selectUser);
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -63,6 +66,7 @@ const AllChatsPage = () => {
         <div className="pb-24">
           <ChatsList
             chats={filteredChats}
+            userId={currentUser?.id}
             activeTab={activeTab}
             isLoading={isLoading && !data}
             isError={isError && !data}

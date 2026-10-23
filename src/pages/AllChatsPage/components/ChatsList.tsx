@@ -8,6 +8,7 @@ import type { ChatTab } from '../types';
 
 interface ChatsListProps {
   chats: Conversation[];
+  userId?: string;
   activeTab: ChatTab;
   isLoading: boolean;
   isError: boolean;
@@ -16,6 +17,7 @@ interface ChatsListProps {
 
 export const ChatsList = ({
   chats,
+  userId,
   activeTab,
   isLoading,
   isError,
@@ -76,7 +78,7 @@ export const ChatsList = ({
   return (
     <div aria-label={t('chats.conversations')}>
       {chats.map((chat) => (
-        <ChatListItem key={chat.id} chat={chat} />
+        <ChatListItem key={chat.id} chat={chat} userId={userId} />
       ))}
     </div>
   );
