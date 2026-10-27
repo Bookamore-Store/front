@@ -10,11 +10,11 @@ import {
 } from '../../shared/mocks/mockData';
 import type { OfferWithBook } from '@/types/entities/OfferWithBook';
 import BackButton from '@/shared/ui/BackButton';
-import type { Category } from '@/shared/constants/categories';
+import { useGenres } from '@/shared/hooks/useGenres';
 import { useFavoriteToggle } from '@/shared/hooks/useFavoriteToggle';
 
 // Mock mode flag - set to true to use mocks instead of API
-const USE_MOCKS = true;
+const USE_MOCKS = false;
 
 // Local header component
 function PageHeader() {
@@ -49,10 +49,12 @@ function FilterChip({
 }
 
 const GenreResultsPage: React.FC = () => {
-  const { genre } = useParams<{ genre: Category }>();
+  const { genre } = useParams<{ genre: string }>();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { toggleFavorite } = useFavoriteToggle();
+  const { getGenreLabel } = useGenres();
+  const genreLabel = genre ? getGenreLabel(genre) : '';
 
   // Get filter parameters from URL
   const filters = {
@@ -176,7 +178,7 @@ const GenreResultsPage: React.FC = () => {
         {/* Results */}
         <div className="px-4 sm:px-6 lg:px-8 py-4 pb-20">
           <h2 className="text-base sm:text-lg lg:text-xl font-bold mb-4">
-            Results for "{genre}":
+            Results for "{genreLabel}":
           </h2>
 
           {/* Results grid */}
@@ -200,7 +202,7 @@ const GenreResultsPage: React.FC = () => {
                 No books found
               </h3>
               <p className="text-sm sm:text-base text-gray-500 mb-6 max-w-md mx-auto">
-                No results found for "{genre}". Try browsing other categories.
+                No results found for "{genreLabel}". Try browsing other categories.
               </p>
               <button
                 onClick={handleBack}

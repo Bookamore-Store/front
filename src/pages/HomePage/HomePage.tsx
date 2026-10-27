@@ -4,12 +4,20 @@ import { Categories } from '@/shared/ui/Categories';
 import { BookSection } from '@/shared/ui/BookSection';
 import { useGetAllOffersWithBooksQuery } from '@/app/store/api/OffersApi.ts';
 import { useTranslation } from 'react-i18next';
+import { useGenres } from '@/shared/hooks/useGenres';
 
 // Size of items per section slider
-const SECTION_SIZE = 10;
+const SECTION_SIZE = 50;
 
 const HomePage: React.FC = () => {
   const { t } = useTranslation();
+  const { genres } = useGenres();
+  const scienceFictionId = genres.find((genre) => genre.id === 'science_fiction')?.id
+    ?? genres.find((genre) => /^(science fiction|sci[ -]?fi)$/i.test(genre.en.trim()))?.id;
+  const sciFiQuery = useGetAllOffersWithBooksQuery(
+    { genres: scienceFictionId, size: SECTION_SIZE },
+    { skip: !scienceFictionId }
+  );
   const bookSections = [
     {
       title: t('categories.new'),
@@ -31,11 +39,8 @@ const HomePage: React.FC = () => {
     },
     {
       title: t('categories.sci-fi'),
-      destination: '/genres/sci-fi',
-      queryResult: useGetAllOffersWithBooksQuery({
-        genres: 'sci-fi',
-        size: SECTION_SIZE,
-      }),
+      destination: `/genres/${scienceFictionId}`,
+      queryResult: sciFiQuery,
     },
   ];
 
@@ -47,7 +52,7 @@ const HomePage: React.FC = () => {
 
         {/* Book sections */}
         <div className="space-y-2 sm:space-y-4 lg:space-y-6">
-          {bookSections.map((section) => (
+          {bookSections.filter((section) => section !== bookSections[2] || scienceFictionId).map((section) => (
             <BookSection
               key={section.title}
               title={section.title}

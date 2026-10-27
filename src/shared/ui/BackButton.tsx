@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { BackButtonSvg } from './BackButtonSvg/BackButtonSvg';
 
-const BackButton = () => {
+const BackButton = ({ className }: { className?: string }) => {
   const navigate = useNavigate();
 
   const handleBack = () => {
@@ -10,7 +10,11 @@ const BackButton = () => {
 
   return (
     <>
-      <button type="button" onClick={handleBack} className="cursor-pointer">
+      <button
+        type="button"
+        onClick={handleBack}
+        className={`cursor-pointer ${className || ''}`}
+      >
         <BackButtonSvg />
       </button>
     </>

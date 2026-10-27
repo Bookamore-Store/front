@@ -8,7 +8,7 @@ export type Book = {
   title: string;
   yearOfRelease: number;
   description: string;
-  isbn: string;
+  isbn?: string;
   condition: BookCondition;
   authors: string[];
   genres: string[];

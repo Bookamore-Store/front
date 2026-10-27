@@ -20,7 +20,8 @@ import type {
 } from '@/types/entities/Book.d.ts';
 import type { OfferType, OfferStatus } from '@/types/entities/Offer.d.ts';
 import type { OfferWithBookRequest } from '@/types/entities/OfferWithBook.d.ts';
-import type { OfferFormData } from '../types';
+import type { OfferFormData, OfferFormErrors } from '../types';
+import { validateOfferForm } from '../validateOfferForm';
 
 export const createInitialFormData = (): OfferFormData => ({
   title: '',
@@ -59,6 +60,7 @@ export const useOfferForm = () => {
   const [formData, setFormData] = useState<OfferFormData>(
     createInitialFormData()
   );
+  const [errors, setErrors] = useState<OfferFormErrors>({});
   const [existingImages, setExistingImages] = useState<BookImage[]>([]);
   const [removedImageIds, setRemovedImageIds] = useState<string[]>([]);
 
@@ -85,10 +87,29 @@ export const useOfferForm = () => {
 
   const handleInputChange = useCallback(
     <K extends keyof OfferFormData>(field: K, value: OfferFormData[K]) => {
-      setFormData((prev) => ({ ...prev, [field]: value }));
+      const nextFormData = { ...formData, [field]: value };
+      setFormData(nextFormData);
+      if (field === 'title' || field === 'author' || field === 'description') {
+        const errorField = field as keyof OfferFormErrors;
+        if (errors[errorField]) {
+          const validationErrors = validateOfferForm(nextFormData);
+          setErrors((prev) => ({
+            ...prev,
+            [errorField]: validationErrors[errorField],
+          }));
+        }
+      }
     },
-    []
+    [formData, errors]
   );
+
+  const handleInputBlur = (field: keyof OfferFormErrors) => {
+    const validationErrors = validateOfferForm(formData);
+    setErrors((prev) => ({
+      ...prev,
+      [field]: validationErrors[field],
+    }));
+  };
 
   const handlePhotosChange = useCallback((photos: File[]) => {
     setFormData((prev) => ({ ...prev, photos }));
@@ -138,6 +159,11 @@ export const useOfferForm = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) return;
+    const validationErrors = validateOfferForm(formData);
+    setErrors(validationErrors);
+    if (Object.values(validationErrors).some(Boolean)) {
+      return;
+    }
     if (!formData.title || !formData.author || !formData.price) {
       toast.error('Please fill in all required fields');
       return;
@@ -165,7 +191,6 @@ export const useOfferForm = () => {
             title: formData.title,
             yearOfRelease: offer.book.yearOfRelease || new Date().getFullYear(),
             description: formData.description,
-            isbn: offer.book.isbn || '',
             condition: formData.condition,
             authors: [formData.author],
             genres: formData.genres,
@@ -218,7 +243,6 @@ export const useOfferForm = () => {
           title: formData.title,
           yearOfRelease: new Date().getFullYear(),
           description: formData.description,
-          isbn: '',
           condition: formData.condition,
           authors: [formData.author],
           genres: formData.genres,
@@ -271,12 +295,14 @@ export const useOfferForm = () => {
   return {
     mode,
     formData,
+    errors,
     existingImages,
     isLoading,
     error,
     offer,
     isSubmitting,
     handleInputChange,
+    handleInputBlur,
     handlePhotosChange,
     handleExistingImagesChange,
     handleSubmit,

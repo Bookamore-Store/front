@@ -1,16 +1,35 @@
 import { NavLink } from 'react-router';
 import clsx from 'clsx';
+import { useSelector } from 'react-redux';
 import { HomeSvg } from './bottomNavImg/HomeSvg';
 import { FavoritesSvg } from './bottomNavImg/FavoritesSvg';
 import { SellSvg } from './bottomNavImg/SellSvg';
 import { ChatsSvg } from './bottomNavImg/ChatsSvg';
 import { FaceSvg } from './bottomNavImg/FaceSvg';
 import { useTranslation } from 'react-i18next';
+import { selectIsAuthenticated } from '@/app/store/slices/authSlice';
+import { useGetUnreadCountQuery } from '@/app/store/api/ChatsApi';
+import { useOnlineStatus } from '@/shared/hooks/useOnlineStatus';
 
 export function BottomNav() {
   const { t } = useTranslation(undefined, {
     keyPrefix: 'bottomNav',
   });
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const isOnline = useOnlineStatus();
+
+  const { data: unreadData } = useGetUnreadCountQuery(undefined, {
+    skip: !isAuthenticated,
+    pollingInterval: isOnline ? 15000 : 0,
+    skipPollingIfUnfocused: true,
+    refetchOnReconnect: true,
+  });
+
+  const unreadCount =
+    typeof unreadData === 'number'
+      ? unreadData
+      : (unreadData?.unreadMessages ?? 0);
+
   const navItems = [
     {
       to: '/',
@@ -66,7 +85,19 @@ export function BottomNav() {
             <div className="pt-[6px] pr-[9.5px] pb-[4px] pl-[9.5px]">
               <Icon />
             </div>
-            <p className="text-sand-100 font-kyiv">{label}</p>
+
+            <div className="relative">
+              <p className="font-kyiv text-sand-100">{label}</p>
+
+              {to === '/chats' && unreadCount > 0 && (
+                <span
+                  aria-label={`${unreadCount} unread messages`}
+                  className="absolute -right-3 -top-10 flex h-5 min-w-5 place-items-baseline justify-center rounded-full bg-red-500 text-[12px] text-white shadow-sm"
+                >
+                  {unreadCount > 99 ? '99+' : unreadCount}
+                </span>
+              )}
+            </div>
           </NavLink>
         ))}
       </nav>

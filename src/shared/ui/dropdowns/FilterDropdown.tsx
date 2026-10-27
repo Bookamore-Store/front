@@ -5,7 +5,7 @@ import { Checkbox } from '@/shared/components/Checkbox';
 import { Button } from '@/shared/ui/Button/Button';
 import { CrossSvg } from '../icons/CrossSvg';
 import { ChevronUpSvg } from '../icons/ChevronUpSvg';
-import { categories } from '@/shared/constants/categories';
+import { useGenres } from '@/shared/hooks/useGenres';
 
 export type ConditionFilter = 'new' | 'used' | 'asNew' | 'any';
 export type TypeOfDealFilter = 'purchaseOnly' | 'exchangeOnly' | 'both';
@@ -45,6 +45,7 @@ export function FilterDropdown({
   const [isCategoryExpanded, setIsCategoryExpanded] = useState(true);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const { t } = useTranslation();
+  const { options: genreOptions, isLoading: genresLoading, isError: genresError } = useGenres();
 
   useEffect(() => {
     setLocalFilters(filters);
@@ -183,6 +184,8 @@ export function FilterDropdown({
                     onChange={() => handleConditionChange(option.value)}
                   />
                 ))}
+                {genresLoading && <p className="text-sm text-gray-500">Loading genres...</p>}
+                {genresError && <p className="text-sm text-red-600">Unable to load genres</p>}
               </div>
             )}
           </div>
@@ -218,6 +221,8 @@ export function FilterDropdown({
                     onChange={() => handleTypeOfDealChange(option.value)}
                   />
                 ))}
+                {genresLoading && <p className="text-sm text-gray-500">Loading genres...</p>}
+                {genresError && <p className="text-sm text-red-600">Unable to load genres</p>}
               </div>
             )}
           </div>
@@ -243,15 +248,17 @@ export function FilterDropdown({
 
             {isCategoryExpanded && (
               <div className="space-y-1.5 lg:space-y-0 mt-2">
-                {categories.map((category) => (
+                {genreOptions.map(({ value: category, label }) => (
                   <Checkbox
                     key={category}
                     isChecked={localFilters.categories.includes(category)}
                     onChange={() => handleCategoryToggle(category)}
-                    label={t(`categories.${category}`)}
+                    label={label}
                     size={16}
                   />
                 ))}
+                {genresLoading && <p className="text-sm text-gray-500">Loading genres...</p>}
+                {genresError && <p className="text-sm text-red-600">Unable to load genres</p>}
               </div>
             )}
           </div>

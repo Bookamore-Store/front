@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { categories } from '@/shared/constants/categories';
+import { useGenres } from '@/shared/hooks/useGenres';
 
 interface CategoryButtonProps {
   label: string;
@@ -35,6 +35,7 @@ export function Categories() {
   const [activeCategory, setActiveCategory] = useState('all');
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const { options, isLoading, isError } = useGenres();
 
   const handleCategoryClick = (categoryId: string) => {
     if (categoryId === 'all') {
@@ -55,10 +56,10 @@ export function Categories() {
 
         {/* Scrollable categories */}
         <div className="flex gap-2 py-2 sm:py-2.5 lg:py-3 sm:gap-3 lg:gap-4 overflow-x-auto scrollbar-custom">
-          {['all', ...categories].map((category) => (
+          {[{ value: 'all', label: t('categories.all') }, ...options].map(({ value: category, label }) => (
             <CategoryButton
               key={category}
-              label={t(`categories.${category}`)}
+              label={label}
               isActive={activeCategory === category}
               onClick={() => {
                 setActiveCategory(category);
@@ -66,6 +67,8 @@ export function Categories() {
               }}
             />
           ))}
+          {isLoading && <span className="text-sm text-gray-500">Loading genres...</span>}
+          {isError && <span className="text-sm text-red-600">Unable to load genres</span>}
         </div>
       </div>
     </section>

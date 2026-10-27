@@ -1,5 +1,5 @@
 import { CheckboxFrameSvg } from '../ui/checkbox/CheckboxFrameSvg';
-import { СheckMarkSvg } from '../ui/checkbox/СheckMarkSvg';
+import { CheckMarkSvg } from '../ui/checkbox/CheckMarkSvg';
 
 export const Checkbox = ({
   isChecked,
@@ -29,7 +29,7 @@ export const Checkbox = ({
         style={{ width: size, height: size }}
       >
         <CheckboxFrameSvg className="text-icons-black" size={size} />
-        <СheckMarkSvg
+        <CheckMarkSvg
           className="absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 opacity-0 text-icons-black"
           size={size}
         />

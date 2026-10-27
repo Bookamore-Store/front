@@ -21,7 +21,6 @@ import HeaderTitle from '@/shared/ui/HeaderTitle';
 import { useFavoriteToggle } from '@/shared/hooks/useFavoriteToggle';
 import { useIsOfferOwner } from '@/shared/hooks/useIsOfferOwner';
 
-import type { Category } from '@/shared/constants/categories';
 import type { OfferWithBook } from '@/types/entities/OfferWithBook';
 
 const OfferDetailsPage: React.FC = () => {
@@ -46,7 +45,7 @@ const OfferDetailsPage: React.FC = () => {
 
   const similarBooksQuery = useGetAllOffersWithBooksQuery(
     offer?.book?.genres?.length
-      ? { genres: offer.book.genres as Category[], size: 10 }
+      ? { genres: offer.book.genres, size: 10 }
       : undefined,
     { skip: !offer?.book?.genres?.length }
   );

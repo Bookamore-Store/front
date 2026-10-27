@@ -75,6 +75,7 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     // Встановлення креденшелів після успішного логіну
+
     setCredentials: (
       state,
       action: PayloadAction<{ token: string; user?: User }>
@@ -82,15 +83,20 @@ const authSlice = createSlice({
       const { token, user } = action.payload;
 
       state.token = token;
+      state.user = user ?? null;
       state.isAuthenticated = true;
       state.isLoading = false;
 
-      // Синхронізуємо з localStorage
       setStoredAuth(token);
 
       if (user) {
-        state.user = user;
         setStoredUser(user);
+      } else {
+        try {
+          localStorage.removeItem('auth_user');
+        } catch (error) {
+          console.error('Failed to clear stored user:', error);
+        }
       }
     },
 

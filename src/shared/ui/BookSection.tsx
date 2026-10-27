@@ -115,13 +115,13 @@ export function BookSection({
 
           {hasError && (
             <div className="py-6 text-center text-red-600">
-              Failed to load books.
+              {t('errors.booksLoadFailed')}
             </div>
           )}
 
           {!isLoading && !hasError && offers.length === 0 && (
             <div className="py-6 text-center text-gray-600">
-              No books available.
+              {t('errors.noBooks')}
             </div>
           )}
 
