@@ -15,7 +15,7 @@ const HomePage: React.FC = () => {
   const scienceFictionId = genres.find((genre) => genre.id === 'science_fiction')?.id
     ?? genres.find((genre) => /^(science fiction|sci[ -]?fi)$/i.test(genre.en.trim()))?.id;
   const sciFiQuery = useGetAllOffersWithBooksQuery(
-    { genres: scienceFictionId, size: SECTION_SIZE },
+    { genre: scienceFictionId, size: SECTION_SIZE },
     { skip: !scienceFictionId }
   );
   const bookSections = [
@@ -25,8 +25,7 @@ const HomePage: React.FC = () => {
       queryResult: useGetAllOffersWithBooksQuery({
         page: 0,
         size: SECTION_SIZE,
-        sortBy: 'createdDate',
-        sortDir: 'desc',
+        sort: 'createdDate,desc',
       }),
     },
     {

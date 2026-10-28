@@ -42,7 +42,7 @@ export const ImagesApi = createApi({
         }
 
         return {
-          url: '/upload',
+          url: '',
           method: 'POST',
           body: formData,
         };
