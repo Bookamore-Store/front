@@ -27,7 +27,6 @@ export const LanguageSwitch: React.FC<{ className?: string }> = ({
     if (lng === currentLng) return;
 
     i18n.changeLanguage(lng);
-    localStorage.setItem('i18nextLng', lng);
   };
 
   const buttonClass = (isActive: boolean) =>

@@ -13,6 +13,18 @@ export default i18n
     fallbackLng: 'en',
     supportedLngs: ['en', 'uk'],
     debug: false,
+
+    detection: {
+      order: ['cookie', 'navigator'],
+      lookupCookie: 'i18next',
+      caches: ['cookie'],
+      cookieMinutes: 60 * 24 * 365,
+      cookieOptions: {
+        path: '/',
+        sameSite: 'lax',
+      },
+    },
+
     interpolation: {
       escapeValue: false,
     },
