@@ -8,5 +8,5 @@ export type QueryParams = Nullable<{
   genre?: string | string[];
   condition?: string;
   search?: string;
-  sellerId?: string | number;
+  sellerId?: string[];
 }>;

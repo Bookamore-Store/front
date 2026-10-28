@@ -41,7 +41,7 @@ const MyAnnouncementsPage = () => {
   const { data: offersWithBooks, isSuccess } = useGetAllOffersWithBooksQuery(
     currentUser?.id
       ? {
-          sellerId: currentUser.id,
+          sellerId: [currentUser.id],
           size: 10,
         }
       : undefined,

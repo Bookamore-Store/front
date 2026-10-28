@@ -193,7 +193,8 @@
     "description": "Про книгу",
     "dateAdded": "Дата додавання:",
     "seller": "Власник",
-    "similarBooks": "Схожі книги"
+    "similarBooks": "Схожі книги",
+    "sellerBooks": "Більше книг цього продавця"
   },
   "settings": {
     "title": "Налаштування",
