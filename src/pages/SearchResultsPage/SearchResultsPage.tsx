@@ -123,6 +123,7 @@ export function SearchResultsPage() {
     condition: currentCondition || undefined,
     page: 0,
     size: 20,
+    sort: sort === 'lowest-price' ? 'price,asc' : sort === 'highest-price' ? 'price,desc' : undefined,
   };
 
   // Mock data logic using new filter function

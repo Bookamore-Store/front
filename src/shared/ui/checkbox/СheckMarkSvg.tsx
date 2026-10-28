@@ -1,4 +1,4 @@
-export const СheckMarkSvg = ({
+export const CheckMarkSvg = ({
   className,
   size = 18,
 }: {
