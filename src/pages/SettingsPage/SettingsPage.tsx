@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaChevronRight } from 'react-icons/fa';
 import { PageLayout } from '@/shared/ui/PageLayout/PageLayout';
@@ -7,18 +7,15 @@ import LogOut from '@/shared/components/LogOut/LogOut';
 
 const SettingsPage = () => {
   const { t, i18n } = useTranslation();
-  const [currentLng, setCurrentLng] = useState(i18n.language);
   const [notifications, setNotifications] = useState(true);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    setCurrentLng(i18n.language);
-  }, [i18n.language]);
+  const currentLng = i18n.resolvedLanguage ?? i18n.language;
 
   const changeLanguage = (lng: string) => {
+    if (lng === currentLng) return;
+
     i18n.changeLanguage(lng);
-    localStorage.setItem('i18nextLng', lng);
-    setCurrentLng(lng);
   };
 
   return (
