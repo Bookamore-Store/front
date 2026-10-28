@@ -194,7 +194,8 @@
     "dateAdded": "Date added:",
     "seller": "The Owner",
     "similarBooks": "Similar Books",
-    "sellerBooks": "More Books from This Seller"
+    "sellerBooks": "More Books from This Seller",
+    "authorBooks": "More Books by This Author"
   },
   "settings": {
     "title": "Settings",
