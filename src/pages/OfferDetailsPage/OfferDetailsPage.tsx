@@ -23,6 +23,8 @@ import { useIsOfferOwner } from '@/shared/hooks/useIsOfferOwner';
 
 import type { OfferWithBook } from '@/types/entities/OfferWithBook';
 
+const normalizeAuthor = (author: string) => author.trim().toLocaleLowerCase();
+
 const OfferDetailsPage: React.FC = () => {
   const { t } = useTranslation();
   const { offerId } = useParams<{ offerId: string }>();
@@ -60,6 +62,11 @@ const OfferDetailsPage: React.FC = () => {
     { skip: !offer?.seller?.id }
   );
 
+  const authorBooksQuery = useGetAllOffersWithBooksQuery(
+    { size: 100 },
+    { skip: !offer?.book?.authors?.length }
+  );
+
   if (isLoading) return <div>Loading...</div>;
   if (error || !offer) return <NotFoundPage />;
 
@@ -81,6 +88,24 @@ const OfferDetailsPage: React.FC = () => {
   const sellerBooks =
     sellerBooksQuery.data?.content?.filter(
       (item: OfferWithBook) => item.id !== offer.id && item.status === 'OPEN'
+    ) || [];
+
+  const currentAuthors = new Set(
+    (book.authors || [])
+      .filter((author): author is string => typeof author === 'string')
+      .map(normalizeAuthor)
+  );
+
+  const authorBooks =
+    authorBooksQuery.data?.content?.filter(
+      (item: OfferWithBook) =>
+        item.id !== offer.id &&
+        item.status === 'OPEN' &&
+        item.book.authors?.some(
+          (author) =>
+            typeof author === 'string' &&
+            currentAuthors.has(normalizeAuthor(author))
+        )
     ) || [];
 
   return (
@@ -137,6 +162,17 @@ const OfferDetailsPage: React.FC = () => {
             title={t('bookDetails.sellerBooks')}
             isLoading={sellerBooksQuery.isLoading}
             error={sellerBooksQuery.error}
+            showViewAll={false}
+          />
+        )}
+        {(authorBooksQuery.isLoading ||
+          authorBooksQuery.isError ||
+          authorBooks.length > 0) && (
+          <BookSection
+            offers={authorBooks}
+            title={t('bookDetails.authorBooks')}
+            isLoading={authorBooksQuery.isLoading}
+            error={authorBooksQuery.error}
             showViewAll={false}
           />
         )}
