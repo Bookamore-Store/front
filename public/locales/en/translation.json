@@ -193,7 +193,8 @@
     "description": "About the book",
     "dateAdded": "Date added:",
     "seller": "The Owner",
-    "similarBooks": "Similar Books"
+    "similarBooks": "Similar Books",
+    "sellerBooks": "More Books from This Seller"
   },
   "settings": {
     "title": "Settings",

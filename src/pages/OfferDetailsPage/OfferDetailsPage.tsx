@@ -50,6 +50,16 @@ const OfferDetailsPage: React.FC = () => {
     { skip: !offer?.book?.genres?.length }
   );
 
+  const sellerBooksQuery = useGetAllOffersWithBooksQuery(
+    offer?.seller?.id
+      ? {
+          sellerId: [String(offer.seller.id)],
+          size: 20,
+        }
+      : undefined,
+    { skip: !offer?.seller?.id }
+  );
+
   if (isLoading) return <div>Loading...</div>;
   if (error || !offer) return <NotFoundPage />;
 
@@ -67,6 +77,11 @@ const OfferDetailsPage: React.FC = () => {
         return item.book.genres?.some((genre) => currentGenres.includes(genre));
       })
       .slice(0, 10) || [];
+
+  const sellerBooks =
+    sellerBooksQuery.data?.content?.filter(
+      (item: OfferWithBook) => item.id !== offer.id && item.status === 'OPEN'
+    ) || [];
 
   return (
     <>
@@ -110,9 +125,21 @@ const OfferDetailsPage: React.FC = () => {
         <BookSection
           offers={similarBooks}
           title={t('bookDetails.similarBooks')}
-          isLoading={isLoading}
+          isLoading={similarBooksQuery.isLoading}
           showViewAll={false}
         />
+
+        {(sellerBooksQuery.isLoading ||
+          sellerBooksQuery.isError ||
+          sellerBooks.length > 0) && (
+          <BookSection
+            offers={sellerBooks}
+            title={t('bookDetails.sellerBooks')}
+            isLoading={sellerBooksQuery.isLoading}
+            error={sellerBooksQuery.error}
+            showViewAll={false}
+          />
+        )}
       </main>
 
       <BottomNav />
