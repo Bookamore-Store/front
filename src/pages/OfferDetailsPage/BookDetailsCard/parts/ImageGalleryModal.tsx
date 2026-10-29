@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
-import { X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { CrossSvg } from '@/shared/ui/icons/CrossSvg';
 import type { image } from '@/types/entities/Book';
 import noImages from '@/assest/images/noImage.jpg';
 
@@ -104,9 +105,9 @@ export const ImageGalleryModal = ({
             type="button"
             onClick={onClose}
             aria-label="Close gallery"
-            className="absolute right-0 top-0 z-10 text-white transition hover:opacity-70 focus-visible:outline-2 focus-visible:outline-white cursor-pointer"
+            className="absolute flex justify-center items-center w-[28px] h-[28px] -right-2 -top-2 z-10 text-text-black bg-gray-300 rounded-full transition hover:opacity-70 focus-visible:outline-2 focus-visible:outline-white cursor-pointer"
           >
-            <X size={28} strokeWidth={3} />
+            <CrossSvg size={22} />
           </button>
           <div className="relative flex h-full w-full items-center justify-center overflow-visible rounded-xl">
             <img
@@ -124,7 +125,7 @@ export const ImageGalleryModal = ({
                     previous();
                   }}
                   aria-label="Previous image"
-                  className="absolute left-0 top-1/2 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white text-gray-900 shadow-md transition hover:bg-gray-300 cursor-pointer"
+                  className="absolute left-0 top-1/2 flex h-10 w-10 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-gray-300 text-text-black shadow-md transition hover:opacity-70 cursor-pointer"
                 >
                   <ChevronLeft size={23} />
                 </button>
@@ -135,7 +136,7 @@ export const ImageGalleryModal = ({
                     next();
                   }}
                   aria-label="Next image"
-                  className="absolute right-0 top-1/2 flex h-10 w-10 translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-white text-gray-900 shadow-md transition hover:bg-gray-300 cursor-pointer"
+                  className="absolute right-0 top-1/2 flex h-10 w-10 translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-gray-300 text-text-black shadow-md transition hover:opacity-70 cursor-pointer"
                 >
                   <ChevronRight size={23} />
                 </button>
