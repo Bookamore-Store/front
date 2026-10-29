@@ -1,6 +1,7 @@
 import { ArrowLeft, ArrowRight } from '@/shared/ui/icons/Arrows';
 import { Badge } from '@/shared/ui/icons/Badge';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
+import { ImageGalleryModal } from './ImageGalleryModal';
 import type { image } from '@/types/entities/Book';
 
 import noImages from '@/assest/images/noImage.jpg';
@@ -20,6 +21,7 @@ export const BookImageGallery = ({
   title: string;
   condition?: string;
 }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const hasMultiple = images.length > 1;
 
   const prev = useCallback(() => {
@@ -31,6 +33,7 @@ export const BookImageGallery = ({
   }, [images.length, setIndex]);
 
   return (
+    <>
     <div className="flex items-center gap-2">
       {hasMultiple && (
         <button onClick={prev} className="p-4 cursor-pointer">
@@ -39,6 +42,7 @@ export const BookImageGallery = ({
       )}
 
       <div className="relative w-[164px] h-[264px] md:w-[214px] md:h-[345px] lg:w-[264px] lg:h-[404px] xl:w-[314px] xl:h-[484px] rounded-xl overflow-hidden">
+        <button type="button" onClick={() => setIsModalOpen(true)} aria-label="Open image fullscreen" className="absolute inset-0 z-10 cursor-zoom-in" />
         {images[index] ? (
           <img
             src={`${IMAGE_HOST}${images[index].path}`}
@@ -66,5 +70,15 @@ export const BookImageGallery = ({
         </button>
       )}
     </div>
+    {isModalOpen && (
+      <ImageGalleryModal
+        images={images}
+        index={index}
+        setIndex={setIndex}
+        title={title}
+        onClose={() => setIsModalOpen(false)}
+      />
+    )}
+    </>
   );
 };
