@@ -24,6 +24,7 @@ export const mockSellers = [
 export const mockOffers: OfferWithBook[] = [
   {
     id: '1',
+    createdDate: '2024-01-01T00:00:00Z',
     price: 300,
     type: OfferType.SELL,
     status: OfferStatus.OPEN,
@@ -50,6 +51,7 @@ export const mockOffers: OfferWithBook[] = [
   },
   {
     id: '2',
+    createdDate: '2024-01-01T00:00:00Z',
     price: 250,
     type: OfferType.SELL,
     status: OfferStatus.OPEN,
@@ -76,6 +78,7 @@ export const mockOffers: OfferWithBook[] = [
   },
   {
     id: '3',
+    createdDate: '2024-01-01T00:00:00Z',
     price: 280,
     type: OfferType.EXCHANGE,
     status: OfferStatus.OPEN,
@@ -102,6 +105,7 @@ export const mockOffers: OfferWithBook[] = [
   },
   {
     id: '4',
+    createdDate: '2024-01-01T00:00:00Z',
     price: 200,
     type: OfferType.SELL,
     status: OfferStatus.OPEN,
@@ -128,6 +132,7 @@ export const mockOffers: OfferWithBook[] = [
   },
   {
     id: '5',
+    createdDate: '2024-01-01T00:00:00Z',
     price: 350,
     type: OfferType.SELL,
     status: OfferStatus.OPEN,
@@ -153,6 +158,7 @@ export const mockOffers: OfferWithBook[] = [
   },
   {
     id: '6',
+    createdDate: '2024-01-01T00:00:00Z',
     price: 180,
     type: OfferType.SELL,
     status: OfferStatus.OPEN,
@@ -179,6 +185,7 @@ export const mockOffers: OfferWithBook[] = [
   },
   {
     id: '7',
+    createdDate: '2024-01-01T00:00:00Z',
     price: 320,
     type: OfferType.EXCHANGE,
     status: OfferStatus.OPEN,
@@ -205,6 +212,7 @@ export const mockOffers: OfferWithBook[] = [
   },
   {
     id: '8',
+    createdDate: '2024-01-01T00:00:00Z',
     price: 275,
     type: OfferType.SELL,
     status: OfferStatus.OPEN,
@@ -230,6 +238,7 @@ export const mockOffers: OfferWithBook[] = [
   },
   {
     id: '9',
+    createdDate: '2024-01-01T00:00:00Z',
     price: 190,
     type: OfferType.SELL,
     status: OfferStatus.OPEN,
@@ -256,6 +265,7 @@ export const mockOffers: OfferWithBook[] = [
   },
   {
     id: '10',
+    createdDate: '2024-01-01T00:00:00Z',
     price: 310,
     type: OfferType.SELL,
     status: OfferStatus.OPEN,
@@ -286,6 +296,7 @@ export const mockOffers: OfferWithBook[] = [
 export const mockRomanticOffers: OfferWithBook[] = [
   {
     id: '11',
+    createdDate: '2024-01-01T00:00:00Z',
     price: 280,
     type: OfferType.SELL,
     status: OfferStatus.OPEN,
@@ -312,6 +323,7 @@ export const mockRomanticOffers: OfferWithBook[] = [
   },
   {
     id: '12',
+    createdDate: '2024-01-01T00:00:00Z',
     price: 250,
     type: OfferType.SELL,
     status: OfferStatus.OPEN,
@@ -337,6 +349,7 @@ export const mockRomanticOffers: OfferWithBook[] = [
   },
   {
     id: '13',
+    createdDate: '2024-01-01T00:00:00Z',
     price: 300,
     type: OfferType.EXCHANGE,
     status: OfferStatus.OPEN,

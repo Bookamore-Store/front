@@ -47,7 +47,7 @@ const OfferDetailsPage: React.FC = () => {
 
   const similarBooksQuery = useGetAllOffersWithBooksQuery(
     offer?.book?.genres?.length
-      ? { genre: offer.book.genres, size: 10 }
+      ? { genre: offer.book.genres, size: 20 }
       : undefined,
     { skip: !offer?.book?.genres?.length }
   );
@@ -63,7 +63,7 @@ const OfferDetailsPage: React.FC = () => {
   );
 
   const authorBooksQuery = useGetAllOffersWithBooksQuery(
-    { size: 100 },
+    { size: 20 },
     { skip: !offer?.book?.authors?.length }
   );
 
@@ -143,6 +143,7 @@ const OfferDetailsPage: React.FC = () => {
           onClick={() => setIsAboutOpen((v) => !v)}
           isOpen={isAboutOpen}
           description={book.description}
+          createdDate={offer.createdDate}
         />
 
         <SellerBlock seller={seller} />

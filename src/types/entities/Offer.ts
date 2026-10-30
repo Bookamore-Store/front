@@ -1,5 +1,6 @@
 export type Offer = {
   id: string;
+  createdDate: string;
   type: OfferType;
   status: OfferStatus;
   description: string;
@@ -16,7 +17,7 @@ export type Offer = {
   favoritesCount?: number;
 };
 
-export type OfferRequest = Omit<Offer, 'id' | 'previewImage'> & {
+export type OfferRequest = Omit<Offer, 'id' | 'createdDate' | 'previewImage'> & {
   previewImage: File | null;
 };
 

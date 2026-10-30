@@ -1,14 +1,17 @@
 import { useTranslation } from 'react-i18next';
 import { ArrowDown, ArrowUp } from '@/shared/ui/icons/Arrows';
+import { parseServerDate } from '@/shared/helpers/parseServerDate';
 
 export const DescriptionBlock = ({
   onClick,
   isOpen,
   description,
+  createdDate,
 }: {
   onClick: () => void;
   isOpen: boolean;
   description: string;
+  createdDate: string;
 }) => {
   const { t } = useTranslation();
 
@@ -26,10 +29,11 @@ export const DescriptionBlock = ({
 
       {isOpen && (
         <div className="text-sm lg:text-base mt-3 text-[#153037]">
-          <p>{description || 'No description available for this book.'}</p>
+          {description && <p>{description}</p>}
+
           <p className="text-xs lg:text-sm font-h6m text-[#153037] mt-4 ">
             {t('bookDetails.dateAdded')}{' '}
-            {new Date().toLocaleDateString('en-GB')}
+            {parseServerDate(createdDate).toLocaleDateString('en-GB')}
           </p>
         </div>
       )}
