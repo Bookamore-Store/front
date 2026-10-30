@@ -1,3 +1,4 @@
+import { setLanguageHeader } from '@/shared/helpers/setLanguageHeader';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { convertObjectToSearchParams } from '@app/store/helpers/convertToSearchParams.ts';
 import type { ListResponse } from '@/types/entities/ListResponse';
@@ -20,7 +21,7 @@ export const FavoritesApi = createApi({
         headers.set('authorization', `Bearer ${token}`);
       }
 
-      return headers;
+      return setLanguageHeader(headers);
     },
   }),
   endpoints: (build) => ({

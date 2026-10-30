@@ -1,3 +1,4 @@
+import { setLanguageHeader } from '@/shared/helpers/setLanguageHeader';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import type { Book, BookPatchRequest } from '@/types/entities/Book';
 import type { RootState } from '../store';
@@ -14,7 +15,7 @@ export const BooksApi = createApi({
         headers.set('authorization', `Bearer ${token}`);
       }
 
-      return headers;
+      return setLanguageHeader(headers);
     },
   }),
   endpoints: (build) => ({
