@@ -1,3 +1,4 @@
+import { setLanguageHeader } from '@/shared/helpers/setLanguageHeader';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import type { RootState } from '../store';
 import type { User } from '../slices/authSlice';
@@ -14,7 +15,7 @@ export const UsersApi = createApi({
         headers.set('authorization', `Bearer ${token}`);
       }
 
-      return headers;
+      return setLanguageHeader(headers);
     },
   }),
   endpoints: (build) => ({

@@ -1,3 +1,4 @@
+import { setLanguageHeader } from '@/shared/helpers/setLanguageHeader';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import type { User } from '../slices/authSlice';
 
@@ -38,6 +39,7 @@ export const AuthApi = createApi({
   reducerPath: 'authApi',
   baseQuery: fetchBaseQuery({
     baseUrl: `${import.meta.env.VITE_BASE_API_URL || '/api/v1'}/auth`,
+    prepareHeaders: (headers) => setLanguageHeader(headers),
   }),
   endpoints: (builder) => ({
     login: builder.mutation<AuthResponse, LoginRequest>({
