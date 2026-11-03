@@ -79,7 +79,7 @@ const OfferDetailsPage: React.FC = () => {
   const similarBooks =
     similarBooksQuery.data?.content
       ?.filter((item: OfferWithBook) => {
-        if (item.id === offer.id) return false;
+        if (item.id === offer.id || item.status !== 'OPEN') return false;
 
         return item.book.genres?.some((genre) => currentGenres.includes(genre));
       })
@@ -148,12 +148,17 @@ const OfferDetailsPage: React.FC = () => {
 
         <SellerBlock seller={seller} />
 
-        <BookSection
-          offers={similarBooks}
-          title={t('bookDetails.similarBooks')}
-          isLoading={similarBooksQuery.isLoading}
-          showViewAll={false}
-        />
+        {(similarBooksQuery.isLoading ||
+          similarBooksQuery.isError ||
+          similarBooks.length > 0) && (
+          <BookSection
+            offers={similarBooks}
+            title={t('bookDetails.similarBooks')}
+            isLoading={similarBooksQuery.isLoading}
+            error={similarBooksQuery.error}
+            showViewAll={false}
+          />
+        )}
 
         {(sellerBooksQuery.isLoading ||
           sellerBooksQuery.isError ||
