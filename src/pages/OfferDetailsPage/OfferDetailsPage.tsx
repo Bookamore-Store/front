@@ -35,6 +35,7 @@ const OfferDetailsPage: React.FC = () => {
 
   useEffect(() => {
     setImgIndex(0);
+    window.scrollTo(0, 0);
   }, [offerId]);
 
   const {
