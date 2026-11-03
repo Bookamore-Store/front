@@ -6,13 +6,15 @@ export const FavoriteButton = ({
   onToggle,
   disabled = false,
   favoritesCount,
+  className,
 }: {
   isFavorite: boolean;
   onToggle: () => void;
   disabled?: boolean;
   favoritesCount?: number;
+  className?: string;
 }) => (
-  <div className="flex items-center gap-2">
+  <div className={clsx('flex items-center gap-2', className)}>
     {favoritesCount !== undefined && favoritesCount > 0 && (
       <p className="text-text-black">{favoritesCount}</p>
     )}

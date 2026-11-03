@@ -1,223 +1,227 @@
-import React from 'react';
-import { useParams, useNavigate, useSearchParams } from 'react-router';
-import { IoLibraryOutline, IoClose } from 'react-icons/io5';
+import { useEffect, useRef, useState } from 'react';
+import { useParams, useSearchParams } from 'react-router';
+import { IoLibraryOutline } from 'react-icons/io5';
 import { useGetAllOffersWithBooksQuery } from '@app/store/api/OffersApi';
 import { BookCard } from '@shared/ui/BookCard';
-import { BottomNav } from '@shared/ui/BottomNav';
-import {
-  applyFiltersAndSort,
-  createMockResponse,
-} from '../../shared/mocks/mockData';
-import type { OfferWithBook } from '@/types/entities/OfferWithBook';
-import BackButton from '@/shared/ui/BackButton';
 import { useGenres } from '@/shared/hooks/useGenres';
-import { useFavoriteToggle } from '@/shared/hooks/useFavoriteToggle';
+import { PageLayout } from '@/shared/ui/PageLayout/PageLayout';
+import { Spinner } from '@/shared/ui/Spinner';
+import { Button } from '@/shared/ui/Button/Button';
+import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
+import type { OfferWithBook } from '@/types/entities/OfferWithBook';
 
-// Mock mode flag - set to true to use mocks instead of API
-const USE_MOCKS = false;
+const PAGE_SIZE = 20;
 
-// Local header component
-function PageHeader() {
-  return (
-    <header className="flex items-center px-4 sm:px-6 lg:px-8 py-3 bg-white border-b border-gray-200">
-      <BackButton />
-      <h1 className="text-base sm:text-lg lg:text-xl font-semibold text-gray-900 flex-1 text-center">
-        BookAmore
-      </h1>
-      <div className="w-6 sm:w-8"></div>
-    </header>
-  );
-}
-
-// Filter chip component
-function FilterChip({
-  label,
-  onRemove,
-}: {
-  label: string;
-  onRemove: () => void;
-}) {
-  return (
-    <button
-      onClick={onRemove}
-      className="flex items-center gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 bg-gray-800 text-white rounded-full text-sm sm:text-base font-medium whitespace-nowrap transition-colors hover:bg-gray-700"
-    >
-      <span>{label.charAt(0).toUpperCase() + label.slice(1)}</span>
-      <IoClose className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-    </button>
-  );
-}
-
-const GenreResultsPage: React.FC = () => {
+const GenreResultsPage = () => {
   const { genre } = useParams<{ genre: string }>();
-  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { toggleFavorite } = useFavoriteToggle();
+  const query = searchParams.get('q');
+
+  return (
+    <GenreResults
+      key={`${genre ?? ''}:${query ?? ''}`}
+      genre={genre}
+      query={query}
+    />
+  );
+};
+
+const GenreResults = ({
+  genre,
+  query,
+}: {
+  genre?: string;
+  query: string | null;
+}) => {
   const { getGenreLabel } = useGenres();
   const genreLabel = genre ? getGenreLabel(genre) : '';
+  const { t } = useTranslation();
 
-  // Get filter parameters from URL
-  const filters = {
-    genre: genre,
-    condition:
-      (searchParams.get('condition') as 'new' | 'used' | null) || undefined,
-    exchange:
-      searchParams.get('exchange') === 'true'
-        ? true
-        : searchParams.get('exchange') === 'false'
-          ? false
-          : undefined,
-    sort: searchParams.get('sort') || undefined,
-    categories: searchParams.get('categories')?.split(',') || undefined,
-  };
+  const [page, setPage] = useState(0);
+  const [offers, setOffers] = useState<OfferWithBook[]>([]);
+  const [hasMore, setHasMore] = useState(true);
+  const hasMoreRef = useRef(true);
+  const loadMoreRef = useRef<HTMLDivElement>(null);
+  const requestedPageRef = useRef(false);
+  const loadedPageRef = useRef<number | null>(null);
+  const loadedOfferIdsRef = useRef(new Set<string>());
 
-  // Mock data logic using new filter function
-  const getMockData = () => {
-    if (!genre) return createMockResponse([]);
-    const filteredOffers = applyFiltersAndSort(filters);
-    return createMockResponse(filteredOffers);
-  };
+  const {
+    currentData: data,
+    isFetching,
+    error,
+    refetch,
+  } = useGetAllOffersWithBooksQuery({
+    genre,
+    page,
+    size: PAGE_SIZE,
+    sort:
+      query === 'new' || query === 'recommended'
+        ? 'createdDate,desc'
+        : undefined,
+  });
 
-  // Use mocks or real API
-  const mockResult = USE_MOCKS
-    ? {
-        data: getMockData(),
-        isLoading: false,
-        error: undefined,
-      }
-    : null;
+  useEffect(() => {
+    if (!data) return;
 
-  const apiResult = useGetAllOffersWithBooksQuery(
-    {
-      genre: genre,
-      condition: filters.condition,
-    },
-    { skip: USE_MOCKS } // Skip API call when using mocks
-  );
+    if (loadedPageRef.current === page) {
+      setOffers((currentOffers) => {
+        const dataMap = new Map(data.content.map((item) => [item.id, item]));
+        return currentOffers.map((item) => dataMap.get(item.id) ?? item);
+      });
+      return;
+    }
 
-  // Choose data source
-  const { data, isLoading, error } = USE_MOCKS ? mockResult! : apiResult;
+    if (page === 0) {
+      loadedOfferIdsRef.current.clear();
+    }
 
-  // Event handlers
-  const handleBack = () => {
-    navigate(-1);
-  };
-
-  const handleRemoveConditionFilter = () => {
-    // Remove condition from URL parameters
-    const newParams = new URLSearchParams(searchParams);
-    newParams.delete('condition');
-    navigate({ search: newParams.toString() }, { replace: true });
-  };
-
-  const handleContact = (offer: OfferWithBook) => {
-    // TODO: Implement contact logic
-    console.log('Contact for offer:', offer.id);
-  };
-
-  const handleFavorite = (offer: OfferWithBook) => {
-    toggleFavorite(offer.id, Boolean(offer.isFavorite));
-  };
-
-  // Loading state
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        <PageHeader />
-        <div className="w-full max-w-md mx-auto lg:max-w-4xl xl:max-w-6xl">
-          <div className="flex justify-center items-center h-64">
-            <div className="text-center">
-              <div className="animate-spin rounded-full h-6 w-6 sm:h-8 sm:w-8 border-b-2 border-gray-900 mx-auto mb-4"></div>
-              <p className="text-sm sm:text-base text-gray-600">Loading...</p>
-            </div>
-          </div>
-        </div>
-      </div>
+    const newOffers = data.content.filter(
+      (offer) => !loadedOfferIdsRef.current.has(offer.id)
     );
-  }
+    newOffers.forEach((offer) => loadedOfferIdsRef.current.add(offer.id));
+
+    setOffers((currentOffers) => {
+      if (page === 0) return data.content;
+
+      return [...currentOffers, ...newOffers];
+    });
+    const nextHasMore =
+      data.last !== undefined ? !data.last : data.content.length === PAGE_SIZE;
+    hasMoreRef.current = nextHasMore;
+    setHasMore(nextHasMore);
+    loadedPageRef.current = page;
+    requestedPageRef.current = false;
+  }, [data, page]);
+
+  const handleFavoriteToggle = (offerId: string, nextIsFavorite: boolean) => {
+    setOffers((currentOffers) =>
+      currentOffers.map((item) =>
+        item.id === offerId
+          ? {
+              ...item,
+              isFavorite: nextIsFavorite,
+              favoritesCount:
+                typeof item.favoritesCount === 'number'
+                  ? nextIsFavorite
+                    ? item.favoritesCount + 1
+                    : Math.max(0, item.favoritesCount - 1)
+                  : item.favoritesCount,
+            }
+          : item
+      )
+    );
+  };
+
+  useEffect(() => {
+    if (error && !isFetching) {
+      requestedPageRef.current = false;
+    }
+  }, [error, isFetching]);
+
+  useEffect(() => {
+    const sentinel = loadMoreRef.current;
+
+    if (
+      !sentinel ||
+      !data ||
+      isFetching ||
+      error ||
+      !hasMore ||
+      loadedPageRef.current !== page
+    ) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (
+          entry.isIntersecting &&
+          hasMoreRef.current &&
+          !requestedPageRef.current
+        ) {
+          requestedPageRef.current = true;
+          setPage((currentPage) => currentPage + 1);
+        }
+      },
+      { rootMargin: '200px' }
+    );
+
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, [data, error, hasMore, isFetching, page]);
+
+  const isInitializing = loadedPageRef.current === null && !error;
 
   // Error state
-  if (error) {
+  if (error && offers.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50">
-        <PageHeader />
-        <div className="w-full max-w-md mx-auto lg:max-w-4xl xl:max-w-6xl">
-          <div className="flex justify-center items-center h-64">
-            <div className="text-center">
-              <p className="text-red-600 mb-2 text-sm sm:text-base">
-                Error loading results
-              </p>
-              <p className="text-gray-500 text-xs sm:text-sm">
-                Please try again later
-              </p>
-            </div>
+      <PageLayout title={genreLabel}>
+        <div className="flex justify-center items-center h-64">
+          <div className="text-center">
+            <p className="text-red-600 mb-2 text-sm sm:text-base">
+              Error loading results
+            </p>
+            <p className="text-gray-500 text-xs sm:text-sm">
+              Please try again later
+            </p>
           </div>
         </div>
-      </div>
+      </PageLayout>
     );
   }
 
-  const offers = data?.content || [];
-
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <PageHeader />
+    <PageLayout title={query ? t(`categories.${query}`) : genreLabel}>
+      <>
+        {isInitializing ? (
+          <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
+            <Spinner size="lg" />
+          </div>
+        ) : offers.length > 0 ? (
+          <div className="flex flex-col items-center space-y-3 sm:space-y-4 lg:grid lg:grid-cols-2 xl:grid-cols-3 lg:gap-6 lg:space-y-0">
+            {offers.map((offer) => (
+              <BookCard
+                key={offer.id}
+                offer={offer}
+                onFavoriteToggle={handleFavoriteToggle}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-8 lg:py-12">
+            <div className="mb-4">
+              <IoLibraryOutline className="w-12 h-12 sm:w-16 sm:h-16 text-gray-300 mx-auto" />
+            </div>
+            <h3 className="text-base sm:text-lg font-medium text-text-black mb-2">
+              {t('errors.noBooks')}
+            </h3>
+            <p className="text-sm sm:text-base text-text-black mb-6 max-w-md mx-auto">
+              {t('errors.noResults', { genreLabel })}
+            </p>
 
-      <div className="w-full max-w-md mx-auto lg:max-w-4xl xl:max-w-6xl">
-        {/* Filters */}
-        {filters.condition && (
-          <div className="px-4 sm:px-6 lg:px-8 py-3">
-            <FilterChip
-              label={filters.condition}
-              onRemove={handleRemoveConditionFilter}
-            />
+            <Link to="/" className="w-full max-w-[343px] block mx-auto">
+              <Button>{t('notFound.backToHome')}</Button>
+            </Link>
           </div>
         )}
 
-        {/* Results */}
-        <div className="px-4 sm:px-6 lg:px-8 py-4 pb-20">
-          <h2 className="text-base sm:text-lg lg:text-xl font-bold mb-4">
-            Results for "{genreLabel}":
-          </h2>
+        <div ref={loadMoreRef} className="h-px" aria-hidden="true" />
 
-          {/* Results grid */}
-          {offers.length > 0 ? (
-            <div className="space-y-3 sm:space-y-4 lg:grid lg:grid-cols-3 xl:grid-cols-4 lg:gap-6 lg:space-y-0">
-              {offers.map((offer) => (
-                <BookCard
-                  key={offer.id}
-                  offer={offer}
-                  onContact={() => handleContact(offer)}
-                  onFavorite={() => handleFavorite(offer)}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-8 lg:py-12">
-              <div className="mb-4">
-                <IoLibraryOutline className="w-12 h-12 sm:w-16 sm:h-16 text-gray-300 mx-auto" />
-              </div>
-              <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-2">
-                No books found
-              </h3>
-              <p className="text-sm sm:text-base text-gray-500 mb-6 max-w-md mx-auto">
-                No results found for "{genreLabel}". Try browsing other categories.
-              </p>
-              <button
-                onClick={handleBack}
-                className="px-4 sm:px-6 py-2 sm:py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors text-sm sm:text-base"
-              >
-                Go Back
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Bottom Navigation */}
-      <BottomNav />
-    </div>
+        {isFetching &&
+          offers.length > 0 &&
+          loadedPageRef.current !== page && <Spinner size="lg" />}
+        {error && offers.length > 0 && (
+          <div className="text-center py-4">
+            <p className="text-red-600 mb-2 text-sm sm:text-base">
+              Error loading results
+            </p>
+            <Button onClick={() => void refetch()}>Retry</Button>
+          </div>
+        )}
+      </>
+    </PageLayout>
   );
 };
 

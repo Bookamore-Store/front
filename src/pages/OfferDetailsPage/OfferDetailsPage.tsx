@@ -7,7 +7,7 @@ import {
   useGetOfferWithBookByIdQuery,
 } from '../../app/store/api/OffersApi';
 
-import { FavoriteButton } from './FavoriteButton';
+import { FavoriteButton } from '../../shared/components/FavoriteButton';
 import { BookDetailsCard } from './BookDetailsCard';
 import { ConditionBlock } from './ConditionBlock';
 import { GenresBlock } from './GenresBlock';

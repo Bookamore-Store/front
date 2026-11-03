@@ -2,6 +2,10 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useGenres } from '@/shared/hooks/useGenres';
+import { useGetAllOffersWithBooksQuery } from '@/app/store/api/OffersApi';
+import type { Genre } from '@/app/store/api/GenresApi';
+
+const CATEGORY_CHECK_SIZE = 20;
 
 interface CategoryButtonProps {
   label: string;
@@ -31,11 +35,43 @@ function CategoryButton({
   );
 }
 
+interface GenreCategoryButtonProps {
+  genre: Genre;
+  label: string;
+  isActive: boolean;
+  onClick: (categoryId: string) => void;
+}
+
+function GenreCategoryButton({
+  genre,
+  label,
+  isActive,
+  onClick,
+}: GenreCategoryButtonProps) {
+  const { data, isLoading, isError } = useGetAllOffersWithBooksQuery({
+    genre: genre.id,
+    size: CATEGORY_CHECK_SIZE,
+  });
+  const hasOpenOffers = data?.content.some((offer) => offer.status === 'OPEN');
+
+  if (isLoading || isError || !hasOpenOffers) {
+    return null;
+  }
+
+  return (
+    <CategoryButton
+      label={label}
+      isActive={isActive}
+      onClick={() => onClick(genre.id)}
+    />
+  );
+}
+
 export function Categories() {
   const [activeCategory, setActiveCategory] = useState('all');
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { options, isLoading, isError } = useGenres();
+  const { genres, getGenreLabel, isLoading, isError } = useGenres();
 
   const handleCategoryClick = (categoryId: string) => {
     if (categoryId === 'all') {
@@ -56,14 +92,23 @@ export function Categories() {
 
         {/* Scrollable categories */}
         <div className="flex gap-2 py-2 sm:py-2.5 lg:py-3 sm:gap-3 lg:gap-4 overflow-x-auto scrollbar-custom">
-          {[{ value: 'all', label: t('categories.all') }, ...options].map(({ value: category, label }) => (
-            <CategoryButton
-              key={category}
-              label={label}
-              isActive={activeCategory === category}
-              onClick={() => {
-                setActiveCategory(category);
-                handleCategoryClick(category);
+          <CategoryButton
+            label={t('categories.all')}
+            isActive={activeCategory === 'all'}
+            onClick={() => {
+              setActiveCategory('all');
+              handleCategoryClick('all');
+            }}
+          />
+          {genres.map((genre) => (
+            <GenreCategoryButton
+              key={genre.id}
+              genre={genre}
+              label={getGenreLabel(genre.id)}
+              isActive={activeCategory === genre.id}
+              onClick={(categoryId) => {
+                setActiveCategory(categoryId);
+                handleCategoryClick(categoryId);
               }}
             />
           ))}

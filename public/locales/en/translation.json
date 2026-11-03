@@ -246,6 +246,7 @@
   },
   "errors": {
     "noBooks": "No books available.",
-    "booksLoadFailed": "Books load failed."
+    "booksLoadFailed": "Books load failed.",
+    "noResults": "No results found for {genreLabel}. Try browsing other categories."
   }
 }

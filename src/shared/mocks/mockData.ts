@@ -381,13 +381,18 @@ export function createMockResponse<T>(
   content: T[],
   totalElements?: number
 ): ListResponse<T> {
+  const total = totalElements || content.length;
+  const totalPages = Math.ceil(total / 20);
   return {
     content,
-    totalElements: totalElements || content.length,
-    totalPages: Math.ceil((totalElements || content.length) / 20),
+    totalElements: total,
+    totalPages,
     size: 20,
     number: 0,
     numberOfElements: content.length,
+    last: totalPages <= 1,
+    first: true,
+    empty: content.length === 0,
     pageable: {
       offset: 0,
       pageNumber: 0,

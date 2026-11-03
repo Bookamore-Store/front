@@ -6,7 +6,7 @@ import { Button } from '@/shared/ui/Button/Button';
 import { BookImageGallery } from './parts/BookImageGallery';
 import { BookTitle } from './parts/BookTitle';
 import { PriceBlock } from './parts/PriceBlock';
-import { ContactSellerModal } from '../ContactSellerModal/ContactSellerModal';
+import { ContactSellerModal } from '@/shared/components/ContactSellerModal/ContactSellerModal';
 
 import { useIsOfferOwner } from '@/shared/hooks/useIsOfferOwner';
 import { selectIsAuthenticated } from '@/app/store/slices/authSlice';
@@ -75,7 +75,6 @@ export const BookDetailsCard = ({
           index={imgIndex}
           setIndex={setImgIndex}
           title={book.title}
-          condition={book.condition}
         />
 
         <PriceBlock
