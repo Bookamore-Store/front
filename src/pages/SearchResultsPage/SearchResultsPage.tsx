@@ -10,7 +10,6 @@ import {
 } from '../../shared/mocks/mockData';
 import type { QueryParams } from '../../types/entities/QueryParams';
 import BackButton from '@/shared/ui/BackButton';
-import { useFavoriteToggle } from '@/shared/hooks/useFavoriteToggle';
 
 // Mock mode flag - set to true to use mocks instead of API
 const USE_MOCKS = true;
@@ -95,7 +94,6 @@ function FilterChip({ label, isActive = false, onClick }: FilterChipProps) {
 export function SearchResultsPage() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const { toggleFavorite } = useFavoriteToggle();
 
   // Get all filter parameters from URL
   const searchQuery = searchParams.get('q') || '';
@@ -123,7 +121,12 @@ export function SearchResultsPage() {
     condition: currentCondition || undefined,
     page: 0,
     size: 20,
-    sort: sort === 'lowest-price' ? 'price,asc' : sort === 'highest-price' ? 'price,desc' : undefined,
+    sort:
+      sort === 'lowest-price'
+        ? 'price,asc'
+        : sort === 'highest-price'
+          ? 'price,desc'
+          : undefined,
   };
 
   // Mock data logic using new filter function
@@ -249,17 +252,7 @@ export function SearchResultsPage() {
           {offers.length > 0 ? (
             <div className="space-y-3 sm:space-y-4 lg:grid lg:grid-cols-3 xl:grid-cols-4 lg:gap-6 lg:space-y-0">
               {offers.map((offer) => (
-                <BookCard
-                  key={offer.id}
-                  offer={offer}
-                  onContact={() => {
-                    console.log('Contact for offer:', offer.id);
-                    // TODO: Implement contact functionality
-                  }}
-                  onFavorite={() => {
-                    toggleFavorite(offer.id, Boolean(offer.isFavorite));
-                  }}
-                />
+                <BookCard key={offer.id} offer={offer} />
               ))}
             </div>
           ) : (

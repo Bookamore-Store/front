@@ -54,6 +54,10 @@ export const router = createBrowserRouter([
     ),
   },
   {
+    path: '/genres',
+    element: <GenreResultsPage />,
+  },
+  {
     path: '/genres/:genre',
     element: <GenreResultsPage />,
   },

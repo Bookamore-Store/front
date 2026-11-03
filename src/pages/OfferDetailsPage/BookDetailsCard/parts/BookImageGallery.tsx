@@ -1,5 +1,4 @@
 import { ArrowLeft, ArrowRight } from '@/shared/ui/icons/Arrows';
-import { Badge } from '@/shared/ui/icons/Badge';
 import { useCallback, useState } from 'react';
 import { ImageGalleryModal } from './ImageGalleryModal';
 import type { image } from '@/types/entities/Book';
@@ -13,13 +12,11 @@ export const BookImageGallery = ({
   index,
   setIndex,
   title,
-  condition,
 }: {
   images: image[];
   index: number;
   setIndex: React.Dispatch<React.SetStateAction<number>>;
   title: string;
-  condition?: string;
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const hasMultiple = images.length > 1;
@@ -57,11 +54,6 @@ export const BookImageGallery = ({
           />
         )}
 
-        {condition === 'NEW' && (
-          <div className="absolute bottom-2 right-2">
-            <Badge className="lg:w-7 lg:h-7" />
-          </div>
-        )}
       </div>
 
       {hasMultiple && (

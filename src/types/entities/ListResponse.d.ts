@@ -5,6 +5,9 @@ export type ListResponse<T> = {
   content: T[];
   number: number;
   numberOfElements: number;
+  last?: boolean;
+  first?: boolean;
+  empty?: boolean;
   pageable: Pageable;
   sort: Sort;
 };

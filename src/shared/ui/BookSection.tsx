@@ -2,13 +2,11 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import type { OfferWithBook } from '@/types/entities/OfferWithBook';
 import noImages from '@/assest/images/noImage.jpg';
-import { Badge } from './icons/Badge';
 import { Spinner } from './Spinner';
 
 const IMAGE_HOST = import.meta.env.VITE_IMAGE_HOST || '';
 
 interface BookCardProps {
-  condition?: 'new' | 'used';
   offer: OfferWithBook;
 }
 
@@ -20,7 +18,7 @@ function getAuthorName(authors: unknown): string {
   return 'Unknown';
 }
 
-function BookCard({ condition, offer }: BookCardProps) {
+function BookCard({ offer }: BookCardProps) {
   const { t } = useTranslation();
 
   // Validate book data structure exists
@@ -45,11 +43,6 @@ function BookCard({ condition, offer }: BookCardProps) {
           alt={bookTitle}
           className="w-full h-full object-cover"
         />
-        {condition === 'new' && (
-          <div className="absolute bottom-2.5 right-2.5 sm:bottom-3 sm:right-3 lg:bottom-4 lg:right-4">
-            <Badge className="w-6 sm:w-7 lg:w-8 h-auto" />
-          </div>
-        )}
       </div>
       <div className="pt-2 sm:pt-2.5 flex-1 flex flex-col">
         <p className="text-h5m font-medium text-text-black truncate">
@@ -94,13 +87,13 @@ export function BookSection({
       <div className="px-4 sm:px-6 lg:px-8 xl:px-12">
         <div className="px-4 py-2.5 mt-2.5 border border-aquamarine-500 bg-aquamarine-50 rounded-[12px]">
           <div className="flex items-center justify-between mb-3 sm:mb-4 lg:mb-5">
-            <h3 className="text-lg sm:text-xl lg:text-2xl font-normal text-text-black">
+            <h3 className="text-lg sm:text-xl lg:text-2xl font-normal text-text-black truncate">
               {title}
             </h3>
             {showViewAll && (
               <Link
                 to={viewAllLink}
-                className="text-sm sm:text-base font-extralight text-gray-800 hover:bg-grass-100 hover:text-text-black focus-visible:bg-grass-100 outline-grass-500 focus-visible:text-text-black transition-colors px-1.5 py-0.5 rounded-[8px]"
+                className="flex-shrink-0 text-sm sm:text-base font-extralight text-gray-800 hover:bg-grass-100 hover:text-text-black focus-visible:bg-grass-100 outline-grass-500 focus-visible:text-text-black transition-colors px-1.5 py-0.5 rounded-[8px]"
               >
                 {t('common.viewAll')}
               </Link>
@@ -130,15 +123,7 @@ export function BookSection({
               {offers
                 .filter((offer) => offer.status === 'OPEN')
                 .map((offer) => (
-                  <BookCard
-                    key={offer.id}
-                    offer={offer}
-                    condition={
-                      offer.book?.condition?.toLowerCase() === 'new'
-                        ? 'new'
-                        : 'used'
-                    }
-                  />
+                  <BookCard key={offer.id} offer={offer} />
                 ))}
             </div>
           )}

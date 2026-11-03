@@ -2,44 +2,95 @@ import { BottomNav } from '@/shared/ui/BottomNav';
 import { Header } from '@/shared/ui/Header';
 import { Categories } from '@/shared/ui/Categories';
 import { BookSection } from '@/shared/ui/BookSection';
-import { useGetAllOffersWithBooksQuery } from '@/app/store/api/OffersApi.ts';
+import { useGetAllOffersWithBooksQuery } from '@/app/store/api/OffersApi';
 import { useTranslation } from 'react-i18next';
 import { useGenres } from '@/shared/hooks/useGenres';
+import type { Genre } from '@/app/store/api/GenresApi';
 
-// Size of items per section slider
-const SECTION_SIZE = 50;
+type OffersQueryParams = NonNullable<
+  Parameters<typeof useGetAllOffersWithBooksQuery>[0]
+>;
+
+const SECTION_SIZE = 20;
+
+interface GenreBookSectionProps {
+  genre: Genre;
+  title: string;
+}
+
+const GenreBookSection: React.FC<GenreBookSectionProps> = ({
+  genre,
+  title,
+}) => {
+  const { data, isLoading, error } = useGetAllOffersWithBooksQuery({
+    genre: genre.id,
+    size: SECTION_SIZE,
+  });
+
+  const offers = data?.content ?? [];
+  const hasOpenOffers = offers.some((offer) => offer.status === 'OPEN');
+
+  if (isLoading || (!error && !hasOpenOffers)) {
+    return null;
+  }
+
+  return (
+    <BookSection
+      title={title}
+      viewAllDestination={`/genres/${genre.id}`}
+      offers={offers}
+      isLoading={isLoading}
+      error={error}
+    />
+  );
+};
+
+interface HomeBookSectionProps {
+  title: string;
+  destination: string;
+  query: OffersQueryParams;
+}
+
+const HomeBookSection: React.FC<HomeBookSectionProps> = ({
+  title,
+  destination,
+  query,
+}) => {
+  const { data, isLoading, error } = useGetAllOffersWithBooksQuery(query);
+
+  return (
+    <BookSection
+      title={title}
+      viewAllDestination={destination}
+      offers={data?.content ?? []}
+      isLoading={isLoading}
+      error={error}
+    />
+  );
+};
 
 const HomePage: React.FC = () => {
   const { t } = useTranslation();
-  const { genres } = useGenres();
-  const scienceFictionId = genres.find((genre) => genre.id === 'science_fiction')?.id
-    ?? genres.find((genre) => /^(science fiction|sci[ -]?fi)$/i.test(genre.en.trim()))?.id;
-  const sciFiQuery = useGetAllOffersWithBooksQuery(
-    { genre: scienceFictionId, size: SECTION_SIZE },
-    { skip: !scienceFictionId }
-  );
+  const { genres, getGenreLabel } = useGenres();
+
   const bookSections = [
     {
       title: t('categories.new'),
-      destination: '/search?condition=new',
-      queryResult: useGetAllOffersWithBooksQuery({
+      destination: '/genres?q=new',
+      query: {
         page: 0,
         size: SECTION_SIZE,
-        sort: 'createdDate,desc',
-      }),
+        sort: 'createdDate,desc' as const,
+      },
     },
     {
       title: t('categories.recommended'),
-      destination: '/search?q=recommended',
-      queryResult: useGetAllOffersWithBooksQuery({
-        search: 'recommended',
+      destination: '/genres?q=recommended',
+      query: {
+        page: 0,
         size: SECTION_SIZE,
-      }),
-    },
-    {
-      title: t('categories.sci-fi'),
-      destination: `/genres/${scienceFictionId}`,
-      queryResult: sciFiQuery,
+        sort: 'createdDate,desc' as const,
+      },
     },
   ];
 
@@ -49,16 +100,21 @@ const HomePage: React.FC = () => {
         <Header />
         <Categories />
 
-        {/* Book sections */}
         <div className="space-y-2 sm:space-y-4 lg:space-y-6">
-          {bookSections.filter((section) => section !== bookSections[2] || scienceFictionId).map((section) => (
-            <BookSection
-              key={section.title}
-              title={section.title}
-              viewAllDestination={section.destination}
-              offers={section.queryResult.data?.content ?? []}
-              isLoading={section.queryResult.isLoading}
-              error={section.queryResult.error}
+          {bookSections.map(({ title, destination, query }) => (
+            <HomeBookSection
+              key={title}
+              title={title}
+              destination={destination}
+              query={query}
+            />
+          ))}
+
+          {genres.map((genre) => (
+            <GenreBookSection
+              key={genre.id}
+              genre={genre}
+              title={getGenreLabel(genre.id)}
             />
           ))}
         </div>
