@@ -62,9 +62,12 @@ const OfferDetailsPage: React.FC = () => {
     { skip: !offer?.seller?.id }
   );
 
+  const authorNames = offer?.book?.authors
+    ?.filter((author) => typeof author === 'string' && author.trim().length > 0)
+    .map((author) => author.trim());
   const authorBooksQuery = useGetAllOffersWithBooksQuery(
-    { size: 20 },
-    { skip: !offer?.book?.authors?.length }
+    { author: authorNames, size: 20 },
+    { skip: !authorNames?.length }
   );
 
   if (isLoading) return <div>Loading...</div>;
@@ -90,23 +93,20 @@ const OfferDetailsPage: React.FC = () => {
       (item: OfferWithBook) => item.id !== offer.id && item.status === 'OPEN'
     ) || [];
 
-  const currentAuthors = new Set(
-    (book.authors || [])
-      .filter((author): author is string => typeof author === 'string')
-      .map(normalizeAuthor)
-  );
-
+  const currentAuthors = new Set((authorNames ?? []).map(normalizeAuthor));
   const authorBooks =
-    authorBooksQuery.data?.content?.filter(
-      (item: OfferWithBook) =>
-        item.id !== offer.id &&
-        item.status === 'OPEN' &&
-        item.book.authors?.some(
-          (author) =>
-            typeof author === 'string' &&
-            currentAuthors.has(normalizeAuthor(author))
-        )
-    ) || [];
+    authorBooksQuery.data?.content
+      ?.filter(
+        (item: OfferWithBook) =>
+          item.id !== offer.id &&
+          item.status === 'OPEN' &&
+          item.book.authors?.some(
+            (author) =>
+              typeof author === 'string' &&
+              currentAuthors.has(normalizeAuthor(author))
+          )
+      )
+      .slice(0, 10) ?? [];
 
   return (
     <>

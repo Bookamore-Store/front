@@ -6,6 +6,7 @@ export type QueryParams = Nullable<{
   size?: string | number;
   sort?: `${OfferSortBy},${'asc' | 'desc'}`;
   genre?: string | string[];
+  author?: string[];
   condition?: string;
   search?: string;
   sellerId?: string[];
