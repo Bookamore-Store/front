@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useSearchParams, useNavigate, useLocation } from 'react-router';
+import { Link, useSearchParams, useNavigate, useLocation } from 'react-router';
 import { SortDropdown } from '@shared/ui/dropdowns/SortDropdown';
 import { FilterDropdown } from '@shared/ui/dropdowns/FilterDropdown';
 import { Checkbox } from '../components/Checkbox';
@@ -155,7 +155,9 @@ export function Header() {
       <div className="px-4 sm:px-6 lg:px-8 xl:px-12">
         {/* Top row - Logo */}
         <div className="flex items-center justify-between py-4 px-[10px]">
-          <LogoSvg />
+          <Link to="/">
+            <LogoSvg />
+          </Link>
           <LanguageSwitch />
         </div>
 
