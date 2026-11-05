@@ -42,6 +42,17 @@
     "recommended": "Recommended",
     "sci-fi": "Science Fiction"
   },
+  "search": {
+    "loading": "Loading search results...",
+    "loadFailed": "Failed to load search results",
+    "tryAgainLater": "Please try again later",
+    "recommendedBooks": "Recommended Books",
+    "resultsFor": "Results for \"{query}\":",
+    "noBooksFound": "No books found",
+    "noResultsForQuery": "No results found for \"{query}\". Try a different search term.",
+    "prompt": "Try searching for books, authors, or genres.",
+    "goBack": "Go Back"
+  },
   "auth": {
     "name": "Name",
     "logIn": "Log In",
