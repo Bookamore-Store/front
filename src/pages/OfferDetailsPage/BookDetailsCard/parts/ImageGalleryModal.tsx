@@ -114,7 +114,7 @@ export const ImageGalleryModal = ({
               ref={imageRef}
               src={src}
               alt={title}
-              className="block max-w-full max-h-full w-auto h-auto object-contain bg-white rounded-xl"
+              className="block w-auto h-auto max-h-[calc(100vh-40%)] min-h-[calc(100vh-40%)] md:max-h-[calc(100vh-20%)] md:min-h-[calc(100vh-20%)] object-contain bg-white rounded-xl"
             />
             {hasMultiple && (
               <>
