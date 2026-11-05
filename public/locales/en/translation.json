@@ -204,7 +204,8 @@
     "uk": "Ukrainian",
     "notifications": "Notifications",
     "myProfile": "My Profile",
-    "privacyPolicy": "Privacy & Policy"
+    "privacyPolicy": "Privacy Policy",
+    "publicOffer": "Public Offer"
   },
   "languageSwitcher": {
     "label": "Language switcher",
@@ -248,5 +249,127 @@
     "noBooks": "No books available.",
     "booksLoadFailed": "Books load failed.",
     "noResults": "No results found for {genreLabel}. Try browsing other categories."
+  },
+  "privacyPolicy": {
+    "title": "Privacy & Policy",
+    "documentTitle": "PRIVACY AND PERSONAL DATA PROTECTION POLICY OF THE BOOKAMORE SERVICE",
+    "lastUpdated": "Last updated: 12.10.2026",
+    "introduction": "This Privacy Policy (hereinafter referred to as the \"Policy\") establishes the procedure for collecting, processing, storing, and protecting personal data of users of the \"Bookamore\" web service in accordance with the Law of Ukraine \"On Personal Data Protection\" No. 2297-VI.",
+    "sections": [
+      {
+        "heading": "1. CONTROLLER OF PERSONAL DATA",
+        "blocks": [
+          {
+            "text": "The controller of the users' personal data is Sole Proprietor (Аn individual entrepreneur registered under the laws of Ukraine) \"Bookamore\", code: 5566778899, address: Kyiv, contact email: bookamore.store@gmail.com."
+          }
+        ]
+      },
+      {
+        "heading": "2. COMPOSITION AND CATEGORIES OF PERSONAL DATA COLLECTED",
+        "blocks": [
+          {
+            "text": "The Service collects and processes the following data:"
+          },
+          {
+            "text": "2.1. Data provided upon registration and profile completion:",
+            "items": [
+              "Email address;",
+              "Nickname / Username;",
+              "Password (in encrypted form via an irreversible BCrypt hashing algorithm);",
+              "Profile avatar / Identification data from Google OAuth."
+            ]
+          },
+          {
+            "text": "2.2. Event and content data:",
+            "items": [
+              "Text and photos of book listings;",
+              "Internal content of chat messages between users (exclusively to ensure technical functionality and security);",
+              "List of listings added to \"Favorites\"."
+            ]
+          },
+          {
+            "text": "2.3. Technical and analytical data:",
+            "items": [
+              "IP address, cookies, browser type, device information, access time, and page visit history."
+            ]
+          }
+        ]
+      },
+      {
+        "heading": "3. PURPOSE OF PERSONAL DATA PROCESSING",
+        "blocks": [
+          {
+            "text": "Personal data processing is carried out exclusively for:",
+            "items": [
+              "Ensuring account functionality and User authentication;",
+              "Enabling the publication of listings and communication between Buyer and Seller via chat;",
+              "Sending technical and service notifications (e.g., password reset instructions);",
+              "Ensuring security, moderation, preventing fraud, and avoiding technical failures;",
+              "Complying with the requirements of Ukrainian legislation."
+            ]
+          }
+        ]
+      },
+      {
+        "heading": "4. CONSENT TO PROCESSING AND RIGHTS OF THE PERSONAL DATA SUBJECT",
+        "blocks": [
+          {
+            "text": "4.1. By checking the checkbox during registration or clicking the \"Register\" / \"Sign in with Google\" button, the User provides conscious and voluntary consent to the Controller for the processing of their personal data."
+          },
+          {
+            "text": "4.2. In accordance with Article 8 of the Law of Ukraine \"On Personal Data Protection\", the User has the right to:",
+            "items": [
+              "Know the sources of collection, location of their personal data, and the purpose of their processing;",
+              "Receive information regarding the conditions for providing access to personal data to third parties;",
+              "Access their personal data and receive information about its processing;",
+              "Submit a reasoned request to the Controller objecting to the processing of their data, or requesting its modification or destruction if the data is inaccurate or processed unlawfully;",
+              "Be protected against unlawful processing, accidental loss, or destruction of their personal data;",
+              "Withdraw consent to personal data processing by submitting a written request to bookamore.store@gmail.com or by deleting their account in the settings."
+            ]
+          }
+        ]
+      },
+      {
+        "heading": "5. DATA TRANSFER TO THIRD PARTIES",
+        "blocks": [
+          {
+            "text": "5.1. The Service does not sell, transfer, or disclose Users' personal data to third parties without their consent, except in cases directly provided for by Ukrainian legislation (for example, upon a reasoned court decision or a request from law enforcement agencies)."
+          },
+          {
+            "text": "5.2. To ensure hosting and system deployment, the Service may use cloud computing resources (specifically Oracle Cloud / GCP) that provide an appropriate level of data encryption and security."
+          }
+        ]
+      },
+      {
+        "heading": "6. DATA RETENTION PERIOD",
+        "blocks": [
+          {
+            "text": "6.1. Personal data is stored for the entire duration of the User's account existence."
+          },
+          {
+            "text": "6.2. If an account is deleted by the User, personal data will be deleted or anonymized within 30 calendar days, except in cases where further retention is required by Ukrainian legislation."
+          }
+        ]
+      },
+      {
+        "heading": "7. USE OF COOKIES",
+        "blocks": [
+          {
+            "text": "7.1. The Service uses cookies to maintain authorization sessions (JWT tokens), save preferences, and collect technical statistics."
+          },
+          {
+            "text": "7.2. Users may disable cookie storage in their browser settings; however, this may lead to improper functioning of authorization and certain Service features."
+          }
+        ]
+      },
+      {
+        "heading": "8. CONTACTS AND REQUESTS",
+        "blocks": [
+          {
+            "text": "For all inquiries regarding the processing, modification, or deletion of personal data, Users may contact the Administration via email: bookamore.store@gmail.com."
+          }
+        ]
+      }
+    ]
   }
 }

@@ -19,6 +19,7 @@ import MyAnnouncementsPage from '@/pages/MyAnnouncementsPage/MyAnnouncementsPage
 import OrdersPage from '@/pages/OrdersPage/OrdersPage';
 import SettingsPage from '@/pages/SettingsPage/SettingsPage';
 import { ProtectedRoute } from '@shared/components/ProtectedRoute.tsx';
+import { PrivacyPolicyPage } from '@pages/PrivacyPolicyPage/PrivacyPolicyPage.tsx';
 
 export const router = createBrowserRouter([
   {
@@ -89,6 +90,10 @@ export const router = createBrowserRouter([
     path: '/sign-up',
     element: <SignUpPage />,
   },
+ {
+    path: '/privacy-policy',
+    element: <PrivacyPolicyPage />,
+ },
   {
     path: '/chats',
     element: (
