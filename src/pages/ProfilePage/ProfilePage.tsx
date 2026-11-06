@@ -4,7 +4,6 @@ import {
   FaBoxOpen,
   FaRegHeart,
   FaRegComments,
-  FaCog,
   FaBook,
 } from 'react-icons/fa';
 import { SettingLinkSvg } from '@/shared/ui/icons/SettingLinkSvg';
@@ -51,7 +50,7 @@ const ProfilePage = () => {
    },
    {
      title: t('profileItems.userAgreement'),
-     path: '#',
+     path: '/user-agreement',
      icon: null,
    },
   ];

@@ -370,5 +370,59 @@
         ]
       }
     ]
+  },
+  "userAgreement": {
+    "title": "User Agreement",
+    "documentTitle": "USER AGREEMENT AND TERMS OF USE OF THE BOOKAMORE SERVICE",
+    "subtitle": "(Public Offer)",
+    "lastUpdated": "Last updated: 12.10.2026",
+    "introduction": "This User Agreement (hereinafter referred to as the \"Agreement\") constitutes a public offer within the meaning of Articles 633 and 634 of the Civil Code of Ukraine and governs the relationship between the Administration of the \"Bookamore\" service (hereinafter referred to as the \"Administration\" or the \"Service\") and any individual (hereinafter referred to as the \"User\") who uses the website https://bookamore.store and its associated services.",
+    "section1": {
+      "title": "1. GENERAL PROVISIONS AND IDENTIFICATION OF THE ADMINISTRATION",
+      "p1": "1.1. The owner and administrator of the Service is Sole Proprietor (Аn individual entrepreneur registered under the laws of Ukraine) \"Bookamore\", code: 5566778899, address: Kyiv, email: bookamore.store@gmail.com.",
+      "p2": "1.2. Acceptance (full and unconditional agreement) of this Agreement occurs at the moment of account creation by the User or through the actual use of any functionality of the Service.",
+      "p3": "1.3. If the User does not agree with the terms of this Agreement in whole or in part, they are obliged to immediately cease using the Service."
+    },
+
+    "section2": {
+      "title": "2. PURPOSE AND STATUS OF THE SERVICE",
+      "p1": "2.1. The Service is an electronic marketplace (bulletin board platform) providing Users with the technical capability to post listings for the sale, purchase, or exchange of used and new books and related literary products.",
+      "p2": "2.2. The Service IS NOT a party to, organizer, guarantor, or intermediary of transactions executed directly between Users (Buyer and Seller).",
+      "p3": "2.3. All settlements, delivery, quality assessment, and exchange of goods are carried out between Users at their own discretion and risk outside the Service system."
+    },
+    "section3": {
+      "title": "3. REGISTRATION, ACCOUNT, AND AGE RESTRICTIONS",
+      "p1": "3.1. The use of certain features of the Service (posting listings, sending messages) is available only after registration.",
+      "p2": "3.2. Registration is permitted for individuals who have reached 14 years of age (with parental/guardian consent) or fully capable individuals who have reached 18 years of age.",
+      "p3": "3.3. The User is obliged to provide accurate information during registration (including via Google OAuth authorization). Creating accounts on behalf of other persons without their knowledge is strictly prohibited.",
+      "p4": "3.4. The User bears full responsibility for maintaining the confidentiality of their access credentials (login, password)."
+    },
+    "section4": {
+      "title": "4. RULES FOR POSTING LISTINGS AND CONTENT",
+      "p1": "4.1. Only listings directly related to printed books, comics, magazines, and related literary items are eligible for publication.",
+      "p2": "4.2. Information in the listing (title, author, price, condition, description, photo) must be truthful and up-to-date.",
+      "p3": "4.3. PROPRIETY AND CONTENT RESTRICTIONS. It is strictly prohibited to post:",
+      "item1": "Books and printed materials published by publishing houses of the aggressor state (the Russian Federation) or the Republic of Belarus, as well as literature included in the list of publications whose distribution is prohibited by the legislation of Ukraine;",
+      "item2": "Counterfeit products, illegal reprints (pirated copies), and materials that infringe upon copyright or related rights;",
+      "item3": "Materials containing calls to overthrow the constitutional order of Ukraine, war propaganda, justification or recognition of the lawfulness of the armed aggression of the Russian Federation against Ukraine, hate speech, pornography, or calls to violence;",
+      "item4": "Spam, duplicate listings, and promotional links to third-party resources."
+    },
+    "section5": {
+      "title": "5. SERVICE LANGUAGE",
+      "p1": "5.1. In accordance with the Law of Ukraine \"On Ensuring the Functioning of Ukrainian as the State Language,\" the interface and service language of the Service is Ukrainian.",
+      "p2": "5.2. Users are recommended to draft listing text and conduct communications in the state language."
+    },
+    "section6": {
+      "title": "6. LIMITATION OF LIABILITY OF THE ADMINISTRATION",
+      "p1": "6.1. The Administration does not verify the legality of Users' ownership of books listed for sale or exchange and does not guarantee that the description matches the actual condition of the goods.",
+      "p2": "6.2. The Service shall not be liable for any direct, indirect, or consequential damages arising from bad-faith actions of Sellers or Buyers (including non-payment, non-delivery, or fraud).",
+      "p3": "6.3. The Administration reserves the right (but is not obligated) to moderate content, and to temporarily or permanently block/delete User accounts or listings without prior notice in the event of a violation of the terms of this Agreement or upon receiving complaints.",
+      "p4": "6.4. Protection of Intellectual Property (Take-Down Notice): If you are a copyright holder and discover a violation of your rights, you may submit an appropriate application to bookamore.store@gmail.com for prompt removal of the content."
+    },
+    "section7": {
+      "title": "7. AMENDMENTS TO THE AGREEMENT AND DISPUTE RESOLUTION",
+      "p1": "7.1. This Agreement may be amended by the Administration unilaterally. The updated version takes effect from the moment of its publication on the website.",
+      "p2": "7.2. All disputes between the Parties shall be resolved through negotiations. In case an agreement cannot be reached, disputes shall be settled in court under the legislation of Ukraine."
+    }
   }
 }
