@@ -105,28 +105,6 @@ const SettingsPage = () => {
         <FaChevronRight className="text-[#004261] opacity-50" />
       </button>
 
-      {/* Кнопка Privacy & Policy */}
-      <button
-       onClick={() => navigate('/privacy-policy')}
-       className="w-full border-2 border-[#A1D9D6] rounded-3xl p-5 flex items-center justify-between hover:bg-teal-50 transition-colors">
-        <span className="text-lg font-medium text-slate-700">
-          {t('settings.privacyPolicy')}
-        </span>
-        <FaChevronRight className="text-[#004261] opacity-50" />
-      </button>
-
-      {/* Кнопка Public Offer — тимчасова заглушка */}
-      <a
-        href="#"
-        onClick={(e) => e.preventDefault()}
-        className="w-full border-2 border-[#A1D9D6] rounded-3xl p-5 flex items-center justify-between hover:bg-teal-50 transition-colors"
-      >
-        <span className="text-lg font-medium text-slate-700">
-          {t('settings.publicOffer')}
-        </span>
-        <FaChevronRight className="text-[#004261] opacity-50" />
-      </a>
-
       <div>
         <LogOut />
       </div>

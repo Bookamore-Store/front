@@ -111,7 +111,8 @@
     "orders": "My Orders",
     "favorites": "My Favorites",
     "chats": "My Chats",
-    "settings": "Settings"
+    "privacyPolicy": "Privacy Policy",
+    "userAgreement": "User Agreement"
   },
   "bottomNav": {
     "home": "Home",
@@ -203,9 +204,7 @@
     "en": "English",
     "uk": "Ukrainian",
     "notifications": "Notifications",
-    "myProfile": "My Profile",
-    "privacyPolicy": "Privacy Policy",
-    "publicOffer": "Public Offer"
+    "myProfile": "My Profile"
   },
   "languageSwitcher": {
     "label": "Language switcher",
