@@ -241,11 +241,14 @@ const SignInPage: React.FC = () => {
         {/* TERMS */}
         <p className="mb-4 text-center text-xs text-gray-500">
           {t('auth.acceptance')}{' '}
-          <Link to="#" className="font-semibold text-gray-800 underline">
+          <Link
+          to="/user-agreement"
+          className="font-semibold text-gray-800 underline"
+          >
             {t('auth.terms')}
           </Link>{' '}
           {t('auth.and')}{' '}
-          <Link to="#" className="font-semibold text-gray-800 underline">
+          <Link to="/privacy-policy" className="font-semibold text-gray-800 underline">
             {t('auth.privacy')}
           </Link>
         </p>

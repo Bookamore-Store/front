@@ -122,7 +122,8 @@
     "orders": "My Orders",
     "favorites": "My Favorites",
     "chats": "My Chats",
-    "settings": "Settings"
+    "privacyPolicy": "Privacy Policy",
+    "userAgreement": "User Agreement"
   },
   "bottomNav": {
     "home": "Home",
@@ -214,8 +215,7 @@
     "en": "English",
     "uk": "Ukrainian",
     "notifications": "Notifications",
-    "myProfile": "My Profile",
-    "privacyPolicy": "Privacy & Policy"
+    "myProfile": "My Profile"
   },
   "languageSwitcher": {
     "label": "Language switcher",
@@ -259,5 +259,181 @@
     "noBooks": "No books available.",
     "booksLoadFailed": "Books load failed.",
     "noResults": "No results found for {genreLabel}. Try browsing other categories."
+  },
+  "privacyPolicy": {
+    "title": "Privacy & Policy",
+    "documentTitle": "PRIVACY AND PERSONAL DATA PROTECTION POLICY OF THE BOOKAMORE SERVICE",
+    "lastUpdated": "Last updated: 12.10.2026",
+    "introduction": "This Privacy Policy (hereinafter referred to as the \"Policy\") establishes the procedure for collecting, processing, storing, and protecting personal data of users of the \"Bookamore\" web service in accordance with the Law of Ukraine \"On Personal Data Protection\" No. 2297-VI.",
+    "sections": [
+      {
+        "heading": "1. CONTROLLER OF PERSONAL DATA",
+        "blocks": [
+          {
+            "text": "The controller of the users' personal data is Sole Proprietor (Аn individual entrepreneur registered under the laws of Ukraine) \"Bookamore\", code: 5566778899, address: Kyiv, contact email: bookamore.store@gmail.com."
+          }
+        ]
+      },
+      {
+        "heading": "2. COMPOSITION AND CATEGORIES OF PERSONAL DATA COLLECTED",
+        "blocks": [
+          {
+            "text": "The Service collects and processes the following data:"
+          },
+          {
+            "text": "2.1. Data provided upon registration and profile completion:",
+            "items": [
+              "Email address;",
+              "Nickname / Username;",
+              "Password (in encrypted form via an irreversible BCrypt hashing algorithm);",
+              "Profile avatar / Identification data from Google OAuth."
+            ]
+          },
+          {
+            "text": "2.2. Event and content data:",
+            "items": [
+              "Text and photos of book listings;",
+              "Internal content of chat messages between users (exclusively to ensure technical functionality and security);",
+              "List of listings added to \"Favorites\"."
+            ]
+          },
+          {
+            "text": "2.3. Technical and analytical data:",
+            "items": [
+              "IP address, cookies, browser type, device information, access time, and page visit history."
+            ]
+          }
+        ]
+      },
+      {
+        "heading": "3. PURPOSE OF PERSONAL DATA PROCESSING",
+        "blocks": [
+          {
+            "text": "Personal data processing is carried out exclusively for:",
+            "items": [
+              "Ensuring account functionality and User authentication;",
+              "Enabling the publication of listings and communication between Buyer and Seller via chat;",
+              "Sending technical and service notifications (e.g., password reset instructions);",
+              "Ensuring security, moderation, preventing fraud, and avoiding technical failures;",
+              "Complying with the requirements of Ukrainian legislation."
+            ]
+          }
+        ]
+      },
+      {
+        "heading": "4. CONSENT TO PROCESSING AND RIGHTS OF THE PERSONAL DATA SUBJECT",
+        "blocks": [
+          {
+            "text": "4.1. By checking the checkbox during registration or clicking the \"Register\" / \"Sign in with Google\" button, the User provides conscious and voluntary consent to the Controller for the processing of their personal data."
+          },
+          {
+            "text": "4.2. In accordance with Article 8 of the Law of Ukraine \"On Personal Data Protection\", the User has the right to:",
+            "items": [
+              "Know the sources of collection, location of their personal data, and the purpose of their processing;",
+              "Receive information regarding the conditions for providing access to personal data to third parties;",
+              "Access their personal data and receive information about its processing;",
+              "Submit a reasoned request to the Controller objecting to the processing of their data, or requesting its modification or destruction if the data is inaccurate or processed unlawfully;",
+              "Be protected against unlawful processing, accidental loss, or destruction of their personal data;",
+              "Withdraw consent to personal data processing by submitting a written request to bookamore.store@gmail.com or by deleting their account in the settings."
+            ]
+          }
+        ]
+      },
+      {
+        "heading": "5. DATA TRANSFER TO THIRD PARTIES",
+        "blocks": [
+          {
+            "text": "5.1. The Service does not sell, transfer, or disclose Users' personal data to third parties without their consent, except in cases directly provided for by Ukrainian legislation (for example, upon a reasoned court decision or a request from law enforcement agencies)."
+          },
+          {
+            "text": "5.2. To ensure hosting and system deployment, the Service may use cloud computing resources (specifically Oracle Cloud / GCP) that provide an appropriate level of data encryption and security."
+          }
+        ]
+      },
+      {
+        "heading": "6. DATA RETENTION PERIOD",
+        "blocks": [
+          {
+            "text": "6.1. Personal data is stored for the entire duration of the User's account existence."
+          },
+          {
+            "text": "6.2. If an account is deleted by the User, personal data will be deleted or anonymized within 30 calendar days, except in cases where further retention is required by Ukrainian legislation."
+          }
+        ]
+      },
+      {
+        "heading": "7. USE OF COOKIES",
+        "blocks": [
+          {
+            "text": "7.1. The Service uses cookies to maintain authorization sessions (JWT tokens), save preferences, and collect technical statistics."
+          },
+          {
+            "text": "7.2. Users may disable cookie storage in their browser settings; however, this may lead to improper functioning of authorization and certain Service features."
+          }
+        ]
+      },
+      {
+        "heading": "8. CONTACTS AND REQUESTS",
+        "blocks": [
+          {
+            "text": "For all inquiries regarding the processing, modification, or deletion of personal data, Users may contact the Administration via email: bookamore.store@gmail.com."
+          }
+        ]
+      }
+    ]
+  },
+  "userAgreement": {
+    "title": "User Agreement",
+    "documentTitle": "USER AGREEMENT AND TERMS OF USE OF THE BOOKAMORE SERVICE",
+    "subtitle": "(Public Offer)",
+    "lastUpdated": "Last updated: 12.10.2026",
+    "introduction": "This User Agreement (hereinafter referred to as the \"Agreement\") constitutes a public offer within the meaning of Articles 633 and 634 of the Civil Code of Ukraine and governs the relationship between the Administration of the \"Bookamore\" service (hereinafter referred to as the \"Administration\" or the \"Service\") and any individual (hereinafter referred to as the \"User\") who uses the website https://bookamore.store and its associated services.",
+    "section1": {
+      "title": "1. GENERAL PROVISIONS AND IDENTIFICATION OF THE ADMINISTRATION",
+      "p1": "1.1. The owner and administrator of the Service is Sole Proprietor (Аn individual entrepreneur registered under the laws of Ukraine) \"Bookamore\", code: 5566778899, address: Kyiv, email: bookamore.store@gmail.com.",
+      "p2": "1.2. Acceptance (full and unconditional agreement) of this Agreement occurs at the moment of account creation by the User or through the actual use of any functionality of the Service.",
+      "p3": "1.3. If the User does not agree with the terms of this Agreement in whole or in part, they are obliged to immediately cease using the Service."
+    },
+
+    "section2": {
+      "title": "2. PURPOSE AND STATUS OF THE SERVICE",
+      "p1": "2.1. The Service is an electronic marketplace (bulletin board platform) providing Users with the technical capability to post listings for the sale, purchase, or exchange of used and new books and related literary products.",
+      "p2": "2.2. The Service IS NOT a party to, organizer, guarantor, or intermediary of transactions executed directly between Users (Buyer and Seller).",
+      "p3": "2.3. All settlements, delivery, quality assessment, and exchange of goods are carried out between Users at their own discretion and risk outside the Service system."
+    },
+    "section3": {
+      "title": "3. REGISTRATION, ACCOUNT, AND AGE RESTRICTIONS",
+      "p1": "3.1. The use of certain features of the Service (posting listings, sending messages) is available only after registration.",
+      "p2": "3.2. Registration is permitted for individuals who have reached 14 years of age (with parental/guardian consent) or fully capable individuals who have reached 18 years of age.",
+      "p3": "3.3. The User is obliged to provide accurate information during registration (including via Google OAuth authorization). Creating accounts on behalf of other persons without their knowledge is strictly prohibited.",
+      "p4": "3.4. The User bears full responsibility for maintaining the confidentiality of their access credentials (login, password)."
+    },
+    "section4": {
+      "title": "4. RULES FOR POSTING LISTINGS AND CONTENT",
+      "p1": "4.1. Only listings directly related to printed books, comics, magazines, and related literary items are eligible for publication.",
+      "p2": "4.2. Information in the listing (title, author, price, condition, description, photo) must be truthful and up-to-date.",
+      "p3": "4.3. PROPRIETY AND CONTENT RESTRICTIONS. It is strictly prohibited to post:",
+      "item1": "Books and printed materials published by publishing houses of the aggressor state (the Russian Federation) or the Republic of Belarus, as well as literature included in the list of publications whose distribution is prohibited by the legislation of Ukraine;",
+      "item2": "Counterfeit products, illegal reprints (pirated copies), and materials that infringe upon copyright or related rights;",
+      "item3": "Materials containing calls to overthrow the constitutional order of Ukraine, war propaganda, justification or recognition of the lawfulness of the armed aggression of the Russian Federation against Ukraine, hate speech, pornography, or calls to violence;",
+      "item4": "Spam, duplicate listings, and promotional links to third-party resources."
+    },
+    "section5": {
+      "title": "5. SERVICE LANGUAGE",
+      "p1": "5.1. In accordance with the Law of Ukraine \"On Ensuring the Functioning of Ukrainian as the State Language,\" the interface and service language of the Service is Ukrainian.",
+      "p2": "5.2. Users are recommended to draft listing text and conduct communications in the state language."
+    },
+    "section6": {
+      "title": "6. LIMITATION OF LIABILITY OF THE ADMINISTRATION",
+      "p1": "6.1. The Administration does not verify the legality of Users' ownership of books listed for sale or exchange and does not guarantee that the description matches the actual condition of the goods.",
+      "p2": "6.2. The Service shall not be liable for any direct, indirect, or consequential damages arising from bad-faith actions of Sellers or Buyers (including non-payment, non-delivery, or fraud).",
+      "p3": "6.3. The Administration reserves the right (but is not obligated) to moderate content, and to temporarily or permanently block/delete User accounts or listings without prior notice in the event of a violation of the terms of this Agreement or upon receiving complaints.",
+      "p4": "6.4. Protection of Intellectual Property (Take-Down Notice): If you are a copyright holder and discover a violation of your rights, you may submit an appropriate application to bookamore.store@gmail.com for prompt removal of the content."
+    },
+    "section7": {
+      "title": "7. AMENDMENTS TO THE AGREEMENT AND DISPUTE RESOLUTION",
+      "p1": "7.1. This Agreement may be amended by the Administration unilaterally. The updated version takes effect from the moment of its publication on the website.",
+      "p2": "7.2. All disputes between the Parties shall be resolved through negotiations. In case an agreement cannot be reached, disputes shall be settled in court under the legislation of Ukraine."
+    }
   }
 }

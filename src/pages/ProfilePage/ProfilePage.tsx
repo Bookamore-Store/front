@@ -4,7 +4,6 @@ import {
   FaBoxOpen,
   FaRegHeart,
   FaRegComments,
-  FaCog,
   FaBook,
 } from 'react-icons/fa';
 import { SettingLinkSvg } from '@/shared/ui/icons/SettingLinkSvg';
@@ -44,11 +43,16 @@ const ProfilePage = () => {
       path: '/chats',
       icon: <FaRegComments className="w-5 h-5" />,
     },
-    {
-      title: t('profileItems.settings'),
-      path: '/settings',
-      icon: <FaCog className="w-5 h-5" />,
-    },
+   {
+     title: t('profileItems.privacyPolicy'),
+     path: '/privacy-policy',
+     icon: null,
+   },
+   {
+     title: t('profileItems.userAgreement'),
+     path: '/user-agreement',
+     icon: null,
+   },
   ];
 
   return (
