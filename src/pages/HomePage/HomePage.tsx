@@ -71,7 +71,7 @@ const HomeBookSection: React.FC<HomeBookSectionProps> = ({
 
 const HomePage: React.FC = () => {
   const { t } = useTranslation();
-  const { genres, getGenreLabel } = useGenres();
+  const { genres, getGenreLabel } = useGenres({ haveBooks: true });
 
   const bookSections = [
     {

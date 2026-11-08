@@ -2,10 +2,6 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useGenres } from '@/shared/hooks/useGenres';
-import { useGetAllOffersWithBooksQuery } from '@/app/store/api/OffersApi';
-import type { Genre } from '@/app/store/api/GenresApi';
-
-const CATEGORY_CHECK_SIZE = 20;
 
 interface CategoryButtonProps {
   label: string;
@@ -35,43 +31,13 @@ function CategoryButton({
   );
 }
 
-interface GenreCategoryButtonProps {
-  genre: Genre;
-  label: string;
-  isActive: boolean;
-  onClick: (categoryId: string) => void;
-}
-
-function GenreCategoryButton({
-  genre,
-  label,
-  isActive,
-  onClick,
-}: GenreCategoryButtonProps) {
-  const { data, isLoading, isError } = useGetAllOffersWithBooksQuery({
-    genre: genre.id,
-    size: CATEGORY_CHECK_SIZE,
-  });
-  const hasOpenOffers = data?.content.some((offer) => offer.status === 'OPEN');
-
-  if (isLoading || isError || !hasOpenOffers) {
-    return null;
-  }
-
-  return (
-    <CategoryButton
-      label={label}
-      isActive={isActive}
-      onClick={() => onClick(genre.id)}
-    />
-  );
-}
-
 export function Categories() {
   const [activeCategory, setActiveCategory] = useState('all');
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const { genres, getGenreLabel, isLoading, isError } = useGenres();
+  const { genres, getGenreLabel, isLoading, isError } = useGenres({
+    haveBooks: true,
+  });
 
   const handleCategoryClick = (categoryId: string) => {
     if (categoryId === 'all') {
@@ -101,14 +67,13 @@ export function Categories() {
             }}
           />
           {genres.map((genre) => (
-            <GenreCategoryButton
+            <CategoryButton
               key={genre.id}
-              genre={genre}
               label={getGenreLabel(genre.id)}
               isActive={activeCategory === genre.id}
-              onClick={(categoryId) => {
-                setActiveCategory(categoryId);
-                handleCategoryClick(categoryId);
+              onClick={() => {
+                setActiveCategory(genre.id);
+                handleCategoryClick(genre.id);
               }}
             />
           ))}
