@@ -65,7 +65,7 @@ export const MessageList = ({
     <div
       ref={containerRef}
       onScroll={onScroll}
-      className="flex flex-col justify-end-safe min-h-0 flex-1 px-4 overflow-y-auto [overflow-anchor:none] w-full mx-auto lg:max-w-6xl xl:max-w-7xl py-4 sm:px-6 lg:px-8 xl:px-12 scrollbar-custom bg-sand-50"
+      className="flex flex-col justify-end-safe min-h-0 flex-1 px-4 overflow-y-auto [overflow-anchor:none] w-full mx-auto lg:max-w-6xl xl:max-w-7xl py-4 sm:px-6 lg:px-8 xl:px-12 scrollbar-custom"
     >
       {messages.length === 0 ? (
         <div className="flex h-full flex-col items-center justify-center py-20 text-center text-gray-400">
