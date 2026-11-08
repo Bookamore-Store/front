@@ -223,6 +223,8 @@ const ChatPage = () => {
         <MessageList
           messages={messages}
           currentUserId={currentUser?.id}
+          counterpartName={conversation?.counterpart?.name || t('chats.unknownUser')}
+          counterpartAvatarUrl={conversation?.counterpart?.avatarUrl}
           containerRef={messagesContainerRef}
           onScroll={handleChatScroll}
         />

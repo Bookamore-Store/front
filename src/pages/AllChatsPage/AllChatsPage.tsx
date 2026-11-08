@@ -11,7 +11,10 @@ import type { Conversation } from '@/types/entities/Chat';
 
 import { ChatsList } from './components/ChatsList';
 import { TabSwitcher } from './components/TabSwitcher';
-import { filterAndSortChats } from './helpers/filterAndSortChats';
+import {
+  filterAndSortChats,
+  filterChatsByTab,
+} from './helpers/filterAndSortChats';
 import type { ChatTab } from './types';
 
 const AllChatsPage = () => {
@@ -39,6 +42,16 @@ const AllChatsPage = () => {
     : (data?.content ?? []);
 
   const filteredChats = filterAndSortChats(chats, activeTab);
+  const unreadCounts = {
+    selling: filterChatsByTab(chats, 'selling').reduce(
+      (total, chat) => total + chat.unreadCount,
+      0
+    ),
+    buying: filterChatsByTab(chats, 'buying').reduce(
+      (total, chat) => total + chat.unreadCount,
+      0
+    ),
+  };
 
   const handleTabChange = (tab: ChatTab) => {
     if (tab === activeTab) return;
@@ -60,7 +73,11 @@ const AllChatsPage = () => {
 
       <div className="mx-auto w-full max-w-md lg:max-w-4xl xl:max-w-6xl">
         <div className="pt-4">
-          <TabSwitcher activeTab={activeTab} onTabChange={handleTabChange} />
+          <TabSwitcher
+            activeTab={activeTab}
+            unreadCounts={unreadCounts}
+            onTabChange={handleTabChange}
+          />
         </div>
 
         <div className="pb-24">

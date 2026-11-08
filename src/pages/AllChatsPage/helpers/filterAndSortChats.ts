@@ -11,18 +11,23 @@ const getMessageTimestamp = (dateStr?: string | null): number => {
   return Number.isNaN(timestamp) ? 0 : timestamp;
 };
 
+export const filterChatsByTab = (
+  chats: Conversation[],
+  activeTab: ChatTab
+): Conversation[] =>
+  chats.filter((chat) => {
+    const role = chat.counterpart?.role?.toUpperCase();
+
+    // BUYER -> мы продаём
+    // SELLER -> мы покупаем
+    return activeTab === 'selling' ? role === 'BUYER' : role === 'SELLER';
+  });
+
 export const filterAndSortChats = (
   chats: Conversation[],
   activeTab: ChatTab
 ): Conversation[] => {
-  return chats
-    .filter((chat) => {
-      const role = chat.counterpart?.role?.toUpperCase();
-
-      // BUYER -> мы продаём
-      // SELLER -> мы покупаем
-      return activeTab === 'selling' ? role === 'BUYER' : role === 'SELLER';
-    })
+  return filterChatsByTab(chats, activeTab)
     .sort(
       (a, b) =>
         getMessageTimestamp(b.lastMessageAt) -

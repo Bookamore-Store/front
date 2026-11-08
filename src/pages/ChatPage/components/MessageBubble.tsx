@@ -1,5 +1,6 @@
 import { CheckSvg } from '@/shared/ui/icons/CheckSvg';
 import { CheckDoubleSvg } from '@/shared/ui/icons/CheckDoubleSvg';
+import { UserAvatar } from '@/shared/ui/UserAvatar/UserAvatar';
 
 import { parseServerDate } from '@/shared/helpers/parseServerDate';
 
@@ -8,9 +9,16 @@ import type { ChatMessage } from '@/types/entities/Chat';
 interface MessageBubbleProps {
   message: ChatMessage;
   isFromMe: boolean;
+  counterpartName: string;
+  counterpartAvatarUrl?: string | null;
 }
 
-export const MessageBubble = ({ message, isFromMe }: MessageBubbleProps) => {
+export const MessageBubble = ({
+  message,
+  isFromMe,
+  counterpartName,
+  counterpartAvatarUrl,
+}: MessageBubbleProps) => {
   const formatTime = (dateStr: string) => {
     if (!dateStr) return '';
 
@@ -26,12 +34,17 @@ export const MessageBubble = ({ message, isFromMe }: MessageBubbleProps) => {
   };
 
   return (
-    <div className={`mb-3 flex ${isFromMe ? 'justify-end' : 'justify-start'}`}>
+    <div className={`mb-3 flex items-end gap-2 ${isFromMe ? 'justify-end' : 'justify-start'}`}>
+      {!isFromMe && (
+        <UserAvatar
+          name={counterpartName}
+          avatarUrl={counterpartAvatarUrl}
+          className="h-10 w-10"
+        />
+      )}
       <div
         className={`max-w-[75%] rounded-2xl px-4 py-2.5 lg:max-w-md text-paragraphm text-text-black ${
-          isFromMe
-            ? 'rounded-br-sm bg-aquamarine-300'
-            : 'rounded-bl-sm bg-grass-100'
+          isFromMe ? 'bg-aquamarine-300' : 'bg-grass-100'
         }`}
       >
         <p className="whitespace-pre-wrap break-words text-sm leading-relaxed">
