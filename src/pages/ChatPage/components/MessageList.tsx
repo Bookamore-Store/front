@@ -8,6 +8,8 @@ import { MessageBubble } from './MessageBubble';
 interface MessageListProps {
   messages: ChatMessage[];
   currentUserId?: string;
+  counterpartName: string;
+  counterpartAvatarUrl?: string | null;
   containerRef: RefObject<HTMLDivElement | null>;
   onScroll: UIEventHandler<HTMLDivElement>;
 }
@@ -46,6 +48,8 @@ const formatDayLabel = (
 export const MessageList = ({
   messages,
   currentUserId,
+  counterpartName,
+  counterpartAvatarUrl,
   containerRef,
   onScroll,
 }: MessageListProps) => {
@@ -61,7 +65,7 @@ export const MessageList = ({
     <div
       ref={containerRef}
       onScroll={onScroll}
-      className="min-h-0 flex-1 px-4 overflow-y-auto [overflow-anchor:none] w-full mx-auto lg:max-w-6xl xl:max-w-7xl py-4 sm:px-6 lg:px-8 xl:px-12 scrollbar-custom"
+      className="flex flex-col justify-end-safe min-h-0 flex-1 px-4 overflow-y-auto [overflow-anchor:none] w-full mx-auto lg:max-w-6xl xl:max-w-7xl py-4 sm:px-6 lg:px-8 xl:px-12 scrollbar-custom bg-sand-50"
     >
       {messages.length === 0 ? (
         <div className="flex h-full flex-col items-center justify-center py-20 text-center text-gray-400">
@@ -101,6 +105,8 @@ export const MessageList = ({
               <MessageBubble
                 message={message}
                 isFromMe={message.senderId === currentUserId}
+                counterpartName={counterpartName}
+                counterpartAvatarUrl={counterpartAvatarUrl}
               />
             </div>
           );
