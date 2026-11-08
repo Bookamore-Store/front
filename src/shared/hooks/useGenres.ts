@@ -2,9 +2,9 @@ import { useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useGetGenresQuery } from '@/app/store/api/GenresApi';
 
-export const useGenres = () => {
+export const useGenres = (params?: { haveBooks?: boolean }) => {
   const { i18n } = useTranslation();
-  const query = useGetGenresQuery();
+  const query = useGetGenresQuery(params);
   const language = i18n.resolvedLanguage === 'uk' ? 'uk' : 'en';
   const genres = query.data;
 

@@ -14,8 +14,13 @@ export const GenresApi = createApi({
     prepareHeaders: (headers) => setLanguageHeader(headers),
   }),
   endpoints: (build) => ({
-    getGenres: build.query<Genre[], void>({
-      query: () => '/genres/all',
+    getGenres: build.query<Genre[], { haveBooks?: boolean } | void>({
+      query: (params) => ({
+        url: '/genres/all',
+        params: params?.haveBooks === undefined
+          ? undefined
+          : { haveBooks: params.haveBooks },
+      }),
     }),
   }),
 });
