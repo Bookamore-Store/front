@@ -1,13 +1,11 @@
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   FaBoxOpen,
   FaRegHeart,
   FaRegComments,
-  FaCog,
   FaBook,
 } from 'react-icons/fa';
-import { SettingLinkSvg } from '@/shared/ui/icons/SettingLinkSvg';
 import { ArrowRight } from '@/shared/ui/icons/Arrows';
 import LogOut from '@/shared/components/LogOut/LogOut';
 import { useGetCurrentUserQuery } from '@/app/store/api/UsersApi';
@@ -44,11 +42,16 @@ const ProfilePage = () => {
       path: '/chats',
       icon: <FaRegComments className="w-5 h-5" />,
     },
-    {
-      title: t('profileItems.settings'),
-      path: '/settings',
-      icon: <FaCog className="w-5 h-5" />,
-    },
+   {
+     title: t('profileItems.privacyPolicy'),
+     path: '/privacy-policy',
+     icon: null,
+   },
+   {
+     title: t('profileItems.userAgreement'),
+     path: '/user-agreement',
+     icon: null,
+   },
   ];
 
   return (
@@ -69,9 +72,6 @@ const ProfilePage = () => {
             <h2 className="text-h3m ">{user?.name}</h2>
             <p className="text-em">{user?.email}</p>
           </div>
-          <NavLink to="/settings">
-            <SettingLinkSvg />
-          </NavLink>
         </div>
       </div>
 
