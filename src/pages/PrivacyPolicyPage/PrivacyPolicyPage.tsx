@@ -1,7 +1,6 @@
 
 import { useTranslation } from 'react-i18next';
 import { PageLayout } from '@/shared/ui/PageLayout/PageLayout';
-import { LanguageSwitch } from '@/shared/components/LanguageSwitch/LanguageSwitch';
 
 type PolicySection = {
   heading: string;
@@ -20,23 +19,19 @@ export const PrivacyPolicyPage = () => {
 
   return (
     <PageLayout title={t('privacyPolicy.title')}>
-     <div className="flex justify-end py-2">
-          <LanguageSwitch />
-        </div>
-      <article className="w-full py-[10px] text-left text-slate-900">
-
+      <article className="w-full py-[10px] pb-6 text-left text-textBlack">
         {/* Назва документа */}
-        <h2 className="mb-3 text-[14px] font-semibold leading-[20px] sm:text-base">
+        <h2 className="mb-3 text-h3m">
           {t('privacyPolicy.documentTitle')}
         </h2>
 
         {/* Дата оновлення */}
-        <p className="mb-3 text-[12px] leading-[18px] sm:text-sm">
+        <p className="mb-3 text-captionm">
           {t('privacyPolicy.lastUpdated')}
         </p>
 
         {/* Вступ */}
-        <p className="mb-4 text-[13px] leading-[19px] sm:text-sm sm:leading-relaxed">
+        <p className="mb-4 text-paragraphm">
           {t('privacyPolicy.introduction')}
         </p>
 
@@ -44,15 +39,14 @@ export const PrivacyPolicyPage = () => {
         <div className="space-y-4">
           {sections.map((section, index) => (
             <section key={index} className="space-y-2">
-
-              <h3 className="text-[13px] font-semibold leading-[19px] sm:text-sm">
+              <h3 className="text-h5m">
                 {section.heading}
               </h3>
 
               {section.blocks.map((block, blockIndex) => (
                 <div key={blockIndex}>
                   {block.text && (
-                    <p className="text-[13px] leading-[19px] sm:text-sm sm:leading-relaxed">
+                    <p className="text-paragraphm">
                       {block.text}
                     </p>
                   )}
@@ -62,7 +56,7 @@ export const PrivacyPolicyPage = () => {
                       {block.items.map((item, itemIndex) => (
                         <li
                           key={itemIndex}
-                          className="text-[13px] leading-[19px] sm:text-sm sm:leading-relaxed"
+                          className="text-paragraphm"
                         >
                           {item}
                         </li>

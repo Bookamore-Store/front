@@ -1,3 +1,4 @@
+
 import { useTranslation } from 'react-i18next';
 import { PageLayout } from '@/shared/ui/PageLayout/PageLayout';
 
@@ -16,48 +17,56 @@ export const UserAgreementPage = () => {
 
   return (
     <PageLayout title={t('userAgreement.title')}>
-      <article className="space-y-6 pb-6 text-sm leading-6 text-gray-800">
-        <header className="space-y-3">
-          <h1 className="text-lg font-semibold">
-            {t('userAgreement.documentTitle')}
-          </h1>
+      <article className="w-full py-[10px] pb-6 text-left text-textBlack">
+        {/* Назва документа */}
+        <h2 className="mb-3 text-h3m">
+          {t('userAgreement.documentTitle')}
+        </h2>
 
-          <p className="font-medium">
-            {t('userAgreement.subtitle')}
-          </p>
+        {/* Підзаголовок */}
+        <p className="mb-3 text-paragraphm">
+          {t('userAgreement.subtitle')}
+        </p>
 
-          <p>{t('userAgreement.lastUpdated')}</p>
-        </header>
+        {/* Дата оновлення */}
+        <p className="mb-3 text-captionm">
+          {t('userAgreement.lastUpdated')}
+        </p>
 
-        <p>{t('userAgreement.introduction')}</p>
+        {/* Вступ */}
+        <p className="mb-4 text-paragraphm">
+          {t('userAgreement.introduction')}
+        </p>
 
-        {sections.map(({ number, paragraphs }) => (
-          <section key={number} className="space-y-3">
-            <h2 className="text-base font-semibold">
-              {t(`userAgreement.section${number}.title`)}
-            </h2>
+        {/* Усі розділи */}
+        <div className="space-y-4">
+          {sections.map(({ number, paragraphs }) => (
+            <section key={number} className="space-y-2">
+              <h3 className="text-h5m">
+                {t(`userAgreement.section${number}.title`)}
+              </h3>
 
-            {Array.from({ length: paragraphs }, (_, index) => (
-              <div key={index}>
-                <p>
-                  {t(`userAgreement.section${number}.p${index + 1}`)}
-                </p>
+              {Array.from({ length: paragraphs }, (_, index) => (
+                <div key={index} className="space-y-2">
+                  <p className="text-paragraphm">
+                    {t(`userAgreement.section${number}.p${index + 1}`)}
+                  </p>
 
-                {number === 4 && index === 2 && (
-                  <ul className="mt-2 list-disc space-y-2 pl-5">
-                    {[1, 2, 3, 4].map((item) => (
-                      <li key={item}>
-                        {t(`userAgreement.section4.item${item}`)}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            ))}
-          </section>
-        ))}
+                  {number === 4 && index === 2 && (
+                    <ul className="mt-1 list-disc space-y-1 pl-4">
+                      {[1, 2, 3, 4].map((item) => (
+                        <li key={item} className="text-paragraphm">
+                          {t(`userAgreement.section4.item${item}`)}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              ))}
+            </section>
+          ))}
+        </div>
       </article>
     </PageLayout>
   );
 };
-
