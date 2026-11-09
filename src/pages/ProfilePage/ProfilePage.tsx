@@ -1,4 +1,4 @@
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   FaBoxOpen,
@@ -6,7 +6,6 @@ import {
   FaRegComments,
   FaBook,
 } from 'react-icons/fa';
-import { SettingLinkSvg } from '@/shared/ui/icons/SettingLinkSvg';
 import { ArrowRight } from '@/shared/ui/icons/Arrows';
 import LogOut from '@/shared/components/LogOut/LogOut';
 import { useGetCurrentUserQuery } from '@/app/store/api/UsersApi';
@@ -73,9 +72,6 @@ const ProfilePage = () => {
             <h2 className="text-h3m ">{user?.name}</h2>
             <p className="text-em">{user?.email}</p>
           </div>
-          <NavLink to="/settings">
-            <SettingLinkSvg />
-          </NavLink>
         </div>
       </div>
 

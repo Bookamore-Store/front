@@ -17,7 +17,6 @@ import { NotFoundPage } from '@pages/NotFoundPage/NotFoundPage.tsx';
 import ProfilePage from '@/pages/ProfilePage/ProfilePage';
 import MyAnnouncementsPage from '@/pages/MyAnnouncementsPage/MyAnnouncementsPage';
 import OrdersPage from '@/pages/OrdersPage/OrdersPage';
-import SettingsPage from '@/pages/SettingsPage/SettingsPage';
 import { ProtectedRoute } from '@shared/components/ProtectedRoute.tsx';
 import { PrivacyPolicyPage } from '@pages/PrivacyPolicyPage/PrivacyPolicyPage.tsx';
 import { UserAgreementPage } from '@/pages/UserAgreementPage/UserAgreementPage';
@@ -136,14 +135,6 @@ export const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <OrdersPage />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: '/settings',
-    element: (
-      <ProtectedRoute>
-        <SettingsPage />
       </ProtectedRoute>
     ),
   },

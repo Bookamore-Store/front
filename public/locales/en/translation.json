@@ -198,14 +198,6 @@
     "sellerBooks": "More Books from This Seller",
     "authorBooks": "More Books by This Author"
   },
-  "settings": {
-    "title": "Settings",
-    "lng": "Language",
-    "en": "English",
-    "uk": "Ukrainian",
-    "notifications": "Notifications",
-    "myProfile": "My Profile"
-  },
   "languageSwitcher": {
     "label": "Language switcher",
     "english": "Switch language to English",
