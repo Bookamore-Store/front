@@ -24,6 +24,7 @@ const NewOfferPage: React.FC = () => {
     handleInputChange,
     handlePhotosChange,
     handleExistingImagesChange,
+    handleImagesOrderChange,
     handleSubmit,
   } = useOfferForm();
 
@@ -46,6 +47,7 @@ const NewOfferPage: React.FC = () => {
           existingImages={existingImages}
           onPhotosChange={handlePhotosChange}
           onExistingImagesChange={handleExistingImagesChange}
+          onImagesOrderChange={handleImagesOrderChange}
           isSubmitting={isSubmitting}
           mode={mode}
           offerId={offerId}

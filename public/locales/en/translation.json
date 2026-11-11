@@ -146,12 +146,22 @@
     "author": "Author",
     "genres": "Genres",
     "genresPlaceholder": "Add genres",
-    "uploadPhoto": "Upload photo",
+    "uploadPhoto": "Add photos of your book",
+    "photoUploadLimit": "Up to 6 photos (maximum 20 MB each).",
+    "photoUploadFormats": "Supported formats: JPEG, PNG, WebP, HEIF/HEIC.",
+    "photoTooLarge": "Each photo must be 20 MB or smaller.",
+    "photoUnsupportedFormat": "Some files have an unsupported format or their extension does not match their contents.",
+    "photoPreviewFailed": "Some photo previews could not be generated. The original files will still be uploaded.",
+    "photoPreviewLoading": "Preparing photo preview",
+    "photoLimitReached": "You can upload up to 6 photos.",
     "description": "Add description",
     "descriptionPlaceholder": "Used, in good condition.",
     "validation": {
       "titleLength": "Book title must be between 5 and 150 characters.",
       "authorLength": "Author must be between 5 and 100 characters.",
+      "priceRequired": "Price is required.",
+      "genresRequired": "Select at least one genre.",
+      "descriptionRequired": "Description is required.",
       "descriptionLength": "Description must be between 10 and 2000 characters."
     }
   },
