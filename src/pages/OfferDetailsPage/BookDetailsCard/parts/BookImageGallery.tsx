@@ -31,46 +31,50 @@ export const BookImageGallery = ({
 
   return (
     <>
-    <div className="flex items-center gap-2">
-      {hasMultiple && (
-        <button onClick={prev} className="p-4 cursor-pointer">
-          <ArrowLeft />
-        </button>
-      )}
-
-      <div className="relative w-[164px] h-[264px] md:w-[214px] md:h-[345px] lg:w-[264px] lg:h-[404px] xl:w-[314px] xl:h-[484px] rounded-xl overflow-hidden">
-        <button type="button" onClick={() => setIsModalOpen(true)} aria-label="Open image fullscreen" className="absolute inset-0 z-10 cursor-zoom-in" />
-        {images[index] ? (
-          <img
-            src={`${IMAGE_HOST}${images[index].path}`}
-            alt={title}
-            className="w-full h-full object-cover"
-          />
-        ) : (
-          <img
-            src={noImages}
-            alt="no image"
-            className="w-full h-full object-cover"
-          />
+      <div className="flex items-center gap-2">
+        {hasMultiple && (
+          <button onClick={prev} className="p-4 cursor-pointer">
+            <ArrowLeft />
+          </button>
         )}
 
-      </div>
+        <div className="relative w-[164px] h-[264px] md:w-[214px] md:h-[345px] lg:w-[264px] lg:h-[404px] xl:w-[314px] xl:h-[484px] rounded-xl overflow-hidden bg-white">
+          <button
+            type="button"
+            onClick={() => setIsModalOpen(true)}
+            aria-label="Open image fullscreen"
+            className="absolute inset-0 z-10 cursor-zoom-in"
+          />
+          {images[index] ? (
+            <img
+              src={`${IMAGE_HOST}${images[index].path}`}
+              alt={title}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <img
+              src={noImages}
+              alt="no image"
+              className="w-full h-full object-cover"
+            />
+          )}
+        </div>
 
-      {hasMultiple && (
-        <button onClick={next} className="p-4 cursor-pointer">
-          <ArrowRight />
-        </button>
+        {hasMultiple && (
+          <button onClick={next} className="p-4 cursor-pointer">
+            <ArrowRight />
+          </button>
+        )}
+      </div>
+      {isModalOpen && (
+        <ImageGalleryModal
+          images={images}
+          index={index}
+          setIndex={setIndex}
+          title={title}
+          onClose={() => setIsModalOpen(false)}
+        />
       )}
-    </div>
-    {isModalOpen && (
-      <ImageGalleryModal
-        images={images}
-        index={index}
-        setIndex={setIndex}
-        title={title}
-        onClose={() => setIsModalOpen(false)}
-      />
-    )}
     </>
   );
 };

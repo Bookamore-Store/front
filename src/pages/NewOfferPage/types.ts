@@ -18,5 +18,5 @@ export interface CategoryOption {
 }
 
 export type OfferFormErrors = Partial<
-  Record<'title' | 'author' | 'description', string>
+  Record<'title' | 'author' | 'price' | 'description' | 'genres', string>
 >;

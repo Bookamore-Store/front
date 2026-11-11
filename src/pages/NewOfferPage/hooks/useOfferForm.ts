@@ -13,6 +13,7 @@ import {
   useDeleteImageByIdMutation,
   useUploadImageMutation,
 } from '@app/store/api/ImagesApi';
+import type { OrderedPhoto } from '@/shared/components/UploadPhoto/UploadPhoto';
 import type { RootState } from '@/app/store/store';
 import type {
   BookCondition,
@@ -55,13 +56,15 @@ export const useOfferForm = () => {
   const [deleteImageById] = useDeleteImageByIdMutation();
 
   const user = useSelector((state: RootState) => state.auth.user);
-  const isSubmitting = isCreatingOffer || isUpdatingOffer;
+  const [isPublishing, setIsPublishing] = useState(false);
+  const isSubmitting = isPublishing || isCreatingOffer || isUpdatingOffer;
 
   const [formData, setFormData] = useState<OfferFormData>(
     createInitialFormData()
   );
   const [errors, setErrors] = useState<OfferFormErrors>({});
   const [existingImages, setExistingImages] = useState<BookImage[]>([]);
+  const [imageOrder, setImageOrder] = useState<OrderedPhoto[]>([]);
   const [removedImageIds, setRemovedImageIds] = useState<string[]>([]);
 
   useEffect(() => {
@@ -77,10 +80,17 @@ export const useOfferForm = () => {
         genres: offer.book.genres,
       });
       setExistingImages(offer.book.images || []);
+      setImageOrder(
+        (offer.book.images || []).map((image) => ({
+          type: 'existing',
+          image,
+        }))
+      );
       setRemovedImageIds([]);
     } else if (!offerId) {
       setFormData(createInitialFormData());
       setExistingImages([]);
+      setImageOrder([]);
       setRemovedImageIds([]);
     }
   }, [offer, offerId]);
@@ -89,7 +99,13 @@ export const useOfferForm = () => {
     <K extends keyof OfferFormData>(field: K, value: OfferFormData[K]) => {
       const nextFormData = { ...formData, [field]: value };
       setFormData(nextFormData);
-      if (field === 'title' || field === 'author' || field === 'description') {
+      if (
+        field === 'title' ||
+        field === 'author' ||
+        field === 'price' ||
+        field === 'description' ||
+        field === 'genres'
+      ) {
         const errorField = field as keyof OfferFormErrors;
         if (errors[errorField]) {
           const validationErrors = validateOfferForm(nextFormData);
@@ -137,17 +153,50 @@ export const useOfferForm = () => {
     });
   }, []);
 
-  const uploadBookImages = async (photos: File[], bookId: string) => {
-    const results = await Promise.allSettled(
-      photos.map((photo) =>
+  const handleImagesOrderChange = useCallback((images: OrderedPhoto[]) => {
+    setImageOrder(images);
+  }, []);
+
+  const uploadImagesAndSaveOrder = async (
+    bookId: string,
+    orderedPhotos: OrderedPhoto[]
+  ) => {
+    const photosToUpload = orderedPhotos.flatMap((item, imageOrder) =>
+      item.type === 'new' ? [{ file: item.file, imageOrder }] : []
+    );
+    const uploadResults = await Promise.allSettled(
+      photosToUpload.map(({ file, imageOrder }) =>
         uploadImage({
-          file: photo,
+          file,
           entityType: 'BOOK',
           entityId: bookId,
+          imageOrder,
         }).unwrap()
       )
     );
-    return results;
+
+    const uploadedImageIds = new Map<File, string>();
+    uploadResults.forEach((result, index) => {
+      if (result.status === 'fulfilled') {
+        uploadedImageIds.set(
+          photosToUpload[index].file,
+          String(result.value.id)
+        );
+      }
+    });
+
+    const orderedImageIds = orderedPhotos.flatMap((item) => {
+      if (item.type === 'existing') return [item.image.id];
+      const uploadedImageId = uploadedImageIds.get(item.file);
+      return uploadedImageId ? [uploadedImageId] : [];
+    });
+
+    await updateBookById({
+      id: bookId,
+      book: { imageOrder: orderedImageIds },
+    }).unwrap();
+
+    return uploadResults;
   };
 
   const removeBookImages = async (imageIds: string[]) => {
@@ -164,11 +213,7 @@ export const useOfferForm = () => {
     if (Object.values(validationErrors).some(Boolean)) {
       return;
     }
-    if (!formData.title || !formData.author || !formData.price) {
-      toast.error('Please fill in all required fields');
-      return;
-    }
-
+    setIsPublishing(true);
     try {
       if (offerId && offer) {
         // Edit Mode
@@ -200,23 +245,20 @@ export const useOfferForm = () => {
 
         await removeBookImages(removedImageIds);
 
-        if (formData.photos.length > 0) {
-          const uploadResults = await uploadBookImages(
-            formData.photos,
-            offer.book.id
+        const uploadResults = await uploadImagesAndSaveOrder(
+          offer.book.id,
+          imageOrder
+        );
+        const failedImages = uploadResults.filter(
+          (result) => result.status === 'rejected'
+        ).length;
+
+        if (failedImages > 0) {
+          toast.error(
+            `Offer updated but ${failedImages} image(s) failed to upload`
           );
-
-          const failedImages = uploadResults.filter(
-            (result) => result.status === 'rejected'
-          ).length;
-
-          if (failedImages > 0) {
-            toast.error(
-              `Offer updated but ${failedImages} image(s) failed to upload`
-            );
-          } else {
-            toast.success('Offer updated with images!');
-          }
+        } else if (uploadResults.length > 0) {
+          toast.success('Offer updated with images!');
         } else {
           toast.success('Offer updated!');
         }
@@ -253,23 +295,20 @@ export const useOfferForm = () => {
 
       const result = await addOfferWithBook(offerWithBookRequest).unwrap();
 
-      if (formData.photos.length > 0) {
-        const uploadResults = await uploadBookImages(
-          formData.photos,
-          result.book.id
+      const uploadResults = await uploadImagesAndSaveOrder(
+        result.book.id,
+        imageOrder
+      );
+      const failedImages = uploadResults.filter(
+        (result) => result.status === 'rejected'
+      ).length;
+
+      if (failedImages > 0) {
+        toast.error(
+          `Offer created but ${failedImages} image(s) failed to upload`
         );
-
-        const failedImages = uploadResults.filter(
-          (result) => result.status === 'rejected'
-        ).length;
-
-        if (failedImages > 0) {
-          toast.error(
-            `Offer created but ${failedImages} image(s) failed to upload`
-          );
-        } else {
-          toast.success('Offer published with images!');
-        }
+      } else if (uploadResults.length > 0) {
+        toast.success('Offer published with images!');
       } else {
         toast.success('Offer published!');
       }
@@ -289,6 +328,8 @@ export const useOfferForm = () => {
           ? 'Failed to update offer. Please try again.'
           : 'Failed to create offer. Please try again.'
       );
+    } finally {
+      setIsPublishing(false);
     }
   };
 
@@ -305,6 +346,7 @@ export const useOfferForm = () => {
     handleInputBlur,
     handlePhotosChange,
     handleExistingImagesChange,
+    handleImagesOrderChange,
     handleSubmit,
   };
 };

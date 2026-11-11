@@ -1,8 +1,11 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { formStyle } from '@app/styles/form';
-import UploadPhoto from '@/shared/components/UploadPhoto/UploadPhoto';
+import UploadPhoto, {
+  type OrderedPhoto,
+} from '@/shared/components/UploadPhoto/UploadPhoto';
 import { Button } from '@/shared/ui/Button/Button';
+import { AlertSvg } from '@/shared/ui/icons/AlertSvg';
 import type { image as BookImage } from '@/types/entities/Book.d.ts';
 import type { OfferFormData, OfferFormErrors } from '../types';
 import { DealTypeSelector } from './DealTypeSelector';
@@ -21,6 +24,7 @@ interface OfferFormProps {
   existingImages: BookImage[];
   onPhotosChange: (photos: File[]) => void;
   onExistingImagesChange: (images: BookImage[]) => void;
+  onImagesOrderChange: (images: OrderedPhoto[]) => void;
   isSubmitting: boolean;
   mode: 'create' | 'edit';
   offerId?: string;
@@ -35,6 +39,7 @@ export const OfferForm: React.FC<OfferFormProps> = ({
   existingImages,
   onPhotosChange,
   onExistingImagesChange,
+  onImagesOrderChange,
   isSubmitting,
   mode,
   offerId,
@@ -44,6 +49,7 @@ export const OfferForm: React.FC<OfferFormProps> = ({
   return (
     <form
       onSubmit={onSubmit}
+      noValidate
       className="px-4 space-y-6 lg:space-y-8 sm:px-6 lg:px-8 xl:px-12"
     >
       {/* Book Title */}
@@ -52,21 +58,26 @@ export const OfferForm: React.FC<OfferFormProps> = ({
           {t('sellBook.bookTitle')}
           {'*'}
         </label>
-        <input
-          id="title"
-          name="title"
-          type="text"
-          value={formData.title}
-          onChange={(e) => onChange('title', e.target.value)}
-          onBlur={() => onBlur('title')}
-          aria-invalid={Boolean(errors.title)}
-          aria-describedby={errors.title ? 'title-error' : undefined}
-          placeholder="Babel"
-          className={formStyle.input}
-          required
-        />
+        <div className="group relative">
+          <input
+            id="title"
+            name="title"
+            type="text"
+            value={formData.title}
+            onChange={(e) => onChange('title', e.target.value)}
+            onBlur={() => onBlur('title')}
+            aria-invalid={Boolean(errors.title)}
+            aria-describedby={errors.title ? 'title-error' : undefined}
+            placeholder="Babel"
+            className={`${formStyle.input} ${errors.title ? 'pr-10' : ''}`}
+            required
+          />
+          {errors.title && (
+            <AlertSvg className="absolute right-2.5 top-1/2 -translate-y-1/2" />
+          )}
+        </div>
         {errors.title && (
-          <p id="title-error" className="mt-0.5 text-sm text-red-600">
+          <p id="title-error" className="ml-3 mt-1 text-sm text-error">
             {t(errors.title)}
           </p>
         )}
@@ -78,21 +89,26 @@ export const OfferForm: React.FC<OfferFormProps> = ({
           {t('sellBook.author')}
           {'*'}
         </label>
-        <input
-          id="author"
-          name="author"
-          type="text"
-          value={formData.author}
-          onChange={(e) => onChange('author', e.target.value)}
-          onBlur={() => onBlur('author')}
-          aria-invalid={Boolean(errors.author)}
-          aria-describedby={errors.author ? 'author-error' : undefined}
-          placeholder="Rebecca Kuang"
-          className={formStyle.input}
-          required
-        />
+        <div className="group relative">
+          <input
+            id="author"
+            name="author"
+            type="text"
+            value={formData.author}
+            onChange={(e) => onChange('author', e.target.value)}
+            onBlur={() => onBlur('author')}
+            aria-invalid={Boolean(errors.author)}
+            aria-describedby={errors.author ? 'author-error' : undefined}
+            placeholder="Rebecca Kuang"
+            className={`${formStyle.input} ${errors.author ? 'pr-10' : ''}`}
+            required
+          />
+          {errors.author && (
+            <AlertSvg className="absolute right-2.5 top-1/2 -translate-y-1/2" />
+          )}
+        </div>
         {errors.author && (
-          <p id="author-error" className="mt-0.5 text-sm text-red-600">
+          <p id="author-error" className="ml-3 mt-1 text-sm text-error">
             {t(errors.author)}
           </p>
         )}
@@ -104,12 +120,14 @@ export const OfferForm: React.FC<OfferFormProps> = ({
         onPhotosChange={onPhotosChange}
         initialExistingImages={existingImages}
         onExistingImagesChange={onExistingImagesChange}
+        onImagesOrderChange={onImagesOrderChange}
       />
 
       {/* Genres Select */}
       <GenreSelect
         value={formData.genres}
         onChange={(genres) => onChange('genres', genres)}
+        error={errors.genres ? t(errors.genres) : undefined}
       />
 
       {/* Deal Type Selection */}
@@ -122,6 +140,8 @@ export const OfferForm: React.FC<OfferFormProps> = ({
       <ConditionPriceFields
         condition={formData.condition}
         price={formData.price}
+        priceError={errors.price ? t(errors.price) : undefined}
+        onPriceBlur={() => onBlur('price')}
         onConditionChange={(condition) => onChange('condition', condition)}
         onPriceChange={(price) => onChange('price', price)}
       />
@@ -130,24 +150,31 @@ export const OfferForm: React.FC<OfferFormProps> = ({
       <div className="flex flex-col mb-5">
         <label htmlFor="desc" className="block mb-1 text-h4m">
           {t('sellBook.description')}
+          {'*'}
         </label>
-        <textarea
-          id="desc"
-          value={formData.description}
-          onChange={(e) => onChange('description', e.target.value)}
-          onBlur={() => onBlur('description')}
-          aria-invalid={Boolean(errors.description)}
-          aria-describedby={
-            errors.description ? 'description-error' : undefined
-          }
-          placeholder={t('sellBook.descriptionPlaceholder')}
-          rows={4}
-          className="w-full px-[10px] py-[14px] rounded-lg lg:py-4
-          border border-gray-400
-          text-sm sm:text-base resize-none"
-        />
+        <div className="relative">
+          <textarea
+            id="desc"
+            value={formData.description}
+            required
+            onChange={(e) => onChange('description', e.target.value)}
+            onBlur={() => onBlur('description')}
+            aria-invalid={Boolean(errors.description)}
+            aria-describedby={
+              errors.description ? 'description-error' : undefined
+            }
+            placeholder={t('sellBook.descriptionPlaceholder')}
+            rows={4}
+            className={`w-full rounded-lg border border-gray-400 px-[10px] py-[14px] text-sm resize-none lg:py-4 sm:text-base ${
+              errors.description ? 'pr-10' : ''
+            }`}
+          />
+          {errors.description && (
+            <AlertSvg className="absolute right-2.5 top-3" />
+          )}
+        </div>
         {errors.description && (
-          <p id="description-error" className="mt-0.5 text-sm text-red-600">
+          <p id="description-error" className="ml-3 mt-1 text-sm text-error">
             {t(errors.description)}
           </p>
         )}

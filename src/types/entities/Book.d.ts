@@ -25,5 +25,5 @@ export type BookRequest = Omit<Book, 'id' | 'images'> & { images: File[] };
 
 export type BookPatchRequest = {
   id: number | string;
-  book: Partial<BookRequest>;
+  book: Partial<BookRequest> & { imageOrder?: string[] };
 };

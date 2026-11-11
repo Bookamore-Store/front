@@ -124,7 +124,7 @@ export function SearchResultsPage() {
       {/* Header with search bar */}
       <Header />
 
-      <div className="px-4 sm:px-6 lg:px-8 xl:px-12">
+      <div className="px-4 sm:px-6 lg:px-8 xl:px-12 pb-[80px]">
         {/* Results info and active filters */}
 
         {searchQuery && (

@@ -6,11 +6,12 @@ export interface UploadImageRequest {
   file: File;
   entityType: 'BOOK' | 'OFFER';
   entityId: number | string;
+  imageOrder?: number;
   description?: string;
 }
 
 export interface ImageResponse {
-  id: number;
+  id: string;
   url: string;
   description?: string;
 }
@@ -37,6 +38,10 @@ export const ImagesApi = createApi({
         formData.append('file', request.file);
         formData.append('entityType', request.entityType);
         formData.append('entityId', String(request.entityId));
+
+        if (request.imageOrder !== undefined) {
+          formData.append('imageOrder', String(request.imageOrder));
+        }
 
         if (request.description) {
           formData.append('description', request.description);
