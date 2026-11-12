@@ -151,7 +151,7 @@
     "photoUploadLimit": "Up to 6 photos (maximum 20 MB each).",
     "photoUploadFormats": "Supported formats: JPEG, PNG, WebP, HEIF/HEIC.",
     "photoTooLarge": "Each photo must be 20 MB or smaller.",
-    "photoUnsupportedFormat": "Some files have an unsupported format or their extension does not match their contents.",
+    "photoUnsupportedFormat": "Nice try, but the photo is in the wrong format. Please try again!",
     "photoPreviewFailed": "Some photo previews could not be generated. The original files will still be uploaded.",
     "photoPreviewLoading": "Preparing photo preview",
     "photoLimitReached": "You can upload up to 6 photos.",

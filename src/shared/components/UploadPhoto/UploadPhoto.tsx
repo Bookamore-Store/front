@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { CrossSvg } from '@/shared/ui/icons/CrossSvg';
 import { AddPhotoBook } from '@/shared/ui/icons/AddPhotoBookSvg';
 import { Spinner } from '@/shared/ui/Spinner';
+import { AlertSvg } from '@/shared/ui/icons/AlertSvg';
 
 interface ExistingImage {
   id: string;
@@ -296,8 +297,7 @@ const UploadPhoto: React.FC<UploadPhotoProps> = ({
 
       const image = photos[index]?.querySelector('img');
       if (image?.complete) {
-        const previewId =
-          item.type === 'new' ? item.previewId : item.image.id;
+        const previewId = item.type === 'new' ? item.previewId : item.image.id;
         updatePreviewItem(
           previewId,
           image.naturalWidth > 0 ? 'ready' : 'failed'
@@ -688,15 +688,18 @@ const UploadPhoto: React.FC<UploadPhotoProps> = ({
       <h3 className="text-[17px] font-semibold leading-6 text-[#153037]">
         {t('sellBook.uploadPhoto')}
       </h3>
-      <p className="mt-1 text-[12px] leading-[17px] text-[#153037]">
+      <p className="mt-1 mb-4 text-[12px] leading-[17px] text-[#153037]">
         {t('sellBook.photoUploadLimit')}
         <br />
         {t('sellBook.photoUploadFormats')}
       </p>
       {uploadError && (
-        <p role="alert" className="mt-2 text-sm text-red-600">
-          {uploadError}
-        </p>
+        <div className="flex md:inline-flex items-center gap-2 p-3 border border-error rounded-xl">
+          <AlertSvg className="flex-shrink-0" />
+          <p role="alert" className="text-xs font-normal text-text-black">
+            {uploadError}
+          </p>
+        </div>
       )}
 
       <input
