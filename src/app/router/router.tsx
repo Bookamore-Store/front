@@ -30,7 +30,7 @@ export const router = createBrowserRouter([
     path: '/offers/:offerId/edit',
     element: (
       <ProtectedRoute>
-        <NewOfferPage />
+        <NewOfferPage key="edit-offer" />
       </ProtectedRoute>
     ),
   },
@@ -42,7 +42,7 @@ export const router = createBrowserRouter([
     path: '/offers/new',
     element: (
       <ProtectedRoute>
-        <NewOfferPage />
+        <NewOfferPage key="new-offer" />
       </ProtectedRoute>
     ),
   },
