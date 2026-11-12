@@ -284,6 +284,28 @@ const UploadPhoto: React.FC<UploadPhotoProps> = ({
     []
   );
 
+  useEffect(() => {
+    const photos =
+      photoListRef.current?.querySelectorAll<HTMLLIElement>(
+        '[data-photo-index]'
+      );
+    if (!photos) return;
+
+    items.forEach((item, index) => {
+      if (item.previewState !== 'loading' || !getPreviewUrl(item)) return;
+
+      const image = photos[index]?.querySelector('img');
+      if (image?.complete) {
+        const previewId =
+          item.type === 'new' ? item.previewId : item.image.id;
+        updatePreviewItem(
+          previewId,
+          image.naturalWidth > 0 ? 'ready' : 'failed'
+        );
+      }
+    });
+  }, [items, updatePreviewItem]);
+
   const handleChange = async (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
 
