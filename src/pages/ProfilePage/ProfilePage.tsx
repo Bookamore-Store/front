@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import {
-  FaBoxOpen,
-  FaRegHeart,
-  FaRegComments,
-  FaBook,
-} from 'react-icons/fa';
+import announcementsIcon from '@/shared/ui/ProfileIcons/icon-announcements.png';
+import ordersIcon from '@/shared/ui/ProfileIcons/icon-oreders.png';
+import favoritesIcon from '@/shared/ui/ProfileIcons/icon-Bookmarks-.png';
+import chatsIcon from '@/shared/ui/ProfileIcons/icon-Alert.png';
+import privacyIcon from '@/shared/ui/ProfileIcons/icon-privacy_policy.png';
+import agreementIcon from '@/shared/ui/ProfileIcons/icon-service_usage_policy.png';
 import { ArrowRight } from '@/shared/ui/icons/Arrows';
 import LogOut from '@/shared/components/LogOut/LogOut';
 import { useGetCurrentUserQuery } from '@/app/store/api/UsersApi';
@@ -25,32 +25,32 @@ const ProfilePage = () => {
     {
       title: t('profileItems.announcements'),
       path: '/my-announcements',
-      icon: <FaBook className="w-5 h-5" />,
+      icon: <img src={announcementsIcon} alt="" className="w-5 h-5" />,
     },
     {
       title: t('profileItems.orders'),
       path: '/orders',
-      icon: <FaBoxOpen className="w-5 h-5" />,
+      icon: <img src={ordersIcon} alt="" className="w-5 h-5" />,
     },
     {
       title: t('profileItems.favorites'),
       path: '/favorites',
-      icon: <FaRegHeart className="w-5 h-5" />,
+      icon: <img src={favoritesIcon} alt="" className="w-5 h-5" />,
     },
     {
       title: t('profileItems.chats'),
       path: '/chats',
-      icon: <FaRegComments className="w-5 h-5" />,
+      icon: <img src={chatsIcon} alt="" className="w-5 h-5" />,
     },
    {
      title: t('profileItems.privacyPolicy'),
      path: '/privacy-policy',
-     icon: null,
+     icon: <img src={privacyIcon} alt="" className="w-5 h-5" />,
    },
    {
      title: t('profileItems.userAgreement'),
      path: '/user-agreement',
-     icon: null,
+     icon: <img src={agreementIcon} alt="" className="w-5 h-5" />,
    },
   ];
 
