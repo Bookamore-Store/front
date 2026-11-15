@@ -1,9 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { FcGoogle } from 'react-icons/fc';
-import { FaFacebook } from 'react-icons/fa';
 
-type SocialProvider = 'google' | 'facebook';
+type SocialProvider = 'google';
 
 interface SocialAuthButtonProps {
   provider: SocialProvider;
@@ -14,11 +13,6 @@ const providerConfig = {
   google: {
     icon: <FcGoogle className="h-5 w-5" />,
     label: 'Google',
-  },
-
-  facebook: {
-    icon: <FaFacebook className="h-5 w-5 text-[#1877F2]" />,
-    label: 'Facebook',
   },
 };
 

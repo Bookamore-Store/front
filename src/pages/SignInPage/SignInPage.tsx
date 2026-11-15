@@ -219,11 +219,6 @@ const SignInPage: React.FC = () => {
               provider="google"
               url={`${OAUTH_BASE_URL}/oauth2/authorization/google`}
             />
-
-            <SocialAuthButton
-              provider="facebook"
-              url={`${OAUTH_BASE_URL}/oauth2/authorization/facebook`}
-            />
           </div>
         </form>
 
