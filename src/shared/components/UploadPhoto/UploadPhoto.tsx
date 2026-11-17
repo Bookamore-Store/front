@@ -133,6 +133,7 @@ const getImagePreviewUrl = (path?: string) => {
 
 interface UploadPhotoProps {
   onPhotosChange?: (photos: File[]) => void;
+  onValidationChange?: (hasError: boolean) => void;
   initialExistingImages?: ExistingImage[];
   onExistingImagesChange?: (images: ExistingImage[]) => void;
   onImagesOrderChange?: (images: OrderedPhoto[]) => void;
@@ -140,6 +141,7 @@ interface UploadPhotoProps {
 
 const UploadPhoto: React.FC<UploadPhotoProps> = ({
   onPhotosChange,
+   onValidationChange,
   initialExistingImages = [],
   onExistingImagesChange,
   onImagesOrderChange,
@@ -366,6 +368,7 @@ const UploadPhoto: React.FC<UploadPhotoProps> = ({
       updateItems([...itemsRef.current, ...newItems]);
     }
     setUploadError(Array.from(errors).join(' '));
+    onValidationChange?.(errors.size > 0);
 
     await Promise.all(
       newItems.flatMap((item) => {

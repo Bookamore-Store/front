@@ -134,10 +134,12 @@
   },
   "sellBook": {
     "create": {
-      "title": "Продати книгу",
+      "title": "Додати книгу",
       "submit": "Опублікувати",
+      "titleRequired": "Обов'язкове поле",
       "loading": "Публікуємо..."
     },
+    "category": "Категорія",
     "edit": {
       "title": "Редагувати книгу",
       "submit": "Оновити",
@@ -158,9 +160,12 @@
     "description": "Додати опис",
     "descriptionPlaceholder": "Вживаний, у хорошому стані.",
     "validation": {
+      "titleRequired": "Обов'язкове поле",
       "titleLength": "Назва книги має містити від 5 до 150 символів.",
+      "authorRequired": "Обов'язкове поле",
       "authorLength": "Ім’я автора має містити від 5 до 100 символів.",
       "priceRequired": "Вкажіть ціну.",
+      "conditionRequired": "Обов'язкове поле",
       "genresRequired": "Оберіть щонайменше один жанр.",
       "descriptionRequired": "Додайте опис.",
       "descriptionLength": "Опис має містити від 10 до 2000 символів."

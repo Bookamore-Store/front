@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { formStyle } from '@app/styles/form';
 import UploadPhoto, {
@@ -45,6 +45,19 @@ export const OfferForm: React.FC<OfferFormProps> = ({
   offerId,
 }) => {
   const { t } = useTranslation();
+  const [hasPhotoError, setHasPhotoError] = useState(false);
+
+  const isFormValid =
+    formData.title.trim().length >= 5 &&
+    formData.title.trim().length <= 150 &&
+    formData.author.trim().length >= 5 &&
+    formData.author.trim().length <= 100 &&
+    Boolean(formData.condition) &&
+    Boolean(formData.price.trim()) &&
+    formData.description.trim().length >= 10 &&
+    formData.description.trim().length <= 2000 &&
+    formData.genres.length > 0 &&
+    !hasPhotoError;
 
   return (
     <form
@@ -118,29 +131,32 @@ export const OfferForm: React.FC<OfferFormProps> = ({
       <UploadPhoto
         key={offerId || 'new'}
         onPhotosChange={onPhotosChange}
+        onValidationChange={setHasPhotoError}
         initialExistingImages={existingImages}
         onExistingImagesChange={onExistingImagesChange}
         onImagesOrderChange={onImagesOrderChange}
       />
 
-      {/* Genres Select */}
-      <GenreSelect
-        value={formData.genres}
-        onChange={(genres) => onChange('genres', genres)}
-        error={errors.genres ? t(errors.genres) : undefined}
-      />
-
-      {/* Deal Type Selection */}
+     {/* Deal Type Selection */}
       <DealTypeSelector
         value={formData.dealType}
         onChange={(dealType) => onChange('dealType', dealType)}
       />
 
+        {/* Genres Select */}
+            <GenreSelect
+              value={formData.genres}
+              onChange={(genres) => onChange('genres', genres)}
+              error={errors.genres ? t(errors.genres) : undefined}
+            />
+
       {/* Condition & Price */}
       <ConditionPriceFields
         condition={formData.condition}
+        conditionError={errors.condition ? t(errors.condition) : undefined}
         price={formData.price}
         priceError={errors.price ? t(errors.price) : undefined}
+        onConditionBlur={() => onBlur('condition')}
         onPriceBlur={() => onBlur('price')}
         onConditionChange={(condition) => onChange('condition', condition)}
         onPriceChange={(price) => onChange('price', price)}
@@ -150,7 +166,6 @@ export const OfferForm: React.FC<OfferFormProps> = ({
       <div className="flex flex-col mb-5">
         <label htmlFor="desc" className="block mb-1 text-h4m">
           {t('sellBook.description')}
-          {'*'}
         </label>
         <div className="relative">
           <textarea
@@ -182,7 +197,12 @@ export const OfferForm: React.FC<OfferFormProps> = ({
 
       {/* Submit Button */}
       <div className="flex justify-center">
-        <Button type="submit" isLoading={isSubmitting} className="mb-[40px]">
+        <Button
+          type="submit"
+          isLoading={isSubmitting}
+          disabled={!isFormValid}
+          className="mb-[40px]"
+        >
           {isSubmitting
             ? t(`sellBook.${mode}.loading`)
             : t(`sellBook.${mode}.submit`)}

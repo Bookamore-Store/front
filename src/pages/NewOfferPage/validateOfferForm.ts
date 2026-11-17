@@ -6,10 +6,18 @@ export const validateOfferForm = (formData: OfferFormData): OfferFormErrors => {
   const author = formData.author.trim();
   const description = formData.description.trim();
 
-  if (title.length < 5 || title.length > 150) {
-    errors.title = 'sellBook.validation.titleLength';
+  if (!formData.condition) {
+    errors.condition = 'sellBook.validation.conditionRequired';
   }
-  if (author.length < 5 || author.length > 100) {
+
+if (!title) {
+  errors.title = 'sellBook.validation.titleRequired';
+} else if (title.length < 5 || title.length > 150) {
+  errors.title = 'sellBook.validation.titleLength';
+}
+  if (!author) {
+    errors.author = 'sellBook.validation.authorRequired';
+  } else if (author.length < 5 || author.length > 100) {
     errors.author = 'sellBook.validation.authorLength';
   }
   if (!formData.price.trim()) {
