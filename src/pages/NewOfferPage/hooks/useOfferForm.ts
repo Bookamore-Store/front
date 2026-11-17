@@ -15,10 +15,7 @@ import {
 } from '@app/store/api/ImagesApi';
 import type { OrderedPhoto } from '@/shared/components/UploadPhoto/UploadPhoto';
 import type { RootState } from '@/app/store/store';
-import type {
-  BookCondition,
-  image as BookImage,
-} from '@/types/entities/Book.d.ts';
+import type {image as BookImage} from '@/types/entities/Book.d.ts';
 import type { OfferType, OfferStatus } from '@/types/entities/Offer.d.ts';
 import type { OfferWithBookRequest } from '@/types/entities/OfferWithBook.d.ts';
 import type { OfferFormData, OfferFormErrors } from '../types';
