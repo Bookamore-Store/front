@@ -4,9 +4,11 @@ import type { BookCondition } from '@/types/entities/Book.d.ts';
 import { AlertSvg } from '@/shared/ui/icons/AlertSvg';
 
 interface ConditionPriceFieldsProps {
-  condition: BookCondition;
+  condition: BookCondition | '';
+  conditionError?: string;
   price: string;
   priceError?: string;
+  onConditionBlur: () => void;
   onPriceBlur: () => void;
   onConditionChange: (value: BookCondition) => void;
   onPriceChange: (value: string) => void;
@@ -14,8 +16,10 @@ interface ConditionPriceFieldsProps {
 
 export const ConditionPriceFields: React.FC<ConditionPriceFieldsProps> = ({
   condition,
+  conditionError,
   price,
   priceError,
+  onConditionBlur,
   onPriceBlur,
   onConditionChange,
   onPriceChange,
@@ -27,27 +31,50 @@ export const ConditionPriceFields: React.FC<ConditionPriceFieldsProps> = ({
       <div className="w-[164px] flex flex-col gap-1">
         <label
           htmlFor="condition"
-          className="text-h6m text-aquamarine-950 py-[4px] px-[12px]"
+          className="font-kyiv text-sm text-aquamarine-950 px-[12px] py-[4px]"
         >
           {t('titles.condition')}
           {'*'}
         </label>
+        <div className="relative">
         <select
           name="condition"
           id="condition"
           value={condition}
           onChange={(e) => onConditionChange(e.target.value as BookCondition)}
-          className="min-w-[163px] h-[44px] text-h6m
-          border-[0.4px] border-gray-400 border-solid rounded-xl
-          px-[10px] py-[12px]
-          bg-no-repeat bg-[url('/down.png')]
-          bg-[right_10px_center]
-          focus:outline-none focus:ring-0 appearance-none"
+          onBlur={onConditionBlur}
+          className={`min-w-[163px] h-[44px] text-h6m
+            border-[0.4px] border-gray-400 border-solid rounded-xl
+            px-[10px] py-[12px] pr-10
+            ${!condition ? 'text-gray-400' : 'text-black'}
+            ${conditionError
+              ? 'bg-none'
+              : "bg-no-repeat bg-[url('/down.png')] bg-[right_10px_center]"}
+            focus:outline-none focus:ring-0 appearance-none`}
         >
-          <option value="NEW">{t('condition.NEW')}</option>
-          <option value="AS_NEW">{t('condition.AS_NEW')}</option>
-          <option value="USED">{t('condition.USED')}</option>
+        <option value="" disabled className="text-gray-400">
+          {t('titles.condition')}
+        </option>
+        <option value="NEW" className="text-black">
+          {t('condition.NEW')}
+        </option>
+        <option value="AS_NEW" className="text-black">
+          {t('condition.AS_NEW')}
+        </option>
+        <option value="USED" className="text-black">
+          {t('condition.USED')}
+        </option>
         </select>
+          {conditionError && (
+            <AlertSvg className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+          )}
+        </div>
+
+          {conditionError && (
+                <p id="condition-error" className="ml-3 mt-1 text-sm text-error">
+                  {conditionError}
+                </p>
+              )}
       </div>
 
       <div className="w-[164px] flex flex-col gap-1">
@@ -56,7 +83,6 @@ export const ConditionPriceFields: React.FC<ConditionPriceFieldsProps> = ({
           className="text-h6m text-aquamarine-950 py-[4px] px-[12px]"
         >
           {`${t('titles.price')}, UAH`}
-          {'*'}
         </label>
 
         <div className="relative">

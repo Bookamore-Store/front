@@ -134,10 +134,11 @@
   },
   "sellBook": {
     "create": {
-      "title": "Sell book",
+      "title": "Add book",
       "submit": "Publish",
       "loading": "Publishing..."
     },
+    "category": "Category",
     "edit": {
       "title": "Edit book",
       "submit": "Update",
@@ -158,9 +159,12 @@
     "description": "Add description",
     "descriptionPlaceholder": "Used, in good condition.",
     "validation": {
+      "titleRequired": "Required field",
       "titleLength": "Book title must be between 5 and 150 characters.",
+      "authorRequired": "Required field",
       "authorLength": "Author must be between 5 and 100 characters.",
       "priceRequired": "Price is required.",
+      "conditionRequired": "Required Field",
       "genresRequired": "Select at least one genre.",
       "descriptionRequired": "Description is required.",
       "descriptionLength": "Description must be between 10 and 2000 characters."

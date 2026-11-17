@@ -15,10 +15,7 @@ import {
 } from '@app/store/api/ImagesApi';
 import type { OrderedPhoto } from '@/shared/components/UploadPhoto/UploadPhoto';
 import type { RootState } from '@/app/store/store';
-import type {
-  BookCondition,
-  image as BookImage,
-} from '@/types/entities/Book.d.ts';
+import type {image as BookImage} from '@/types/entities/Book.d.ts';
 import type { OfferType, OfferStatus } from '@/types/entities/Offer.d.ts';
 import type { OfferWithBookRequest } from '@/types/entities/OfferWithBook.d.ts';
 import type { OfferFormData, OfferFormErrors } from '../types';
@@ -27,7 +24,7 @@ import { validateOfferForm } from '../validateOfferForm';
 export const createInitialFormData = (): OfferFormData => ({
   title: '',
   author: '',
-  condition: 'NEW' as BookCondition,
+  condition: '',
   dealType: 'SELL' as OfferType,
   price: '',
   description: '',
@@ -102,6 +99,7 @@ export const useOfferForm = () => {
       if (
         field === 'title' ||
         field === 'author' ||
+        field === 'condition' ||
         field === 'price' ||
         field === 'description' ||
         field === 'genres'
@@ -210,7 +208,7 @@ export const useOfferForm = () => {
     if (!user) return;
     const validationErrors = validateOfferForm(formData);
     setErrors(validationErrors);
-    if (Object.values(validationErrors).some(Boolean)) {
+   if (Object.values(validationErrors).some(Boolean) || !formData.condition) {
       return;
     }
     setIsPublishing(true);

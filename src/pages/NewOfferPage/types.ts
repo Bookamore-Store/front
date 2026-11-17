@@ -4,7 +4,7 @@ import type { BookCondition } from '@/types/entities/Book.d.ts';
 export interface OfferFormData {
   title: string;
   author: string;
-  condition: BookCondition;
+  condition: BookCondition | '';
   dealType: OfferType;
   price: string;
   description: string;
@@ -18,5 +18,8 @@ export interface CategoryOption {
 }
 
 export type OfferFormErrors = Partial<
-  Record<'title' | 'author' | 'price' | 'description' | 'genres', string>
+  Record<
+    'title' | 'author' | 'condition' | 'price' | 'description' | 'genres',
+    string
+  >
 >;
