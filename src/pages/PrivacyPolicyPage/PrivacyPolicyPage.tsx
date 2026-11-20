@@ -19,12 +19,8 @@ export const PrivacyPolicyPage = () => {
 
   return (
     <PageLayout title={t('privacyPolicy.title')}>
+    {/* Назва документа */}
       <article className="w-full py-[10px] pb-6 text-left text-textBlack">
-        {/* Назва документа */}
-        <h2 className="mb-3 text-h3m">
-          {t('privacyPolicy.documentTitle')}
-        </h2>
-
         {/* Дата оновлення */}
         <p className="mb-3 text-captionm">
           {t('privacyPolicy.lastUpdated')}

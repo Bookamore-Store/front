@@ -267,8 +267,7 @@
     "noResults": "No results found for {genreLabel}. Try browsing other categories."
   },
   "privacyPolicy": {
-    "title": "Privacy & Policy",
-    "documentTitle": "PRIVACY AND PERSONAL DATA PROTECTION POLICY OF THE BOOKAMORE SERVICE",
+    "title": "Privacy and personal data protection policy of the Bookamore service",
     "lastUpdated": "Last updated: 12.10.2026",
     "introduction": "This Privacy Policy (hereinafter referred to as the \"Policy\") establishes the procedure for collecting, processing, storing, and protecting personal data of users of the \"Bookamore\" web service in accordance with the Law of Ukraine \"On Personal Data Protection\" No. 2297-VI.",
     "sections": [
@@ -389,8 +388,7 @@
     ]
   },
   "userAgreement": {
-    "title": "User Agreement",
-    "documentTitle": "USER AGREEMENT AND TERMS OF USE OF THE BOOKAMORE SERVICE",
+    "title": "User agreement and terms of use of the Bookamore service",
     "subtitle": "(Public Offer)",
     "lastUpdated": "Last updated: 12.10.2026",
     "introduction": "This User Agreement (hereinafter referred to as the \"Agreement\") constitutes a public offer within the meaning of Articles 633 and 634 of the Civil Code of Ukraine and governs the relationship between the Administration of the \"Bookamore\" service (hereinafter referred to as the \"Administration\" or the \"Service\") and any individual (hereinafter referred to as the \"User\") who uses the website https://bookamore.store and its associated services.",
