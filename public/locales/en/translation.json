@@ -157,7 +157,7 @@
     "photoPreviewLoading": "Preparing photo preview",
     "photoLimitReached": "You can upload up to 6 photos.",
     "description": "Add description",
-    "descriptionPlaceholder": "Used, in good condition.",
+    "descriptionPlaceholder": "Write what this book is about.",
     "validation": {
       "titleRequired": "Required field",
       "titleLength": "Book title must be between 5 and 150 characters.",
@@ -166,7 +166,6 @@
       "priceRequired": "Price is required.",
       "conditionRequired": "Required Field",
       "genresRequired": "Select at least one genre.",
-      "descriptionRequired": "Description is required.",
       "descriptionLength": "Description must be between 10 and 2000 characters."
     }
   },

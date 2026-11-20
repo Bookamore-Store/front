@@ -1,18 +1,14 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-//import Select from 'react-select';
-//import makeAnimated from 'react-select/animated';
 import { formStyle } from '@app/styles/form';
 import { useGenres } from '@/shared/hooks/useGenres';
-//import type { CategoryOption } from '../types';
+
 
 interface GenreSelectProps {
   value: string[];
   onChange: (genres: string[]) => void;
   error?: string;
 }
-
-//const animatedComponents = makeAnimated();
 
 export const GenreSelect: React.FC<GenreSelectProps> = ({
   value,
@@ -26,6 +22,7 @@ export const GenreSelect: React.FC<GenreSelectProps> = ({
     <div className={formStyle.container}>
       <h2 className={formStyle.title}>
         {t('sellBook.category')}
+        {'*'}
       </h2>
       <div
         role="group"

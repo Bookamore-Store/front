@@ -54,7 +54,6 @@ export const OfferForm: React.FC<OfferFormProps> = ({
     formData.author.trim().length <= 100 &&
     Boolean(formData.condition) &&
     Boolean(formData.price.trim()) &&
-    formData.description.trim().length >= 10 &&
     formData.description.trim().length <= 2000 &&
     formData.genres.length > 0 &&
     !hasPhotoError;
@@ -171,7 +170,6 @@ export const OfferForm: React.FC<OfferFormProps> = ({
           <textarea
             id="desc"
             value={formData.description}
-            required
             onChange={(e) => onChange('description', e.target.value)}
             onBlur={() => onBlur('description')}
             aria-invalid={Boolean(errors.description)}

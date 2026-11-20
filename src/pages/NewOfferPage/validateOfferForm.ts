@@ -23,9 +23,7 @@ if (!title) {
   if (!formData.price.trim()) {
     errors.price = 'sellBook.validation.priceRequired';
   }
-  if (!description) {
-    errors.description = 'sellBook.validation.descriptionRequired';
-  } else if (description.length < 10 || description.length > 2000) {
+  if (description && (description.length < 10 || description.length > 2000)) {
     errors.description = 'sellBook.validation.descriptionLength';
   }
   if (formData.genres.length === 0) {
