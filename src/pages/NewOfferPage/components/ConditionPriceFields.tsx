@@ -83,6 +83,7 @@ export const ConditionPriceFields: React.FC<ConditionPriceFieldsProps> = ({
           className="text-h6m text-aquamarine-950 py-[4px] px-[12px]"
         >
           {`${t('titles.price')}, UAH`}
+          {'*'}
         </label>
 
         <div className="relative">

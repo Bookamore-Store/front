@@ -158,7 +158,7 @@
     "photoPreviewLoading": "Підготовка мініатюри фото",
     "photoLimitReached": "Можна завантажити не більше 6 фото.",
     "description": "Додати опис",
-    "descriptionPlaceholder": "Вживаний, у хорошому стані.",
+    "descriptionPlaceholder": "Напишіть, про що ця книга.",
     "validation": {
       "titleRequired": "Обов'язкове поле",
       "titleLength": "Назва книги має містити від 5 до 150 символів.",
@@ -167,7 +167,6 @@
       "priceRequired": "Вкажіть ціну.",
       "conditionRequired": "Обов'язкове поле",
       "genresRequired": "Оберіть щонайменше один жанр.",
-      "descriptionRequired": "Додайте опис.",
       "descriptionLength": "Опис має містити від 10 до 2000 символів."
     }
   },
