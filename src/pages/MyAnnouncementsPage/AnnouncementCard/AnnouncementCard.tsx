@@ -6,6 +6,7 @@ import { StatusSwitch } from '@/pages/MyAnnouncementsPage/AnnouncementCard/Statu
 import { DeleteOfferButton } from '@/pages/MyAnnouncementsPage/AnnouncementCard/DeleteOfferButton/DeleteOfferButton';
 import noImages from '@/assest/images/noImage.jpg';
 import { SynchronizeArrows } from '@/shared/ui/icons/Arrows';
+import { AddToFavoritesSvg } from '@/shared/ui/icons/AddToFavoritesSvg';
 import { useTranslation } from 'react-i18next';
 
 const IMAGE_HOST = import.meta.env.VITE_IMAGE_HOST || '';
@@ -17,6 +18,7 @@ export interface Announcement {
   type: OfferType;
   description?: string;
   book: Book;
+  favoritesCount?: number;
 }
 
 interface AnnouncementCardProps {
@@ -127,7 +129,7 @@ export const AnnouncementCard = ({
         </a>
 
         {/* Інформація */}
-        <div className="flex flex-col flex-1 py-1">
+        <div className="flex flex-col flex-1 py-1 relative">
           {/* Перемикач статусу */}
           <StatusSwitch status={localStatus} onToggle={handleToggle} />
 
@@ -164,6 +166,14 @@ export const AnnouncementCard = ({
                   </div>
                 ))}
             </div>
+              <div className="mt-auto pt-2 flex items-center justify-end gap-1 text-xs text-gray-600">
+                <div className="w-4 h-4 [&>svg]:w-full [&>svg]:h-full">
+                  <AddToFavoritesSvg />
+                </div>
+                  {(offer.favoritesCount ?? 0) > 0 && (
+                    <span>{offer.favoritesCount} saved</span>
+                  )}
+              </div>
           </div>
         </div>
       </div>
