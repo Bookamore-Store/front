@@ -2,11 +2,18 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { getCookie, setCookie, removeCookie } from '@/shared/helpers/cookies';
 
-export interface User {
+export interface CurrentUser {
   id: string;
   name: string;
   email: string;
+  socialAvatarUrl?: string;
+  uploadedImage?: {
+    id: string;
+    path: string;
+  };
 }
+
+export type User = CurrentUser;
 
 interface AuthState {
   user: User | null;

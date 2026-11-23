@@ -2,6 +2,7 @@ import { logout } from '@/app/store/slices/authSlice';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
+import { PowerButtonSvg } from '@/shared/ui/icons/PowerButtonSvg';
 
 const LogOut = () => {
   const { t } = useTranslation();
@@ -16,13 +17,10 @@ const LogOut = () => {
     <>
       <button
         onClick={handleLogOut}
-        className="cursor-pointer
-underline underline-offset-[5px] decoration-[2px]
-text-[#153037] text-h4m
-
-     "
+        className="flex gap-2 cursor-pointer text-aquamarine-700 text-h4m hover:underline underline-offset-[5px] decoration-[2px]"
         type="button"
       >
+        <PowerButtonSvg />
         {t('auth.logOut')}
       </button>
     </>
