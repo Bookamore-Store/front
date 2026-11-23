@@ -4,15 +4,15 @@ import type { RootState } from '../store';
 
 export interface UploadImageRequest {
   file: File;
-  entityType: 'BOOK' | 'OFFER';
-  entityId: number | string;
+  entityType: 'BOOK' | 'USER';
+  entityId?: number | string;
   imageOrder?: number;
   description?: string;
 }
 
 export interface ImageResponse {
   id: string;
-  url: string;
+  path: string;
   description?: string;
 }
 
@@ -37,10 +37,12 @@ export const ImagesApi = createApi({
         const formData = new FormData();
         formData.append('file', request.file);
         formData.append('entityType', request.entityType);
-        formData.append('entityId', String(request.entityId));
+        if (request.entityId !== undefined) {
+          formData.append('entityId', String(request.entityId));
+        }
 
         if (request.imageOrder !== undefined) {
-          formData.append('imageOrder', String(request.imageOrder));
+          formData.append('orderIndex', String(request.imageOrder));
         }
 
         if (request.description) {

@@ -8,9 +8,16 @@ import {
 } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CrossSvg } from '@/shared/ui/icons/CrossSvg';
-import { AddPhotoBook } from '@/shared/ui/icons/AddPhotoBookSvg';
+import { AddSvg } from '@/shared/ui/icons/AddSvg';
 import { Spinner } from '@/shared/ui/Spinner';
 import { AlertSvg } from '@/shared/ui/icons/AlertSvg';
+import {
+  convertHeicToJpeg,
+  getPhotoFormatFromContent,
+  getPhotoFormatFromExtension,
+  isHeicPhoto,
+  MAX_PHOTO_SIZE,
+} from '@/shared/helpers/imageValidation';
 
 interface ExistingImage {
   id: string;
@@ -39,86 +46,6 @@ type PreviewState = 'loading' | 'ready' | 'failed';
 
 const IMAGE_HOST = import.meta.env.VITE_IMAGE_HOST || '';
 const MAX_PHOTOS = 6;
-const MAX_PHOTO_SIZE = 20 * 1024 * 1024;
-const HEIC_PHOTO_EXTENSIONS = /\.(heif|heic)$/i;
-const HEIF_BRANDS = new Set([
-  'heic',
-  'heix',
-  'hevc',
-  'hevx',
-  'heim',
-  'heis',
-  'hevm',
-  'hevs',
-  'mif1',
-  'msf1',
-]);
-
-type PhotoFormat = 'jpeg' | 'png' | 'webp' | 'heif';
-
-const getPhotoFormatFromExtension = (fileName: string): PhotoFormat | null => {
-  const extension = fileName.split('.').pop()?.toLowerCase();
-
-  if (extension === 'jpg' || extension === 'jpeg') return 'jpeg';
-  if (extension === 'png') return 'png';
-  if (extension === 'webp') return 'webp';
-  if (extension === 'heif' || extension === 'heic') return 'heif';
-
-  return null;
-};
-
-const getPhotoFormatFromContent = async (
-  file: File
-): Promise<PhotoFormat | null> => {
-  const bytes = new Uint8Array(await file.slice(0, 64 * 1024).arrayBuffer());
-
-  if (
-    bytes.length >= 3 &&
-    bytes[0] === 0xff &&
-    bytes[1] === 0xd8 &&
-    bytes[2] === 0xff
-  ) {
-    return 'jpeg';
-  }
-
-  if (
-    bytes.length >= 8 &&
-    bytes[0] === 0x89 &&
-    bytes[1] === 0x50 &&
-    bytes[2] === 0x4e &&
-    bytes[3] === 0x47 &&
-    bytes[4] === 0x0d &&
-    bytes[5] === 0x0a &&
-    bytes[6] === 0x1a &&
-    bytes[7] === 0x0a
-  ) {
-    return 'png';
-  }
-
-  if (
-    bytes.length >= 12 &&
-    String.fromCharCode(...bytes.slice(0, 4)) === 'RIFF' &&
-    String.fromCharCode(...bytes.slice(8, 12)) === 'WEBP'
-  ) {
-    return 'webp';
-  }
-
-  if (
-    bytes.length >= 16 &&
-    String.fromCharCode(...bytes.slice(4, 8)) === 'ftyp'
-  ) {
-    const boxSize = new DataView(bytes.buffer).getUint32(0);
-    const boxEnd = Math.min(boxSize || bytes.length, bytes.length);
-
-    for (let offset = 8; offset + 4 <= boxEnd; offset += 4) {
-      const brand = String.fromCharCode(...bytes.slice(offset, offset + 4));
-      if (HEIF_BRANDS.has(brand)) return 'heif';
-    }
-  }
-
-  return null;
-};
-
 const getImagePreviewUrl = (path?: string) => {
   if (!path) return '';
 
@@ -141,7 +68,7 @@ interface UploadPhotoProps {
 
 const UploadPhoto: React.FC<UploadPhotoProps> = ({
   onPhotosChange,
-   onValidationChange,
+  onValidationChange,
   initialExistingImages = [],
   onExistingImagesChange,
   onImagesOrderChange,
@@ -350,10 +277,7 @@ const UploadPhoto: React.FC<UploadPhotoProps> = ({
 
     const acceptedFiles = validFiles.slice(0, remainingSlots);
     const newItems = acceptedFiles.map((file): PhotoItem => {
-      const isHeic =
-        file.type.toLowerCase() === 'image/heic' ||
-        file.type.toLowerCase() === 'image/heif' ||
-        HEIC_PHOTO_EXTENSIONS.test(file.name);
+      const isHeic = isHeicPhoto(file);
 
       return {
         type: 'new',
@@ -379,17 +303,8 @@ const UploadPhoto: React.FC<UploadPhotoProps> = ({
         return [
           (async () => {
             try {
-              const { default: convert } = await import('heic-convert/browser');
-              const converted = await convert({
-                buffer: new Uint8Array(await item.file.arrayBuffer()),
-                format: 'JPEG',
-                quality: 0.8,
-              });
-              const jpegBuffer = new ArrayBuffer(converted.byteLength);
-              new Uint8Array(jpegBuffer).set(converted);
-              const previewUrl = URL.createObjectURL(
-                new Blob([jpegBuffer], { type: 'image/jpeg' })
-              );
+              const jpegPreview = await convertHeicToJpeg(item.file);
+              const previewUrl = URL.createObjectURL(jpegPreview);
 
               if (!isMountedRef.current) {
                 URL.revokeObjectURL(previewUrl);
@@ -658,7 +573,7 @@ const UploadPhoto: React.FC<UploadPhotoProps> = ({
             role="img"
             aria-label={t('sellBook.photoPreviewFailed')}
           >
-            <AddPhotoBook />
+            <AddSvg />
           </div>
         )}
         {(item.previewState === 'processing' ||
@@ -732,7 +647,7 @@ const UploadPhoto: React.FC<UploadPhotoProps> = ({
               aria-label={t('sellBook.addPhoto', 'Add photo')}
               className="flex h-full w-full items-center justify-center rounded-[10px] bg-[#F7F8F2]"
             >
-              <AddPhotoBook />
+              <AddSvg />
             </button>
           </li>
         ))}

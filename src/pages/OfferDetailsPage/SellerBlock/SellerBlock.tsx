@@ -1,8 +1,22 @@
 import { useTranslation } from 'react-i18next';
+import { useGetUserByUuidQuery } from '@/app/store/api/UsersApi';
+import { UserAvatar } from '@/shared/ui/UserAvatar/UserAvatar';
 import type { Seller } from '@/types/entities/OfferWithBook';
 
 export const SellerBlock = ({ seller }: { seller: Seller }) => {
   const { t } = useTranslation();
+  const { data: sellerProfile } = useGetUserByUuidQuery(String(seller.id), {
+    skip: !seller.id,
+  });
+  const avatarPath =
+    sellerProfile?.uploadedImage?.path ?? sellerProfile?.socialAvatarUrl;
+  const imageHost = import.meta.env.VITE_IMAGE_HOST || '';
+  const avatarUrl = avatarPath
+    ? /^https?:\/\//i.test(avatarPath)
+      ? avatarPath
+      : `${imageHost}${avatarPath.startsWith('/') ? '' : '/'}${avatarPath}`
+    : null;
+
   return (
     <section className="px-4 sm:px-6 lg:px-8 xl:px-12 py-4">
       <h2 className="mb-1 text-base lg:text-lg font-medium text-text-black">
@@ -10,23 +24,11 @@ export const SellerBlock = ({ seller }: { seller: Seller }) => {
       </h2>
 
       <div className="flex items-center gap-2">
-        <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-full bg-gray-100 flex items-center justify-center">
-          {seller.avatar ? (
-            <img
-              src={seller.avatar}
-              alt={seller.name}
-              className="w-full h-full object-cover rounded-full"
-            />
-          ) : (
-            <span className="text-sm lg:text-base font-medium text-gray-500 uppercase">
-              {seller.name
-                .split(' ')
-                .map((n: string) => n[0])
-                .join('')
-                .slice(0, 2)}
-            </span>
-          )}
-        </div>
+        <UserAvatar
+          name={seller.name}
+          avatarUrl={avatarUrl}
+          className="h-10 w-10 lg:h-12 lg:w-12"
+        />
         <p className="text-sm lg:text-base text-text-black capitalize">
           {seller.name}
         </p>

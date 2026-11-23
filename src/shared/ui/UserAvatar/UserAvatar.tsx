@@ -43,7 +43,7 @@ export const UserAvatar = ({
       ) : (
         <span
           aria-label={name}
-          className="text-[10px] font-medium text-aquamarine-700"
+          className="text-[14px] font-medium text-aquamarine-700"
         >
           {initials}
         </span>

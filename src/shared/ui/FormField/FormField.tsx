@@ -37,6 +37,13 @@ const FormField: React.FC<FormFieldProps> = ({
       ? 'text'
       : 'password'
     : type;
+  const inputRightPaddingClass = isPasswordField
+    ? error
+      ? 'pr-20'
+      : 'pr-11'
+    : error
+      ? 'pr-11'
+      : '';
 
   return (
     <div className="mb-4">
@@ -60,7 +67,7 @@ const FormField: React.FC<FormFieldProps> = ({
           onChange={onChange}
           autoComplete={autoComplete}
           disabled={disabled}
-          className={`w-full rounded-xl border-1 py-2.5 px-3 text-text-black text-sm transition-colors focus:outline-none border-gray-300 focus:border-blue-500 group-hover:border-gray-500 ${disabled ? 'bg-gray-100 opacity-60 cursor-not-allowed' : ''}`}
+          className={`w-full rounded-xl border-1 py-2.5 px-3 ${inputRightPaddingClass} text-text-black text-sm transition-colors focus:outline-none border-gray-300 focus:border-blue-500 group-hover:border-gray-500 ${disabled ? 'bg-gray-100 opacity-60 cursor-not-allowed' : ''}`}
           aria-invalid={!!error}
         />
 

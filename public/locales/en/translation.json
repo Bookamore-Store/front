@@ -18,7 +18,8 @@
     "category": "Category",
     "condition": "Condition",
     "typeOfDeal": "Type of deal",
-    "profile": "Profile"
+    "profile": "Profile",
+    "editProfile": "Edit Profile"
   },
   "typeOfDeal": {
     "purchaseOnly": "Purchase only",
@@ -64,6 +65,7 @@
     "createAccount": "Create Account",
     "email": "Email",
     "password": "Password",
+    "currentPassword": "Current Password",
     "confirmPassword": "Confirm Password",
     "forgotPassword": "Forgot password",
     "forgotPasswordDescription": "No worries! Enter your email address below and we will send you a code to reset password.",
@@ -93,11 +95,15 @@
   "validation": {
     "nameRequired": "Name is required",
     "nameInvalid": "Name must be at least 2 characters",
+    "usernameRequired": "Username is required",
+    "usernameLength": "Username must be between 2 and 100 characters",
     "emailRequired": "Email is required",
     "emailInvalid": "Please enter a valid email address",
     "passwordRequired": "Password is required",
     "passwordMinLength": "Password must be at least 6 characters",
     "passwordRequirements": "Password must be at least 6 characters and contain at least 1 uppercase and 1 lowercase letter",
+    "currentPasswordIncorrect": "Current password is incorrect.",
+    "newPasswordSameAsCurrent": "New password must be different from the current password.",
     "confirmPassword": "Please confirm your password",
     "passwordsDoNotMatch": "Passwords do not match",
     "codeRequired": "Verification code is required",
@@ -124,6 +130,22 @@
     "chats": "My Chats",
     "privacyPolicy": "Privacy Policy",
     "userAgreement": "User Agreement"
+  },
+  "editProfile": {
+    "username": "Username",
+    "changeAvatar": "Change avatar",
+    "avatarUploading": "Uploading avatar...",
+    "avatarRequirements": "5 KB–5 MB, minimum 400 x 400 pixels.",
+    "avatarTooSmall": "Image must be at least 5 KB.",
+    "avatarTooLarge": "Image must be 5 MB or smaller.",
+    "avatarDimensionsTooSmall": "Image must be at least 400 x 400 pixels.",
+    "avatarInvalid": "Could not read the image. Choose a valid image file.",
+    "currentPasswordHint": "Leave blank if you have not set a password before.",
+    "saveChanges": "Save changes",
+    "saving": "Saving...",
+    "saveError": "Could not save your changes. Please try again.",
+    "loading": "Loading profile...",
+    "loadError": "Could not load your profile. Please try again."
   },
   "bottomNav": {
     "home": "Home",

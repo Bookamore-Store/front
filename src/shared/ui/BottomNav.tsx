@@ -76,30 +76,34 @@ export function BottomNav() {
           flex justify-around
         "
       >
-        {navItems.map(({ to, label, Icon }) => (
-          <NavLink
-            key={label}
-            to={to}
-            className={({ isActive }) => linkStyle(isActive)}
-          >
-            <div className="pt-[6px] pr-[9.5px] pb-[4px] pl-[9.5px]">
-              <Icon />
-            </div>
+        <div className="flex justify-between w-full lg:max-w-6xl xl:max-w-7xl px-4 sm:px-6 lg:px-8 xl:px-12">
+          {navItems.map(({ to, label, Icon }) => (
+            <NavLink
+              key={label}
+              to={to}
+              className={({ isActive }) => linkStyle(isActive)}
+            >
+              <div className="pt-[6px] pr-[9.5px] pb-[4px] pl-[9.5px]">
+                <Icon />
+              </div>
 
-            <div className="relative">
-              <p className="font-kyiv text-sand-100">{label}</p>
+              <div className="relative">
+                <p className="font-kyiv text-sand-100 text-[14px] font-[500]">
+                  {label}
+                </p>
 
-              {to === '/chats' && unreadCount > 0 && (
-                <span
-                  aria-label={`${unreadCount} unread messages`}
-                  className="absolute -right-3 -top-10 flex h-5 min-w-5 place-items-baseline justify-center rounded-full bg-red-500 text-[12px] text-white shadow-sm"
-                >
-                  {unreadCount > 99 ? '99+' : unreadCount}
-                </span>
-              )}
-            </div>
-          </NavLink>
-        ))}
+                {to === '/chats' && unreadCount > 0 && (
+                  <span
+                    aria-label={`${unreadCount} unread messages`}
+                    className="absolute -right-3 -top-10 flex h-5 min-w-5 place-items-baseline justify-center rounded-full bg-red-500 text-[12px] text-white shadow-sm"
+                  >
+                    {unreadCount > 99 ? '99+' : unreadCount}
+                  </span>
+                )}
+              </div>
+            </NavLink>
+          ))}
+        </div>
       </nav>
     </footer>
   );
